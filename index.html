@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>WrappedKitties</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Loading Bootstrap -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <!-- Loading Flat UI -->
+    <link href="flat-ui.css" rel="stylesheet">
+    <link href="demo.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <script language="javascript" type="text/javascript" src="app.js"></script>
+    <script language="javascript" type="text/javascript" src="./bignumber.js/bignumber.js"></script>
+    <script language="javascript" type="text/javascript" src="web3.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="demo-headline" onClick="javascript:App.retreatToHomeScreen();">
+        <h1 class="demo-logo">
+          <div class="logo"></div>
+          Wrapped Kitties
+          <div><small>ERC20 tokens, each backed 1:1 by an ERC721 CryptoKitty</small>
+        </h1>
+      </div> <!-- /demo-headline -->
+      <div class="col connectToWeb3Button">
+        <center>
+          <a href="javascript:App.init();" class="btn btn-block btn-lg btn-primary">Connect to Web3 Provider</a>
+        </center>
+      </div> <!-- /Connect To Web3 -->
+      <div class="col siteUnderMaintenance" style="display: none;">
+        <center>
+          <h1 class="demo-section-title"><center>Site Under Maintenance</center></h1>
+          <h1 class="demo-section-title"><center>Be Back Online By 11:30pm EST</center></h1>
+        </center>
+      </div> <!-- /Site Under Maintenance -->
+      <div class="col noMainnetOrMetamaskDetectedDiv" style="display: none;">
+        <center>
+          <h1 class="demo-download-text"><center>A web3-enabled browser is required to interact with this dapp. On Desktop, two options are the Dapper Chrome Extension or the Metamask Chrome Extension. On Mobile, two options are the Coinbase Wallet app or the Trust Wallet app. Here are links to those resources:</center></h1>
+          <div class="col">
+            <a href="https://www.meetdapper.com" class="btn btn-block btn-lg btn-primary">Get Dapper Chrome Extension (recommended)</a>
+          </div>
+          <br/>
+          <div class="col">
+            <a href="https://www.metamask.io" class="btn btn-block btn-lg btn-primary">Get Metamask Chrome Extension</a>
+          </div>
+        </center>
+      </div> <!-- /No metamask or mainnet detected -->
+      <div class="coreApp" style="display: none;">
+        <div class="row demo-row">
+          <div class="col kittyToTokenButton">
+            <center>
+              <div class="col">
+                <a href="javascript:App.init();" class="btn btn-block btn-lg btn-primary">Give a Kitty, Get a WCK Token</a>
+              </div>
+            </center>
+          </div> <!-- /kittyToTokenButton -->
+          <div class="col tokenToKittyButton">
+            <center>
+              <div class="col">
+                <a href="javascript:App.proceedToTokenToKittySection();" class="btn btn-block btn-lg btn-primary">Give a WCK Token, Get a Kitty</a>
+              </div>
+            </center>
+          </div> <!-- /tokenToKittyButton -->
+        </div> <!-- /demoRow -->
+        <br/>
+        <div class="row demo-row">
+          <div class="col kittyToKittyButton">
+            <center>
+              <div class="col">
+                <a href="javascript:App.init();" class="btn btn-block btn-lg btn-primary">Give a Kitty, Get a Different Kitty</a>
+              </div>
+            </center>
+          </div> <!-- /kittyToKittyButton -->
+          <div class="col tokenToTokenButton">
+            <center>
+              <div class="col">
+                <a href="https://uniswap.exchange/swap" class="btn btn-block btn-lg btn-primary">Buy and Sell WCK Tokens In Bulk</a>
+              </div>
+            </center>
+          </div> <!-- /tokenToTokenButton -->
+        </div> <!-- /demoRow -->
+      </div> <!-- /coreApp -->
+      <div class="tokenToKittySection" style="display: none;">
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <input type="number" min="1" max="20" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Maximum 20 per transaction" class="form-control" id="tokenToKittyInputBox" />
+              </div>
+            </div>
+            <div class="col tokenToKittyButton">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.tokensToKittyButtonPressed();" class="btn btn-block btn-lg btn-primary">Convert WCK Tokens into CryptoKitties</a>
+                </div>
+              </center>
+            </div> <!-- /tokenToKittyButton -->
+          </div> <!-- /row -->
+      </div> <!-- /tokenToKittySection -->
+      <br/>
+      <div class="infoForApp">
+        <div class="row demo-row">
+          <div class="col viewVerifiedContract">
+            <center>
+              <div class="col">
+                <a href="https://etherscan.io/address/0x19d9b17497824081e291115044b567c4722cdaeb#code" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-info">View Verified Contract on Etherscan</a>
+              </div>
+            </center>
+          </div> <!-- /viewVerifiedContract -->
+          <br/>
+          <div class="col viewLockedKitties">
+            <center>
+              <div class="col">
+                <a href="https://www.cryptokitties.co/profile/0x19d9b17497824081e291115044b567c4722cdaeb" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-info">View Kitties Backing Outstanding ERC20 Tokens</a>
+              </div>
+            </center>
+          </div> <!-- /viewLockedKitties -->
+        </div> <!-- /demoRow -->
+      </div> <!-- /infoForApp -->
+      <div class="viewTransactionOnEtherscan" style="display: none;">
+          <div class="row demo-row">
+            <div class="col retreatToHomeScreenButton">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.retreatToHomeScreen();" class="btn btn-block btn-lg btn-primary">Return to Home Screen</a>
+                </div>
+              </center>
+          </div> <!-- /retreatToHomeScreenButton -->
+            <div class="col viewTransactionOnEtherscanButton">
+              <center>
+                <div class="col">
+                  <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-default" id="viewTransactionOnEtherscanButton">View Transaction on Etherscan</a>
+                </div>
+              </center>
+            </div> <!-- /viewTransactionOnEtherscanButton -->
+          </div> <!-- /demoRow -->
+      </div> <!-- /viewTransactionOnEtherscan -->
+      <br></br>
+      <br></br>
+      <div class="col builtOnEthereum">
+        <center>
+          <img src="BuiltOnEthereum.png" alt="Built On Ethereum">
+        </center>
+      </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <!-- Bootstrap 4 requires Popper.js -->
+    <script src="https://unpkg.com/popper.js@1.14.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="flat-ui.js"></script>
+  </body>
+</html>
