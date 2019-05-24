@@ -1,10 +1,15 @@
 App = {
     Constants: {
         nullAddress: '0x0000000000000000000000000000000000000000',
+        maximumNumberOfVisibleKittyToTokenInputBoxes:10,
     },
     Globals: {
         userAccount: undefined,
         web3Provider: undefined,
+        kittyToToken: true,
+        numberOfVisibleKittyToTokenInputBoxes: 0,
+        numApproveTxnSent: 0,
+        approvedKitties:{},
         contracts:{
             'cryptoCatsCoreContract':{
                 'source': undefined,
@@ -69,6 +74,10 @@ App = {
             }
         }, 100);
 
+        var accountInterval = setInterval(function() {
+            App.checkAllInputtedKittyIdsForApproval();
+        }, (2 * 1000));
+
         window.onpopstate = function(e){
             App.retreatToHomeScreen();
         };
@@ -94,7 +103,7 @@ App = {
         }
     },
 
-    tokensToKittyButtonPressed: function(){
+    tokenToKittyButtonPressed: function(){
         var numTokens = document.getElementById('tokenToKittyInputBox').value;
         if(numTokens !== ''){
             web3.eth.getAccounts(function(error, accounts) {
@@ -106,10 +115,10 @@ App = {
                                                                                     from: account,
                                                                                 },
                                                                                 function(error, result){
-                                                                                    if(!error) return App.displayTransactionConfirmation(result);
+                                                                                    if(!error) return App.displayTokenToKittyTransactionConfirmation(result);
                                                                                     else {
                                                                                         console.log(error.message);
-                                                                                        return App.displayCancelBountyError(error);
+                                                                                        return App.displayTransactionError(error);
                                                                                     }
                                                                                 })
                 } else {
@@ -118,10 +127,10 @@ App = {
                                                                                     from: account,
                                                                                 },
                                                                                 function(error, result){
-                                                                                    if(!error) return App.displayTransactionConfirmation(result);
+                                                                                    if(!error) return App.displayTokenToKittyTransactionConfirmation(result);
                                                                                     else {
                                                                                         console.log(error.message);
-                                                                                        return App.displayCancelBountyError(error);
+                                                                                        return App.displayTransactionError(error);
                                                                                     }
                                                                                 })
                 }
@@ -129,259 +138,130 @@ App = {
         }
     },
 
-    displayTransactionConfirmation: function(result){
+    displayTokenToKittyTransactionConfirmation: function(result){
         document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
         App.hideAllDivsInClass('tokenToKittySection');
         App.showAllDivsInClass('viewTransactionOnEtherscan');
     },
 
-    displayCancelBountyError: function(err){
-
-    },
+    displayTransactionError: function(err){},
 
     doNothing: function(){},
 
-    fulfillBountyInitialButtonPressed: function(){
-        const bountyId = App.Globals.currBountyID;
-        if(App.Globals.activeBounties[bountyId] > 0){
-            App.toggleFulfillBountyInstructions();
-        }
-    },
-
-    toggleFulfillBountyInstructions: function(){
-        if(App.Globals.fulfillBountyInstructionsBeingShown === false){
-            App.Globals.fulfillBountyInstructionsBeingShown = true;
-            App.initializeFulfillBountyTxnOneButton();
-            App.initializeFulfillBountyTxnTwoButton();
-            App.showAllDivsInClass("fulfillBountyInstructions");
-        } else {
-            App.Globals.fulfillBountyInstructionsBeingShown = false;
-            App.hideAllDivsInClass("fulfillBountyInstructions");
-        }
-    },
-
-    fulfillBountyTxnOneButtonPressed: function(){
-        var kittyId = document.getElementById('fulfillBountyKittyIdInputBox').value;
+    approveKittyButtonPressed: function(numTxn){
+        App.Globals.numApproveTxnSent = numTxn;
+        const elementId = 'kittyToTokenInputBox' + numTxn;
+        var kittyId = document.getElementById(elementId).value;
         if(kittyId !== ''){
-            const kittyIdAsNumber = Number(kittyId);
-            App.Globals.kittySubmittingForBounty = kittyIdAsNumber;
-            console.log(App.Globals.kittySubmittingForBounty);
-            App.sendFulfillBountyTxnOne();
+            web3.eth.getAccounts(function(error, accounts) {
+                if (error) { console.log(error); }
+                var account = accounts[0];
+                App.Globals.contracts['cryptoCatsCoreContract'].instance.approve(new BigNumber(String(App.Globals.contracts['wrappedKittiesContract'].contractAddress)),
+                                                                            new BigNumber(String(kittyId)),
+                                                                            {
+                                                                                from: account,
+                                                                            },
+                                                                            function(error, result){
+                                                                                if(!error) return App.displayApproveKittyConfirmation(result);
+                                                                                else {
+                                                                                    console.log(error.message);
+                                                                                    return App.displayTransactionError(error);
+                                                                                }
+                                                                            })
+            });
         }
     },
 
-    fulfillBountyTxnTwoButtonPressed: function(){
-        var kittyId = document.getElementById('fulfillBountyKittyIdInputBox').value;
-        if(kittyId !== ''){
-            const kittyIdAsNumber = Number(kittyId);
-            App.Globals.kittySubmittingForBounty = kittyIdAsNumber;
-            App.sendFulfillBountyTxnTwo();
+    txnTwoOfTwoButtonPressed: function(){
+        var catsToSend = [];
+        for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
+            const elementId = 'kittyToTokenInputBox' + i;
+            var kittyId = document.getElementById(elementId).value;
+            if(kittyId !== ''){
+                catsToSend.push(new BigNumber(String(kittyId)));
+            }
         }
-    },
+        if(catsToSend.length === 0) {
+            return;
+        }
 
-    sendFulfillBountyTxnOne: function(){
-        if(App.Globals.kittySubmittingForBounty === undefined) return;
         web3.eth.getAccounts(function(error, accounts) {
-            if (error) console.log(error);
+            if (error) { console.log(error); }
             var account = accounts[0];
-            App.Globals.contracts['cryptoCatsCoreContract'].instance.approve(new BigNumber(String(App.Globals.contracts['kittyBountiesContract'].contractAddress)),
-                                                                        new BigNumber(String(App.Globals.kittySubmittingForBounty)),
-                                                                        {
-                                                                            from: account,
-                                                                        },
-                                                                        function(error, result){
-                                                                            if(!error) return App.displayFulfillBountyTxnOneConfirmation(result);
-                                                                            else {
-                                                                                console.log(error.message);
-                                                                                return App.displayFulfillBountyTxnOneError(error);
-                                                                            }
-                                                                        })
-
+            if (catsToSend.length === 1){
+                if(App.Globals.kittyToToken === true){
+                    App.Globals.contracts['wrappedKittiesContract'].instance.depositKittyAndMintToken(catsToSend[0],
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTxnTwoOfTwoConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
+                } else {
+                    App.Globals.contracts['wrappedKittiesContract'].instance.depositKittyAndWithdrawDifferentKitty(catsToSend[0],
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTxnTwoOfTwoConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
+                }
+            } else {
+                if(App.Globals.kittyToToken === true){
+                    App.Globals.contracts['wrappedKittiesContract'].instance.multiDepositKittyAndMintToken(catsToSend,
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTxnTwoOfTwoConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
+                } else {
+                    App.Globals.contracts['wrappedKittiesContract'].instance.multiDepositKittyAndWithdrawDifferentKitty(catsToSend,
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTxnTwoOfTwoConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
+                }
+            }
         });
     },
 
-    sendFulfillBountyTxnTwo: function(){
-        if(App.Globals.kittySubmittingForBounty === undefined) return;
-        web3.eth.getAccounts(function(error, accounts) {
-            if (error) console.log(error);
-            var account = accounts[0];
-            App.Globals.contracts['kittyBountiesContract'].instance.fulfillBountyAndClaimFunds(new BigNumber(String(App.Globals.currBountyID)),
-                                                                        new BigNumber(String(App.Globals.kittySubmittingForBounty)),
-                                                                        new BigNumber(String(App.Constants.nullAddress)),
-                                                                        {
-                                                                            from: account,
-                                                                        },
-                                                                        function(error, result){
-                                                                            if(!error) return App.displayFulfillBountyTxnTwoConfirmation(result);
-                                                                            else {
-                                                                                console.log(error.message);
-                                                                                return App.displayFulfillBountyTxnTwoError(error);
-                                                                            }
-                                                                        })
-        });
+    displayApproveKittyConfirmation: function(result){
+        const elementId = 'txnXOfY' + App.Globals.numApproveTxnSent;
+        document.getElementById(elementId).href = "https://etherscan.io/tx/" + String(result);
+        document.getElementById(elementId).target="_blank"
+        document.getElementById(elementId).rel="noopener noreferrer"
+        document.getElementById(elementId).innerText = 'View Transaction on Etherscan';
+        document.getElementById(elementId).classList.remove('btn-primary');
+        document.getElementById(elementId).classList.add('btn-default');
     },
 
-    sendCreateBountyTxn: function(){
-        web3.eth.getAccounts(function(error, accounts) {
-            if (error) console.log(error);
-            var account = accounts[0];
-            console.log(account);
-            App.Globals.contracts['kittyBountiesContract'].instance.createBountyAndLockFunds(new BigNumber(String(App.Bounty.desiredGeneMaskAsUINT)),
-                                                                        new BigNumber(String(App.Bounty.desiredGenesAsUINT)),
-                                                                        new BigNumber(String(App.Bounty.desiredGen)),
-                                                                        new BigNumber(String(App.Bounty.desiredCooldown)),
-                                                                        new BigNumber(String(App.Bounty.numberOfBlocksToLock)),
-                                                                        new BigNumber(String(App.Bounty.quantity)),
-                                                                        {   from: account,
-                                                                            value: new BigNumber(String(web3.toWei(String(App.Bounty.depositAmountInETH), "ether"))),
-                                                                        },
-                                                                        function(error, result){
-                                                                            if(!error) return App.displayCreateBountyConfirmation(result);
-                                                                            else {
-                                                                                console.log(error.message);
-                                                                                return App.displayCreateBountyError(error);
-                                                                            }
-                                                                        })
-        });
-    },
-
-    displayFulfillBountyTxnOneConfirmation: function(result){
-        document.getElementById('fulfillBountyTxnOneButton').innerText = "View Transaction on Etherscan";
-        document.getElementById('fulfillBountyTxnOneButton').href = "https://etherscan.io/tx/" + String(result);
-        document.getElementById('fulfillBountyTxnOneButton').target = "_blank";
-        document.getElementById('fulfillBountyTxnOneButton').rel = "noopener noreferrer";
-        document.getElementById('fulfillBountyTxnOneButton').classList.remove('btn-primary');
-        document.getElementById('fulfillBountyTxnOneButton').classList.add('btn-default');
-    },
-
-    displayFulfillBountyTxnTwoConfirmation: function(result){
-        document.getElementById('fulfillBountyTxnTwoButton').innerText = "View Transaction on Etherscan";
-        document.getElementById('fulfillBountyTxnTwoButton').href = "https://etherscan.io/tx/" + String(result);
-        document.getElementById('fulfillBountyTxnTwoButton').target = "_blank";
-        document.getElementById('fulfillBountyTxnTwoButton').rel = "noopener noreferrer";
-        document.getElementById('fulfillBountyTxnTwoButton').classList.remove('btn-primary');
-        document.getElementById('fulfillBountyTxnTwoButton').classList.add('btn-default');
-    },
-
-    initializeFulfillBountyTxnOneButton: function(){
-        document.getElementById('fulfillBountyTxnOneButton').innerText = "Submit Transaction 1 of 2";
-        document.getElementById('fulfillBountyTxnOneButton').href = "javascript:App.fulfillBountyTxnOneButtonPressed();";
-        document.getElementById('fulfillBountyTxnOneButton').target = "_self";
-        document.getElementById('fulfillBountyTxnOneButton').classList.remove('btn-default');
-        document.getElementById('fulfillBountyTxnOneButton').classList.add('btn-primary');
-    },
-
-    initializeFulfillBountyTxnTwoButton: function(){
-        document.getElementById('fulfillBountyTxnTwoButton').innerText = "Submit Transaction 2 of 2";
-        document.getElementById('fulfillBountyTxnTwoButton').href = "javascript:App.fulfillBountyTxnTwoButtonPressed();";
-        document.getElementById('fulfillBountyTxnOneButton').target = "_self";
-        document.getElementById('fulfillBountyTxnTwoButton').classList.remove('btn-default');
-        document.getElementById('fulfillBountyTxnTwoButton').classList.add('btn-primary');
-    },
-
-    displayCreateBountyConfirmation: function(result){
-        App.hideAllDivsInClass('confirmBountyOptions');
-        document.getElementById('createBountyViewSentTxnButton').href = "https://etherscan.io/tx/" + String(result);
-        document.getElementById('createBountyViewSentTxnButton').target = "_blank";
-        document.getElementById('createBountyViewSentTxnButton').rel = "noopener noreferrer";
-        App.showAllDivsInClass('successfullySentCreateBountyTransactionToBlockchain');
-        console.log(result);
-    },
-
-    retreatFromCreateBountyConfirmationScreen: function(){
-        App.hideAllDivsInClass('successfullySentCreateBountyTransactionToBlockchain');
-        document.getElementById('createBountyViewSentTxnButton').href = "javascript:App.doNothing();";
-        App.fetchCurrentBlock();
-        App.showHomePageDivs();
-    },
-
-    displayFulfillBountyTxnOneError: function(err){
-
-    },
-
-    displayFulfillBountyTxnTwoError: function(err){
-
-    },
-
-    displayCreateBountyError: function(err){
-
-    },
-
-    fetchNumCatsFromDiv: function(){
-        var numCats = document.getElementById('numberOfCatsInputBox').value;
-        if(numCats !== ''){
-            const numCatsAsNumber = Number(numCats);
-            App.Bounty.quantity = numCatsAsNumber;
-            document.getElementById('numCatsConfirmation').innerText = "Number of Cats: \n" + numCatsAsNumber;
-        }
-    },
-
-    fetchGenerationFromDiv: function(){
-        var desiredGen = document.getElementById('generationInputBox').value;
-        if(desiredGen !== ''){
-            const desiredGenAsNumber = Number(desiredGen);
-            App.Bounty.desiredGen = desiredGenAsNumber;
-            document.getElementById('generationConfirmation').innerText = "Exact Generation: \n" + desiredGenAsNumber;
-        } else {
-            App.Bounty.desiredGen = App.Constants.anyGenerationPlaceholder;
-            document.getElementById('generationConfirmation').innerText = "Exact Generation: \nAny";
-        }
-    },
-
-    fetchCooldownFromDiv: function(){
-        var desiredCooldown = Number(document.getElementById('cooldownInputBox').value);
-        if(desiredCooldown === 14) desiredCooldown = 13;
-        App.Bounty.desiredCooldown = desiredCooldown;
-        const selectedIndex = document.getElementById('cooldownInputBox').selectedIndex;
-        App.Bounty.desiredCooldownText = document.getElementById('cooldownInputBox').options[selectedIndex].text;
-        document.getElementById('cooldownConfirmation').innerText = 'Maximum Cooldown: \n' + App.Bounty.desiredCooldownText;
-    },
-
-    fetchDepositAmountInETH: function(){
-        var numCats = document.getElementById('numberOfCatsInputBox').value;
-        const numCatsAsNumber = Number(numCats);
-        var depositAmountInETH = document.getElementById('depositAmountInETHInputBox').value;
-        const depositAmountInETHAsNumber = (depositAmountInETH !== '' && Number(depositAmountInETH) >= App.Constants.minimumBidSize) ? Number(depositAmountInETH) : App.Constants.minimumBidSize;
-        App.Bounty.depositAmountInETH = depositAmountInETHAsNumber;
-        const depositAmountPerCat = Number((depositAmountInETHAsNumber / numCatsAsNumber).toFixed(10));
-        const cancelledAmountToReturn = (depositAmountInETHAsNumber - App.Constants.cancellationFee).toFixed(10);
-        const successfulBountyAmountSent = (depositAmountPerCat * (1 - App.Constants.successfulBountyPercentAsFraction)).toFixed(10);
-        document.getElementById('depositAmountInETHConfirmation').innerText = "In total, you are depositing: \nΞ " + depositAmountInETHAsNumber.toString() + " ETH \n\n Per cat, that amounts to: \nΞ " + depositAmountPerCat.toString() + " ETH \n\n If successful, the bounty hunter will receive \nΞ " + Number(successfulBountyAmountSent).toString() + " ETH per cat \n(Successful Bounty Fee of 3.75%) \n\n If cancelled, you will receive \nΞ " + Number(cancelledAmountToReturn) + " ETH \n(Cancellation Fee of Ξ 0.008 ETH)";
-    },
-
-    fetchNumberOfDaysToLockFromDiv: function(){
-        var desiredNumberOfDaysToLock = document.getElementById('numberOfDaysToLockInputBox').value;
-        if(desiredNumberOfDaysToLock !== '' && Number(desiredNumberOfDaysToLock) !== 0){
-            const desiredNumberOfDaysToLockAsNumber = Number(desiredNumberOfDaysToLock);
-            App.Bounty.numberOfDaysToLock = desiredNumberOfDaysToLockAsNumber;
-            App.Bounty.numberOfBlocksToLock = Math.floor(desiredNumberOfDaysToLockAsNumber * App.Constants.numberOfBlocksInDay);
-            document.getElementById('numberOfDaysToLockConfirmation').innerText = "Number of Days To Lock Your ETH Deposit: \n" + Number(desiredNumberOfDaysToLockAsNumber).toString() + "\nWARNING: This means that you will not be able to cancel your bounty until " + desiredNumberOfDaysToLock + ' days have passed \n(measured in blocks, so not until ' + App.Bounty.numberOfBlocksToLock + ' blocks have passed).\nYour bounty will stay valid until cancelled, even once your lock-time has expired.\nAre you sure that you want to do this?';
-            document.getElementById('lockEthAndCreateBountyButton').innerText = "Lock " + App.Bounty.depositAmountInETH.toString() + " ETH For " + Number(desiredNumberOfDaysToLockAsNumber).toString() + " Days and Create Bounty";
-        } else {
-            App.Bounty.numberOfDaysToLock = 0;
-            App.Bounty.numberOfBlocksToLock = 0;
-            document.getElementById('numberOfDaysToLockConfirmation').innerText = "You chose for your ETH deposit to not be locked, meaning that you may cancel at any time.";
-            document.getElementById('lockEthAndCreateBountyButton').innerText = "Deposit " + App.Bounty.depositAmountInETH.toString() + " ETH and Create Bounty";
-        }
-    },
-
-    fetchBountyContentsFromDivs: function(){
-        App.fetchNumCatsFromDiv();
-        App.fetchGenesFromDiv();
-        App.fetchGenerationFromDiv();
-        App.fetchCooldownFromDiv();
-        App.fetchDepositAmountInETH();
-        App.fetchNumberOfDaysToLockFromDiv();
-    },
-
-    checkIfIShouldProceedToConfirmationScreen: function(){
-        if((!document.getElementById('depositAmountInETHInputBox').validity.valid || document.getElementById('depositAmountInETHInputBox').value === '')){
-            App.proceedToErrorScreen();
-        } else if((!document.getElementById('numberOfCatsInputBox').validity.valid || document.getElementById('numberOfCatsInputBox').value === '')){
-            App.proceedToNumCatsErrorScreen();
-        } else {
-            App.proceedToConfirmationScreen();
-        }
+    displayTxnTwoOfTwoConfirmation: function(result){
+        document.getElementById('transactionTwoOfTwoButton').href = "https://etherscan.io/tx/" + String(result);
+        document.getElementById('transactionTwoOfTwoButton').target="_blank"
+        document.getElementById('transactionTwoOfTwoButton').rel="noopener noreferrer"
+        document.getElementById('transactionTwoOfTwoButton').innerText = 'View Transaction on Etherscan';
+        document.getElementById('transactionTwoOfTwoButton').classList.remove('btn-primary');
+        document.getElementById('transactionTwoOfTwoButton').classList.add('btn-default');
+        App.Globals.approvedKitties = {};
     },
 
     showHomePageDivs: function(){
@@ -417,7 +297,19 @@ App = {
         App.hideAllDivsInClass('tokenToKittySection');
         App.hideAllDivsInClass('kittyToKittySection');
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
+        for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
+            const textBoxId = 'kittyToTokenInputBox' + String(i);
+            document.getElementById(textBoxId).value = '';
+        }
         App.showHomePageDivs();
+    },
+
+    proceedToKittyToTokenSection: function(){
+        App.hideHomePageDivs();
+        window.history.pushState({}, "", "");
+        App.Globals.kittyToToken = true;
+        App.updateKittyToTokenInputBoxes();
+        App.showAllDivsInClass('kittyToTokenSection');
     },
 
     proceedToTokenToKittySection: function(){
@@ -426,17 +318,106 @@ App = {
         App.showAllDivsInClass('tokenToKittySection');
     },
 
-    proceedToErrorScreen: function(){
-        App.showAllDivsInClass('errorWithCreateBountyOptions');
+    proceedToKittyToKittySection: function(){
+        App.hideHomePageDivs();
+        window.history.pushState({}, "", "");
+        App.Globals.kittyToToken = false;
+        App.updateKittyToTokenInputBoxes();
+        App.showAllDivsInClass('kittyToTokenSection');
     },
 
-    proceedToNumCatsErrorScreen: function(){
-        App.showAllDivsInClass('errorWithCreateBountyNoNumCatsSpecified');
+    updateKittyToTokenInputBoxes: function(){
+        App.Globals.numberOfVisibleKittyToTokenInputBoxes = 1;
+        document.getElementById('bundleMoreKittiesButton').classList.remove('btn-default');
+        document.getElementById('bundleMoreKittiesButton').classList.add('btn-primary');
+        document.getElementById('bundleMoreKittiesButton').href = "javascript:App.bundleMoreKittiesInThisTransactionButtonPressed();"
+        document.getElementById('transactionTwoOfTwoButton').innerText = 'Send Transaction 2 of 2';
+        document.getElementById('transactionTwoOfTwoButton').classList.remove('btn-default');
+        document.getElementById('transactionTwoOfTwoButton').classList.add('btn-primary');
+        document.getElementById('transactionTwoOfTwoButton').href = 'javascript:App.txnTwoOfTwoButtonPressed()';
+        document.getElementById('transactionTwoOfTwoButton').removeAttribute('target');
+        document.getElementById('transactionTwoOfTwoButton').removeAttribute('rel');
+        for(var i = 1; i <= App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes; i++){
+            const elementId = 'kittyToTokenInputBox' + String(i);
+            document.getElementById(elementId).value = '';
+            document.getElementById(elementId).placeholder = (App.Globals.kittyToToken) ? 'Enter the ID of the kitty you wish to give for WCK' : 'Enter the ID of the kitty you wish to give for a different kitty';
+            const totalNumTransactions = String(Number(App.Globals.numberOfVisibleKittyToTokenInputBoxes) + 1);
+            const buttonId = 'txnXOfY' + String(i);
+            document.getElementById(buttonId).innerText = 'Send Transaction ' + i + ' of ' + totalNumTransactions;
+            document.getElementById(buttonId).classList.remove('btn-default');
+            document.getElementById(buttonId).classList.add('btn-primary');
+            document.getElementById(buttonId).href = 'javascript:App.approveKittyButtonPressed(' + i + ')';
+            document.getElementById(buttonId).removeAttribute('target');
+            document.getElementById(buttonId).removeAttribute('rel');
+            if(i > 1){
+                const classId = 'kittyToTokenInputRow' + String(i);
+                App.hideAllDivsInClass(classId);
+            }
+        }
+        App.Globals.approvedKitties = {};
     },
 
-    retreatFromConfirmationScreen: function(){
-        App.hideAllDivsInClass('confirmBountyOptions');
-        App.showHomePageDivs();
+    updateTransactionXOfYText: function(){
+        const totalNumTransactions = String(Number(App.Globals.numberOfVisibleKittyToTokenInputBoxes) + 1);
+        for(var i = 1; i <= App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes; i++){
+            const elementId = 'txnXOfY' + String(i);
+            document.getElementById(elementId).innerText = 'Send Transaction ' + i + ' of ' + totalNumTransactions;
+        }
+        document.getElementById('transactionTwoOfTwoButton').innerText = 'Send Transaction ' + totalNumTransactions + ' of ' + totalNumTransactions;
+    },
+
+    bundleMoreKittiesInThisTransactionButtonPressed: function(){
+        if(App.Globals.numberOfVisibleKittyToTokenInputBoxes < App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes){
+            App.Globals.numberOfVisibleKittyToTokenInputBoxes++;
+            const classId = 'kittyToTokenInputRow' + String(App.Globals.numberOfVisibleKittyToTokenInputBoxes);
+            App.showAllDivsInClass(classId);
+            if(App.Globals.numberOfVisibleKittyToTokenInputBoxes >= App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes){
+                document.getElementById('bundleMoreKittiesButton').classList.remove('btn-primary');
+                document.getElementById('bundleMoreKittiesButton').classList.add('btn-default');
+                document.getElementById('bundleMoreKittiesButton').href = "javascript:App.doNothing();"
+            }
+        }
+        App.updateTransactionXOfYText();
+    },
+
+    checkAllInputtedKittyIdsForApproval: function(){
+        for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
+            App.checkInputtedKittyIdForApproval(i);
+        }
+    },
+
+    checkInputtedKittyIdForApproval: function(numTxn){
+        const elementId = 'kittyToTokenInputBox' + numTxn;
+        var kittyId = document.getElementById(elementId).value;
+        if(kittyId !== '' && App.Globals.approvedKitties[kittyId] !== true){
+            App.Globals.contracts['cryptoCatsCoreContract'].instance.kittyIndexToApproved(new BigNumber(String(kittyId)),
+                                                                                            function(error, result){
+                                                                                                if(!error) App.kittyIndexToApprovedCallback(kittyId, numTxn, result);
+                                                                                                else {
+                                                                                                    console.log(error.message);
+                                                                                                }
+                                                                                            });
+
+        }
+    },
+
+    kittyIndexToApprovedCallback: function(kittyId, numTxn, result){
+        if(String(result).toLowerCase() === String(App.Globals.contracts['wrappedKittiesContract'].contractAddress).toLowerCase()){
+            App.Globals.approvedKitties[kittyId] = true;
+            App.greyOutButtonContainingKittyId(kittyId, numTxn);
+        }
+    },
+
+    greyOutButtonContainingKittyId: function(kittyId, numTxn){
+        const textBoxId = 'kittyToTokenInputBox' + String(numTxn);
+        const textBoxValue = document.getElementById(textBoxId).value;
+        if(String(textBoxValue) === String(kittyId)){
+            const buttonId = 'txnXOfY' + String(numTxn);
+            document.getElementById(buttonId).innerText = 'Approved';
+            document.getElementById(buttonId).classList.remove('btn-primary');
+            document.getElementById(buttonId).classList.add('btn-default');
+            document.getElementById(buttonId).href = 'javascript:App.doNothing()';
+        };
     },
 
     showSingleDiv: function(id) {

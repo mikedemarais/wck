@@ -19,8 +19,8 @@
   </head>
   <body>
     <div class="container">
-      <div class="demo-headline" onClick="javascript:App.retreatToHomeScreen();">
-        <h1 class="demo-logo">
+      <div class="demo-headline">
+        <h1 class="demo-logo" onClick="javascript:App.retreatToHomeScreen();">
           <div class="logo"></div>
           Wrapped Kitties
           <div><small>ERC20 tokens, each backed 1:1 by an ERC721 CryptoKitty</small>
@@ -54,7 +54,7 @@
           <div class="col kittyToTokenButton">
             <center>
               <div class="col">
-                <a href="javascript:App.init();" class="btn btn-block btn-lg btn-primary">Give a Kitty, Get a WCK Token</a>
+                <a href="javascript:App.proceedToKittyToTokenSection();" class="btn btn-block btn-lg btn-primary">Give a Kitty, Get a WCK Token</a>
               </div>
             </center>
           </div> <!-- /kittyToTokenButton -->
@@ -71,7 +71,7 @@
           <div class="col kittyToKittyButton">
             <center>
               <div class="col">
-                <a href="javascript:App.init();" class="btn btn-block btn-lg btn-primary">Give a Kitty, Get a Different Kitty</a>
+                <a href="javascript:App.proceedToKittyToKittySection();" class="btn btn-block btn-lg btn-primary">Give a Kitty, Get a Different Kitty</a>
               </div>
             </center>
           </div> <!-- /kittyToKittyButton -->
@@ -84,6 +84,175 @@
           </div> <!-- /tokenToTokenButton -->
         </div> <!-- /demoRow -->
       </div> <!-- /coreApp -->
+      <div class="kittyToTokenSection" style="display: none;">
+          <div class="row kittyToTokenInputRow1">
+            <div class="col">
+              <div class="form-group">
+                <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox1" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY1">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <div class="row">
+            <div class="col kittyToTokenInputRow2" style="display: none;">
+              <div class="form-group">
+                <input  type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox2" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton kittyToTokenInputRow2" style="display: none;">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY2">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <div class="row">
+            <div class="col kittyToTokenInputRow3" style="display: none;">
+              <div class="form-group">
+                <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox3" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton kittyToTokenInputRow3" style="display: none;">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY3">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <div class="row">
+            <div class="col kittyToTokenInputRow4" style="display: none;">
+              <div class="form-group">
+                <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox4" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton kittyToTokenInputRow4" style="display: none;">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY4">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <div class="row">
+            <div class="col kittyToTokenInputRow5" style="display: none;">
+              <div class="form-group">
+                <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox5" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton kittyToTokenInputRow5" style="display: none;">
+              <center>
+                <div class="col" >
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY5">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <div class="row">
+            <div class="col kittyToTokenInputRow6" style="display: none;">
+              <div class="form-group">
+                <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox6" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton kittyToTokenInputRow6" style="display: none;">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY6">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <div class="row">
+            <div class="col kittyToTokenInputRow7" style="display: none;">
+              <div class="form-group">
+                <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox7" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton kittyToTokenInputRow7" style="display: none;">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY7">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <div class="row">
+            <div class="col kittyToTokenInputRow8" style="display: none;">
+              <div class="form-group">
+                <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox8" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton kittyToTokenInputRow8" style="display: none;">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY8">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <div class="row">
+            <div class="col kittyToTokenInputRow9" style="display: none;">
+              <div class="form-group">
+                <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox9" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton kittyToTokenInputRow9" style="display: none;">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY9">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <div class="row" >
+            <div class="col kittyToTokenInputRow10" style="display: none;">
+              <div class="form-group">
+                <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the ID of the kitty you wish to give for WCK" class="form-control" id="kittyToTokenInputBox10" />
+              </div>
+            </div>
+            <div class="col kittyToTokenFunctionButton kittyToTokenInputRow10" style="display: none;">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.kittyToTokenButtonPressed();" class="btn btn-block btn-lg btn-primary" id="txnXOfY10">Send Transaction 1 of 2</a>
+                </div>
+              </center>
+              <br/>
+            </div> <!-- /kittyToTokenFunctionButton -->
+          </div> <!-- /kittyToTokenInputRow -->
+          <br/>
+          <div class="row">
+            <div class="col kittyToTokenAddAnotherRowButton">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.bundleMoreKittiesInThisTransactionButtonPressed();" class="btn btn-block btn-lg btn-primary" id='bundleMoreKittiesButton'>Bundle More Kitties Into This Transaction</a>
+                </div>
+              </center>
+            </div> <!-- /kittyToKittyButton -->
+            <div class="col kittyToTokenTransactionTwoButton">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.txnTwoOfTwoButtonPressed();" class="btn btn-block btn-lg btn-default" id="transactionTwoOfTwoButton">Send Transaction 2 of 2</a>
+                </div>
+              </center>
+            </div> <!-- /tokenToTokenButton -->
+          </div> <!-- /demoRow -->
+      </div> <!-- /kittyToTokenSection -->
       <div class="tokenToKittySection" style="display: none;">
           <div class="row">
             <div class="col">
@@ -91,13 +260,13 @@
                 <input type="number" min="1" max="20" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Maximum 20 per transaction" class="form-control" id="tokenToKittyInputBox" />
               </div>
             </div>
-            <div class="col tokenToKittyButton">
+            <div class="col tokenToKittyFunctionButton">
               <center>
                 <div class="col">
-                  <a href="javascript:App.tokensToKittyButtonPressed();" class="btn btn-block btn-lg btn-primary">Convert WCK Tokens into CryptoKitties</a>
+                  <a href="javascript:App.tokenToKittyButtonPressed();" class="btn btn-block btn-lg btn-primary">Convert WCK Tokens into CryptoKitties</a>
                 </div>
               </center>
-            </div> <!-- /tokenToKittyButton -->
+            </div> <!-- /tokenToKittyFunctionButton -->
           </div> <!-- /row -->
       </div> <!-- /tokenToKittySection -->
       <br/>
