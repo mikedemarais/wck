@@ -7,9 +7,10 @@ App = {
         userAccount: undefined,
         web3Provider: undefined,
         kittyToToken: true,
-        numberOfVisibleKittyToTokenInputBoxes: 0,
+        numberOfVisibleKittyToTokenInputBoxes: 1,
         numApproveTxnSent: 0,
         approvedKitties:{},
+        numApprovedKitties: 0,
         contracts:{
             'cryptoCatsCoreContract':{
                 'source': undefined,
@@ -327,12 +328,7 @@ App = {
         document.getElementById('bundleMoreKittiesButton').classList.remove('btn-default');
         document.getElementById('bundleMoreKittiesButton').classList.add('btn-primary');
         document.getElementById('bundleMoreKittiesButton').href = "javascript:App.bundleMoreKittiesInThisTransactionButtonPressed();"
-        document.getElementById('transactionTwoOfTwoButton').innerText = 'Send Transaction 2 of 2';
-        document.getElementById('transactionTwoOfTwoButton').classList.remove('btn-default');
-        document.getElementById('transactionTwoOfTwoButton').classList.add('btn-primary');
-        document.getElementById('transactionTwoOfTwoButton').href = 'javascript:App.txnTwoOfTwoButtonPressed()';
-        document.getElementById('transactionTwoOfTwoButton').removeAttribute('target');
-        document.getElementById('transactionTwoOfTwoButton').removeAttribute('rel');
+        App.hideTransactionTwoOfTwoButton();
         for(var i = 1; i <= App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes; i++){
             const elementId = 'kittyToTokenInputBox' + String(i);
             document.getElementById(elementId).value = '';
@@ -351,6 +347,7 @@ App = {
             }
         }
         App.Globals.approvedKitties = {};
+        App.Globals.numApprovedKitties = 0;
     },
 
     updateTransactionXOfYText: function(){
@@ -359,11 +356,11 @@ App = {
             const elementId = 'txnXOfY' + String(i);
             document.getElementById(elementId).innerText = 'Send Transaction ' + i + ' of ' + totalNumTransactions;
         }
-        document.getElementById('transactionTwoOfTwoButton').innerText = 'Send Transaction ' + totalNumTransactions + ' of ' + totalNumTransactions;
     },
 
     bundleMoreKittiesInThisTransactionButtonPressed: function(){
         if(App.Globals.numberOfVisibleKittyToTokenInputBoxes < App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes){
+            App.hideTransactionTwoOfTwoButton();
             App.Globals.numberOfVisibleKittyToTokenInputBoxes++;
             const classId = 'kittyToTokenInputRow' + String(App.Globals.numberOfVisibleKittyToTokenInputBoxes);
             App.showAllDivsInClass(classId);
@@ -413,7 +410,35 @@ App = {
             document.getElementById(buttonId).classList.remove('btn-primary');
             document.getElementById(buttonId).classList.add('btn-default');
             document.getElementById(buttonId).href = 'javascript:App.doNothing()';
+            App.Globals.numApprovedKitties += 1;
         };
+        if(App.Globals.numApprovedKitties === App.Globals.numberOfVisibleKittyToTokenInputBoxes){
+            App.showTransactionTwoOfTwoButton();
+        }
+    },
+
+    showTransactionTwoOfTwoButton: function(){
+        const totalNumTransactions = String(Number(App.Globals.numberOfVisibleKittyToTokenInputBoxes) + 1);
+        document.getElementById('transactionTwoOfTwoButton').innerText = 'Send Transaction ' + totalNumTransactions + ' of ' + totalNumTransactions;
+        document.getElementById('transactionTwoOfTwoButton').classList.remove('btn-default');
+        document.getElementById('transactionTwoOfTwoButton').classList.add('btn-primary');
+        document.getElementById('transactionTwoOfTwoButton').href = 'javascript:App.txnTwoOfTwoButtonPressed()';
+        document.getElementById('transactionTwoOfTwoButton').removeAttribute('target');
+        document.getElementById('transactionTwoOfTwoButton').removeAttribute('rel');
+    },
+
+    hideTransactionTwoOfTwoButton: function(){
+        const totalNumTransactions = String(Number(App.Globals.numberOfVisibleKittyToTokenInputBoxes) + 1);
+        document.getElementById('transactionTwoOfTwoButton').innerText = 'Send Transaction ' + totalNumTransactions + ' of ' + totalNumTransactions;
+        document.getElementById('transactionTwoOfTwoButton').classList.remove('btn-primary');
+        document.getElementById('transactionTwoOfTwoButton').classList.add('btn-default');
+        document.getElementById('transactionTwoOfTwoButton').href = 'javascript:App.addWarningToTransactionTwoOfTwoButton()';
+        document.getElementById('transactionTwoOfTwoButton').removeAttribute('target');
+        document.getElementById('transactionTwoOfTwoButton').removeAttribute('rel');
+    },
+
+    addWarningToTransactionTwoOfTwoButton: function(){
+        document.getElementById('transactionTwoOfTwoButton').innerText = 'Wait For Previous Transactions To Confirm';
     },
 
     showSingleDiv: function(id) {
