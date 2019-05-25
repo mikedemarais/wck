@@ -255,12 +255,9 @@ App = {
     },
 
     displayTxnTwoOfTwoConfirmation: function(result){
-        document.getElementById('transactionTwoOfTwoButton').href = "https://etherscan.io/tx/" + String(result);
-        document.getElementById('transactionTwoOfTwoButton').target="_blank"
-        document.getElementById('transactionTwoOfTwoButton').rel="noopener noreferrer"
-        document.getElementById('transactionTwoOfTwoButton').innerText = 'View Transaction on Etherscan';
-        document.getElementById('transactionTwoOfTwoButton').classList.remove('btn-primary');
-        document.getElementById('transactionTwoOfTwoButton').classList.add('btn-default');
+        document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
+        App.hideAllDivsInClass('kittyToTokenSection');
+        App.showAllDivsInClass('viewTransactionOnEtherscan');
         App.Globals.approvedKitties = {};
     },
 
