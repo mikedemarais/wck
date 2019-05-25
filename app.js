@@ -360,8 +360,8 @@ App = {
 
     bundleMoreKittiesInThisTransactionButtonPressed: function(){
         if(App.Globals.numberOfVisibleKittyToTokenInputBoxes < App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes){
-            App.hideTransactionTwoOfTwoButton();
             App.Globals.numberOfVisibleKittyToTokenInputBoxes++;
+            App.hideTransactionTwoOfTwoButton();
             const classId = 'kittyToTokenInputRow' + String(App.Globals.numberOfVisibleKittyToTokenInputBoxes);
             App.showAllDivsInClass(classId);
             if(App.Globals.numberOfVisibleKittyToTokenInputBoxes >= App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes){
