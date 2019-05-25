@@ -70,7 +70,6 @@ App = {
             // Check if account has changed
             if (window.web3.eth.accounts[0] !== App.Globals.userAccount) {
                 App.Globals.userAccount = window.web3.eth.accounts[0];
-                App.fetchCurrentBlock();
             }
         }, 100);
 
