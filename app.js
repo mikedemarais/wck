@@ -288,6 +288,12 @@ App = {
         App.showHomePageDivs();
     },
 
+    titleButtonPressed: function(){
+        if(window.web3.eth.accounts[0] !== undefined){
+            App.retreatToHomeScreen();
+        }
+    },
+
     retreatToHomeScreen: function(){
         App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
         App.hideAllDivsInClass('kittyToTokenSection');
