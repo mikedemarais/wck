@@ -299,6 +299,7 @@ App = {
         App.hideAllDivsInClass('kittyToTokenSection');
         App.hideAllDivsInClass('tokenToKittySection');
         App.hideAllDivsInClass('kittyToKittySection');
+        App.hideAllDivsInClass('buyTokensInBulkSection');
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
         for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
             const textBoxId = 'kittyToTokenInputBox' + String(i);
@@ -327,6 +328,12 @@ App = {
         App.Globals.kittyToToken = false;
         App.updateKittyToTokenInputBoxes();
         App.showAllDivsInClass('kittyToTokenSection');
+    },
+
+    proceedToBuyTokensInBulkSection: function(){
+        App.hideHomePageDivs();
+        window.history.pushState({}, "", "");
+        App.showAllDivsInClass('buyTokensInBulkSection');
     },
 
     updateKittyToTokenInputBoxes: function(){
