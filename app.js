@@ -289,9 +289,11 @@ App = {
     },
 
     titleButtonPressed: function(){
+        /*
         if(window.web3.eth.accounts[0] !== undefined){
             App.retreatToHomeScreen();
         }
+        */
     },
 
     retreatToHomeScreen: function(){
