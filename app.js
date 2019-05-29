@@ -1,6 +1,7 @@
 App = {
     Constants: {
         nullAddress: '0x0000000000000000000000000000000000000000',
+        nullTransaction: '0x0000000000000000000000000000000000000000000000000000000000000000',
         maximumNumberOfVisibleKittyToTokenInputBoxes:10,
     },
     Globals: {
@@ -139,7 +140,11 @@ App = {
     },
 
     displayTokenToKittyTransactionConfirmation: function(result){
-        document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
+        if(String(result) === String(App.Constants.nullTransaction)){
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
+        }else{
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
+        }
         App.hideAllDivsInClass('tokenToKittySection');
         App.showAllDivsInClass('viewTransactionOnEtherscan');
     },
@@ -246,7 +251,11 @@ App = {
 
     displayApproveKittyConfirmation: function(result){
         const elementId = 'txnXOfY' + App.Globals.numApproveTxnSent;
-        document.getElementById(elementId).href = "https://etherscan.io/tx/" + String(result);
+        if(String(result) === String(App.Constants.nullTransaction)){
+            document.getElementById(elementId).href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
+        }else{
+            document.getElementById(elementId).href = "https://etherscan.io/tx/" + String(result);
+        }
         document.getElementById(elementId).target="_blank"
         document.getElementById(elementId).rel="noopener noreferrer"
         document.getElementById(elementId).innerText = 'View Transaction on Etherscan';
@@ -255,7 +264,11 @@ App = {
     },
 
     displayTxnTwoOfTwoConfirmation: function(result){
-        document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
+        if(String(result) === String(App.Constants.nullTransaction)){
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
+        }else{
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
+        }
         App.hideAllDivsInClass('kittyToTokenSection');
         App.showAllDivsInClass('viewTransactionOnEtherscan');
         App.Globals.approvedKitties = {};
