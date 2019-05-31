@@ -7,12 +7,11 @@ App = {
     Globals: {
         userAccount: undefined,
         web3Provider: undefined,
+        kittyToToken: true,
         numberOfVisibleKittyToTokenInputBoxes: 1,
         numApproveTxnSent: 0,
         approvedKitties:{},
         numApprovedKitties: 0,
-        specifyingDestinationAddresses: false,
-        specifyingKittyIDs: false,
         contracts:{
             'cryptoCatsCoreContract':{
                 'source': undefined,
@@ -23,8 +22,8 @@ App = {
             'wrappedKittiesContract':{
                 'source': undefined,
                 'instance': undefined,
-                'contractABI':[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_kittyIds","type":"uint256[]"},{"name":"_destinationAddresses","type":"address[]"}],"name":"burnTokensAndWithdrawKitties","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"kittyCoreAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_numSlotsToCheck","type":"uint256"}],"name":"batchRemoveWithdrawnKittiesFromStorage","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_kittyIds","type":"uint256[]"}],"name":"depositKittiesAndMintTokens","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"kittyId","type":"uint256"}],"name":"DepositKittyAndMintToken","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"kittyId","type":"uint256"}],"name":"BurnTokenAndWithdrawKitty","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"}],
-                'contractAddress':'0x09fE5f0236F0Ea5D930197DCE254d77B04128075',
+                'contractABI':[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_kittyId","type":"uint256"}],"name":"depositKittyAndMintToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalCatsLockedInContract","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"kittyCoreAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"burnTokenAndWithdrawKitty","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_kittyId","type":"uint256"}],"name":"depositKittyAndWithdrawDifferentKitty","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_kittyIds","type":"uint256[]"}],"name":"multiDepositKittyAndWithdrawDifferentKitty","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_numTokens","type":"uint256"}],"name":"multiBurnTokenAndWithdrawKitty","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_kittyIds","type":"uint256[]"}],"name":"multiDepositKittyAndMintToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"kittyId","type":"uint256"},{"indexed":false,"name":"tokensMinted","type":"uint256"}],"name":"DepositKittyAndMintToken","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"kittyId","type":"uint256"},{"indexed":false,"name":"tokensBurned","type":"uint256"}],"name":"BurnTokenAndWithdrawKitty","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"}],
+                'contractAddress':'0x19d9b17497824081E291115044B567c4722CDaeB',
             },
         },
     },
@@ -39,14 +38,13 @@ App = {
         // Modern dapp browsers...
         if (window.ethereum) {
             window.web3 = new Web3(ethereum);
-
             try {
                 // Request account access if needed
                 await ethereum.enable();
                 App.hideAllDivsInClass('connectToWeb3Button');
                 App.showAllDivsInClass('coreApp');
                 // Accounts now exposed
-                //web3.eth.sendTransaction({ ... });
+                //web3.eth.sendTransaction({/* ... */});
             } catch (error) {
                 console.log('Error when trying to enable');
                 App.proceedToNoMainnetOrMetamaskScreen();
@@ -112,38 +110,31 @@ App = {
             web3.eth.getAccounts(function(error, accounts) {
                 if (error) { console.log(error); }
                 var account = accounts[0];
-                var specificKitties = [];
-                var specificAddresses = [];
-                for(var i = 1; i <= Number(numTokens); i++){
-                    if(App.Globals.specifyingKittyIDs === true){
-                        const inputBoxElementID = 'tokenToKittySpecificKittyIDInputBox' + String(i);
-                        const inputValue = document.getElementById(inputBoxElementID).value;
-                        if(inputValue === '') { return; }
-                        specificKitties.push(new BigNumber(String(inputValue)));
-                    } else {
-                        specificKitties.push(new BigNumber(String(0)));
-                    }
-                    if(App.Globals.specifyingDestinationAddresses === true){
-                        const inputBoxElementID = 'tokenToKittySpecificAddressInputBox' + String(i);
-                        const inputValue = document.getElementById(inputBoxElementID).value;
-                        if(inputValue === '') { return; }
-                        specificAddresses.push(new BigNumber(String(inputValue)));
-                    } else {
-                        specificAddresses.push(new BigNumber(String(App.Globals.userAccount)));
-                    }
+                if(Number(numTokens) === 1){
+                    App.Globals.contracts['wrappedKittiesContract'].instance.burnTokenAndWithdrawKitty(
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTokenToKittyTransactionConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
+                } else {
+                    App.Globals.contracts['wrappedKittiesContract'].instance.multiBurnTokenAndWithdrawKitty(new BigNumber(String(numTokens)),
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTokenToKittyTransactionConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
                 }
-                App.Globals.contracts['wrappedKittiesContract'].instance.burnTokensAndWithdrawKitties(specificKitties,
-                                                                                                    specificAddresses,
-                                                                            {
-                                                                                from: account,
-                                                                            },
-                                                                            function(error, result){
-                                                                                if(!error) return App.displayTokenToKittyTransactionConfirmation(result);
-                                                                                else {
-                                                                                    console.log(error.message);
-                                                                                    return App.displayTransactionError(error);
-                                                                                }
-                                                                            })
             });
         }
     },
@@ -202,17 +193,59 @@ App = {
         web3.eth.getAccounts(function(error, accounts) {
             if (error) { console.log(error); }
             var account = accounts[0];
-            App.Globals.contracts['wrappedKittiesContract'].instance.depositKittiesAndMintTokens(catsToSend,
-                                                                        {
-                                                                            from: account,
-                                                                        },
-                                                                        function(error, result){
-                                                                            if(!error) return App.displayTxnTwoOfTwoConfirmation(result);
-                                                                            else {
-                                                                                console.log(error.message);
-                                                                                return App.displayTransactionError(error);
-                                                                            }
-                                                                        })
+            if (catsToSend.length === 1){
+                if(App.Globals.kittyToToken === true){
+                    App.Globals.contracts['wrappedKittiesContract'].instance.depositKittyAndMintToken(catsToSend[0],
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTxnTwoOfTwoConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
+                } else {
+                    App.Globals.contracts['wrappedKittiesContract'].instance.depositKittyAndWithdrawDifferentKitty(catsToSend[0],
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTxnTwoOfTwoConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
+                }
+            } else {
+                if(App.Globals.kittyToToken === true){
+                    App.Globals.contracts['wrappedKittiesContract'].instance.multiDepositKittyAndMintToken(catsToSend,
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTxnTwoOfTwoConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
+                } else {
+                    App.Globals.contracts['wrappedKittiesContract'].instance.multiDepositKittyAndWithdrawDifferentKitty(catsToSend,
+                                                                                {
+                                                                                    from: account,
+                                                                                },
+                                                                                function(error, result){
+                                                                                    if(!error) return App.displayTxnTwoOfTwoConfirmation(result);
+                                                                                    else {
+                                                                                        console.log(error.message);
+                                                                                        return App.displayTransactionError(error);
+                                                                                    }
+                                                                                })
+                }
+            }
         });
     },
 
@@ -293,85 +326,23 @@ App = {
     proceedToKittyToTokenSection: function(){
         App.hideHomePageDivs();
         window.history.pushState({}, "", "");
+        App.Globals.kittyToToken = true;
         App.updateKittyToTokenInputBoxes();
         App.showAllDivsInClass('kittyToTokenSection');
     },
 
     proceedToTokenToKittySection: function(){
         App.hideHomePageDivs();
-        App.Globals.specifyingDestinationAddresses = false;
-        App.Globals.specifyingKittyIDs = false;
         window.history.pushState({}, "", "");
-        document.getElementById('tokenToKittyInputBox').value = '';
-        App.clearInputsOfTokenToKittyInputSections();
-        App.hideAllDivsInClass('tokenToKittySpecificKittyIDRow');
-        App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
         App.showAllDivsInClass('tokenToKittySection');
     },
 
-    tokentoKittyAddSpecificAddressesButtonPressed: function(){
-        App.Globals.specifyingDestinationAddresses = !App.Globals.specifyingDestinationAddresses;
-        if(App.Globals.specifyingDestinationAddresses){
-            App.showAllDivsInClass('tokenToKittySpecificAddressRow');
-            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = "Specify My Address For All Kitties Being Withdrawn";
-        } else {
-            App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
-            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = 'Optional: Specify Individual Destination Addresses Per Kitty';
-        }
-        var inputValue = document.getElementById('tokenToKittyInputBox').value;
-        if(inputValue === '' || inputValue === undefined) { inputValue = 1; }
-        App.tokenToKittyShowSpecificAddressInputsUpToValue(inputValue);
-        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(inputValue);
-    },
-
-    tokenToKittyNumTokensInputValueEntered: function(value){
-        if(value === '' || value === undefined) { value = 1; }
-        App.tokenToKittyShowSpecificAddressInputsUpToValue(value);
-        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(value);
-    },
-
-    tokenToKittyShowSpecificAddressInputsUpToValue: function(value){
-        for(var i = 1; i <= 20; i++){
-            if(i <= value){
-                App.showAllDivsInClass('tokenToKittySpecificAddressInputRow' + String(i));
-            }else{
-                App.hideAllDivsInClass('tokenToKittySpecificAddressInputRow' + String(i));
-            }
-        }
-    },
-
-    tokenToKittyShowSpecificKittyIDInputsUpToValue: function(value){
-        if(App.Globals.specifyingKittyIDs === true){
-            for(var i = 1; i <= 20; i++){
-                if(i <= value){
-                    App.showAllDivsInClass('tokenToKittySpecificKittyIDInputRow' + String(i));
-                }else{
-                    App.hideAllDivsInClass('tokenToKittySpecificKittyIDInputRow' + String(i));
-                }
-            }
-        }
-    },
-
-    proceedToTokenForSpecificKittySection: function(){
+    proceedToKittyToKittySection: function(){
         App.hideHomePageDivs();
-        App.Globals.specifyingDestinationAddresses = false;
-        App.Globals.specifyingKittyIDs = true;
         window.history.pushState({}, "", "");
-        document.getElementById('tokenToKittyInputBox').value = '';
-        App.clearInputsOfTokenToKittyInputSections();
-        App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
-        App.showAllDivsInClass('tokenToKittySection');
-        App.showAllDivsInClass('tokenToKittySpecificKittyIDRow');
-        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(1);
-    },
-
-    clearInputsOfTokenToKittyInputSections: function(){
-        for(var i = 1; i <= 20; i++){
-            const kittyIDInputBoxElementID = 'tokenToKittySpecificKittyIDInputBox' + String(i);
-            document.getElementById(kittyIDInputBoxElementID).value = '';
-            const addressInputBoxElementID = 'tokenToKittySpecificAddressInputBox' + String(i);
-            document.getElementById(addressInputBoxElementID).value = '';
-        }
+        App.Globals.kittyToToken = false;
+        App.updateKittyToTokenInputBoxes();
+        App.showAllDivsInClass('kittyToTokenSection');
     },
 
     proceedToBuyTokensInBulkSection: function(){
@@ -389,7 +360,7 @@ App = {
         for(var i = 1; i <= App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes; i++){
             const elementId = 'kittyToTokenInputBox' + String(i);
             document.getElementById(elementId).value = '';
-            document.getElementById(elementId).placeholder = 'Enter the ID of the kitty you wish to give for WCK';
+            document.getElementById(elementId).placeholder = (App.Globals.kittyToToken) ? 'Enter the ID of the kitty you wish to give for WCK' : 'Enter the ID of the kitty you wish to give for a different kitty';
             const totalNumTransactions = String(Number(App.Globals.numberOfVisibleKittyToTokenInputBoxes) + 1);
             const buttonId = 'txnXOfY' + String(i);
             document.getElementById(buttonId).innerText = 'Send Transaction ' + i + ' of ' + totalNumTransactions;
