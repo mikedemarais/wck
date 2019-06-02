@@ -30,11 +30,11 @@
           <a href="javascript:App.init();" class="btn btn-block btn-lg btn-primary">Connect to Web3 Provider</a>
         </center>
       </div> <!-- /Connect To Web3 -->
-      <div class="col connectToWeb3AccountLockedMessage style="display: none;">
+      <div class="col connectToWeb3AccountLockedMessage" style="display: none;">
         <center>
             <h1 class="demo-download-text"><center>Make sure that your web3 extension is unlocked.</center></h1>
         </center>
-      </div> <!-- /Connect To Web3 -->
+      </div> <!-- connectToWeb3AccountLockedMessage -->
       <div class="col siteUnderMaintenance" style="display: none;">
         <center>
           <h1 class="demo-section-title"><center>Site Under Maintenance</center></h1>
@@ -302,12 +302,17 @@
               </center>
             </div> <!-- /tokenToKittyFunctionButton -->
           </div> <!-- /row -->
+          <div class="col invalidAddressErrorMessage" style="display: none;">
+            <center>
+                <h1 class="demo-download-text"><center>Invalid address entered. Please double check your inputs in the boxes below, or press the button at the bottom of the page.</center></h1>
+            </center>
+          </div> <!-- connectToWeb3AccountLockedMessage -->
           <div class="row tokenToKittySpecificKittyIDRow" style="display: none;">
               <div class="col">
                 <div class="col tokenToKittySpecificKittyIDInputRow1" >
                   <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 1st kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox1" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 1st kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox1" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -326,7 +331,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow2" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 2nd kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox2" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 2nd kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox2" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -345,7 +350,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow3" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 3rd kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox3" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 3rd kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox3" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -364,7 +369,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow4" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 4th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox4" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 4th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox4" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -383,7 +388,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow5" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 5th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox5" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 5th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox5" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -402,7 +407,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow6" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 6th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox6" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 6th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox6" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -421,7 +426,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow7" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 7th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox7" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 7th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox7" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -440,7 +445,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow8" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 8th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox8" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 8th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox8" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -459,7 +464,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow9" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 9th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox9" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 9th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox9" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -478,7 +483,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow10" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 10th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox10" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 10th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox10" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -497,7 +502,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow11" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 11th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox11" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 11th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox11" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -516,7 +521,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow12" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 12th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox12" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 12th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox12" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -535,7 +540,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow13" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 13th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox13" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 13th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox13" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -554,7 +559,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow14" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 14th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox14" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 14th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox14" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -573,7 +578,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow15" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 15th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox15" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 15th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox15" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -592,7 +597,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow16" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 16th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox16" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 16th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox16" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -611,7 +616,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow17" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 17th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox17" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 17th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox17" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -630,7 +635,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow18" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 18th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox18" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 18th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox18" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -649,7 +654,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow19" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 19th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox19" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 19th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox19" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
@@ -668,7 +673,7 @@
                 <div class="col tokenToKittySpecificKittyIDInputRow20" >
                     <br/>
                   <div class="form-group">
-                    <input placeholder="Enter the KittyID for the 20th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox20" />
+                    <input type="number" min="1" max="100000000" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Enter the KittyID for the 20th kitty" class="form-control" id="tokenToKittySpecificKittyIDInputBox20" />
                   </div>
                 </div>
             </div> <!-- /specificAddressInputBox -->
