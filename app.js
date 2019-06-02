@@ -93,7 +93,7 @@ App = {
         }
 
         App.Globals.userAccount = window.web3.eth.accounts[0];
-        
+
         var accountInterval = setInterval(function() {
             // Check if account has changed
             if(App.Globals.lockscreenIsLocked === true && window.web3.eth.accounts[0] !== undefined){
@@ -160,9 +160,9 @@ App = {
                         const inputBoxElementID = 'tokenToKittySpecificAddressInputBox' + String(i);
                         const inputValue = document.getElementById(inputBoxElementID).value;
                         if(inputValue === '') { return; }
-                        specificAddresses.push(String(inputValue));
+                        specificAddresses.push(new BigNumber(String(inputValue)));
                     } else {
-                        specificAddresses.push(String(App.Globals.userAccount));
+                        specificAddresses.push(new BigNumber(String(App.Globals.userAccount)));
                     }
                 }
                 App.Globals.contracts['wrappedKittiesContract'].instance.burnTokensAndWithdrawKitties(specificKitties,
