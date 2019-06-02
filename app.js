@@ -23,6 +23,7 @@ App = {
         numApprovedKitties: 0,
         specifyingDestinationAddresses: false,
         specifyingKittyIDs: false,
+        lockscreenIsLocked: false,
         contracts:{
             'cryptoCatsCoreContract':{
                 'source': undefined,
@@ -53,8 +54,14 @@ App = {
             try {
                 // Request account access if needed
                 await ethereum.enable();
-                App.hideAllDivsInClass('connectToWeb3Button');
-                App.showAllDivsInClass('coreApp');
+                if(window.web3.eth.accounts[0] !== undefined){
+                    App.hideAllDivsInClass('connectToWeb3Button');
+                    App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+                    App.showAllDivsInClass('coreApp');
+                } else {
+                    App.showAllDivsInClass('connectToWeb3AccountLockedMessage');
+                    App.Globals.lockscreenIsLocked = true;
+                }
                 // Accounts now exposed
                 //web3.eth.sendTransaction({ ... });
             } catch (error) {
@@ -67,8 +74,14 @@ App = {
         else if (window.web3) {
             console.log('Legacy dapp browser');
             window.web3 = new Web3(web3.currentProvider);
-            App.hideAllDivsInClass('connectToWeb3Button');
-            App.showAllDivsInClass('coreApp');
+            if(window.web3.eth.accounts[0] !== undefined){
+                App.hideAllDivsInClass('connectToWeb3Button');
+                App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+                App.showAllDivsInClass('coreApp');
+            } else {
+                App.showAllDivsInClass('connectToWeb3AccountLockedMessage');
+                App.Globals.lockscreenIsLocked = true;
+            }
             // Acccounts always exposed
             //web3.eth.sendTransaction({ ... });
         }
@@ -80,12 +93,21 @@ App = {
         }
 
         App.Globals.userAccount = window.web3.eth.accounts[0];
+        
         var accountInterval = setInterval(function() {
             // Check if account has changed
-            if (window.web3.eth.accounts[0] !== App.Globals.userAccount) {
+            if(App.Globals.lockscreenIsLocked === true && window.web3.eth.accounts[0] !== undefined){
+                App.Globals.lockscreenIsLocked = false;
+                App.Globals.userAccount = window.web3.eth.accounts[0];
+                App.hideAllDivsInClass('connectToWeb3Button');
+                App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+                App.showAllDivsInClass('coreApp');
+            } else if(window.web3.eth.accounts[0] === undefined){
+                App.retreatToLockScreen();
+            } else if (window.web3.eth.accounts[0] !== App.Globals.userAccount) {
                 App.Globals.userAccount = window.web3.eth.accounts[0];
             }
-        }, 100);
+        }, 1000);
 
         var accountInterval = setInterval(function() {
             App.checkAllInputtedKittyIdsForApproval();
@@ -99,6 +121,7 @@ App = {
     },
 
     checkWhetherWeb3HasBeenInitialized: function() {
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
         if(window.web3.eth.accounts[0] !== undefined){
             App.initWeb3();
         }
@@ -265,16 +288,19 @@ App = {
 
     proceedToNoMainnetOrMetamaskScreen: function(){
         App.hideHomePageDivs();
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
         App.showAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
     },
 
     proceedToSiteUnderMaintenance: function(){
         App.hideHomePageDivs();
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
         App.showAllDivsInClass('siteUnderMaintenance');
     },
 
     retreatFromNoMainnetOrMetamaskScreen: function(){
         App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
         App.showHomePageDivs();
     },
 
@@ -290,14 +316,31 @@ App = {
         App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
         App.hideAllDivsInClass('kittyToTokenSection');
         App.hideAllDivsInClass('tokenToKittySection');
-        App.hideAllDivsInClass('kittyToKittySection');
+        App.hideAllDivsInClass('buyTokensInBulkSection');
+        App.hideAllDivsInClass('viewTransactionOnEtherscan');
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+        for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
+            const textBoxId = 'kittyToTokenInputBox' + String(i);
+            document.getElementById(textBoxId).value = '';
+        }
+        App.showHomePageDivs();
+    },
+
+    retreatToLockScreen: function(){
+        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
+        App.hideAllDivsInClass('kittyToTokenSection');
+        App.hideAllDivsInClass('tokenToKittySection');
         App.hideAllDivsInClass('buyTokensInBulkSection');
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
         for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
             const textBoxId = 'kittyToTokenInputBox' + String(i);
             document.getElementById(textBoxId).value = '';
         }
-        App.showHomePageDivs();
+        App.hideAllDivsInClass('coreApp');
+        App.showAllDivsInClass('connectToWeb3AccountLockedMessage');
+        App.showAllDivsInClass('connectToWeb3Button');
+        App.showAllDivsInClass('infoForApp');
+        App.showAllDivsInClass('builtOnEthereum');
     },
 
     proceedToKittyToTokenSection: function(){
