@@ -1,3 +1,13 @@
+Object.defineProperty(Object.prototype, 'round', {
+    value: function(){return this},
+    writeable:true,
+});
+
+Object.defineProperty(Object.prototype, 'lessThan', {
+    value: function(n){},
+    writeable:true,
+});
+
 App = {
     Constants: {
         nullAddress: '0x0000000000000000000000000000000000000000',
@@ -60,7 +70,7 @@ App = {
             App.hideAllDivsInClass('connectToWeb3Button');
             App.showAllDivsInClass('coreApp');
             // Acccounts always exposed
-            //web3.eth.sendTransaction({/* ... */});
+            //web3.eth.sendTransaction({ ... });
         }
         // Non-dapp browsers...
         else {
@@ -127,9 +137,9 @@ App = {
                         const inputBoxElementID = 'tokenToKittySpecificAddressInputBox' + String(i);
                         const inputValue = document.getElementById(inputBoxElementID).value;
                         if(inputValue === '') { return; }
-                        specificAddresses.push(new BigNumber(String(inputValue)));
+                        specificAddresses.push(String(inputValue));
                     } else {
-                        specificAddresses.push(new BigNumber(String(App.Globals.userAccount)));
+                        specificAddresses.push(String(App.Globals.userAccount));
                     }
                 }
                 App.Globals.contracts['wrappedKittiesContract'].instance.burnTokensAndWithdrawKitties(specificKitties,
