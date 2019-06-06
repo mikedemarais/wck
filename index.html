@@ -291,7 +291,7 @@
           <div class="row">
             <div class="col">
               <div class="form-group">
-                <input type="number" min="1" max="20" step="1" oninput="validity.valid||(value='');App.tokenToKittyNumTokensInputValueEntered(value);" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Maximum 20 per transaction" class="form-control" id="tokenToKittyInputBox" />
+                <input type="number" min="1" max="20" step="1" oninput="validity.valid||(value='');App.tokenToKittyNumTokensInputValueEntered(value);" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="1" placeholder="Maximum 20 per transaction" class="form-control" id="tokenToKittyInputBox" />
               </div>
             </div>
             <div class="col tokenToKittyFunctionButton">
@@ -302,6 +302,11 @@
               </center>
             </div> <!-- /tokenToKittyFunctionButton -->
           </div> <!-- /row -->
+          <div class="col missingInputErrorNumTokens" style="display: none;">
+            <center>
+                <h1 class="demo-download-text"><center>Please specify the number of WCK tokens that you wish to convert into CryptoKitties.</center></h1>
+            </center>
+          </div> <!-- connectToWeb3AccountLockedMessage -->
           <div class="col invalidAddressErrorMessage" style="display: none;">
             <center>
                 <h1 class="demo-download-text"><center>Invalid address entered. Please double check your inputs in the boxes below, or press the button at the bottom of the page.</center></h1>

@@ -141,7 +141,11 @@ App = {
 
     tokenToKittyButtonPressed: function(){
         var numTokens = document.getElementById('tokenToKittyInputBox').value;
-        if(numTokens !== ''){
+        if(numTokens === ''){
+            App.showAllDivsInClass('missingInputErrorNumTokens');
+            return;
+        } else {
+            App.hideAllDivsInClass('missingInputErrorNumTokens');
             web3.eth.getAccounts(function(error, accounts) {
                 if (error) { console.log(error); }
                 var account = accounts[0];
@@ -192,6 +196,7 @@ App = {
         }
         App.hideAllDivsInClass('tokenToKittySection');
         App.hideAllDivsInClass('invalidAddressErrorMessage');
+        App.hideAllDivsInClass('missingInputErrorNumTokens');
         App.showAllDivsInClass('viewTransactionOnEtherscan');
     },
 
@@ -331,6 +336,7 @@ App = {
         App.hideAllDivsInClass('kittyToTokenSection');
         App.hideAllDivsInClass('tokenToKittySection');
         App.hideAllDivsInClass('invalidAddressErrorMessage');
+        App.hideAllDivsInClass('missingInputErrorNumTokens');
         App.hideAllDivsInClass('buyTokensInBulkSection');
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
         App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
@@ -346,6 +352,7 @@ App = {
         App.hideAllDivsInClass('kittyToTokenSection');
         App.hideAllDivsInClass('tokenToKittySection');
         App.hideAllDivsInClass('invalidAddressErrorMessage');
+        App.hideAllDivsInClass('missingInputErrorNumTokens');
         App.hideAllDivsInClass('buyTokensInBulkSection');
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
         for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
@@ -371,11 +378,12 @@ App = {
         App.Globals.specifyingDestinationAddresses = false;
         App.Globals.specifyingKittyIDs = false;
         window.history.pushState({}, "", "");
-        document.getElementById('tokenToKittyInputBox').value = '';
+        document.getElementById('tokenToKittyInputBox').value = '1';
         App.clearInputsOfTokenToKittyInputSections();
         App.hideAllDivsInClass('tokenToKittySpecificKittyIDRow');
         App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
         App.hideAllDivsInClass('invalidAddressErrorMessage');
+        App.hideAllDivsInClass('missingInputErrorNumTokens');
         App.showAllDivsInClass('tokenToKittySection');
     },
 
@@ -427,10 +435,11 @@ App = {
         App.Globals.specifyingDestinationAddresses = false;
         App.Globals.specifyingKittyIDs = true;
         window.history.pushState({}, "", "");
-        document.getElementById('tokenToKittyInputBox').value = '';
+        document.getElementById('tokenToKittyInputBox').value = '1';
         App.clearInputsOfTokenToKittyInputSections();
         App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
         App.hideAllDivsInClass('invalidAddressErrorMessage');
+        App.hideAllDivsInClass('missingInputErrorNumTokens');
         App.showAllDivsInClass('tokenToKittySection');
         App.showAllDivsInClass('tokenToKittySpecificKittyIDRow');
         App.tokenToKittyShowSpecificKittyIDInputsUpToValue(1);
