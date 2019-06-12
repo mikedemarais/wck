@@ -20,6 +20,7 @@ App = {
         numberOfVisibleKittyToTokenInputBoxes: 1,
         numApproveTxnSent: 0,
         approvedKitties:{},
+        numIndexHasApprovedKitty:{},
         numApprovedKitties: 0,
         specifyingDestinationAddresses: false,
         specifyingKittyIDs: false,
@@ -528,6 +529,8 @@ App = {
                                                                                                 }
                                                                                             });
 
+        } else if (App.Globals.approvedKitties[kittyId] === true){
+            App.greyOutButtonContainingKittyId(kittyId, numTxn);
         }
     },
 
@@ -535,6 +538,8 @@ App = {
         if(String(result).toLowerCase() === String(App.Globals.contracts['wrappedKittiesContract'].contractAddress).toLowerCase()){
             App.Globals.approvedKitties[kittyId] = true;
             App.greyOutButtonContainingKittyId(kittyId, numTxn);
+        } else {
+            App.greenOutButtonLackingKittyId(numTxn);
         }
     },
 
@@ -547,10 +552,27 @@ App = {
             document.getElementById(buttonId).classList.remove('btn-primary');
             document.getElementById(buttonId).classList.add('btn-default');
             document.getElementById(buttonId).href = 'javascript:App.doNothing()';
-            App.Globals.numApprovedKitties += 1;
+            if(App.Globals.numIndexHasApprovedKitty[numTxn] !== true){
+                App.Globals.numIndexHasApprovedKitty[numTxn] = true;
+                App.Globals.numApprovedKitties += 1;
+            }
         };
         if(App.Globals.numApprovedKitties === App.Globals.numberOfVisibleKittyToTokenInputBoxes){
             App.showTransactionTwoOfTwoButton();
+        }
+    },
+
+    greenOutButtonLackingKittyId: function(numTxn){
+        const buttonId = 'txnXOfY' + String(numTxn);
+        const totalNumTransactions = String(Number(App.Globals.numberOfVisibleKittyToTokenInputBoxes) + 1);
+        document.getElementById(buttonId).innerText = 'Send Transaction ' + numTxn + ' of ' + totalNumTransactions;
+        document.getElementById(buttonId).classList.remove('btn-default');
+        document.getElementById(buttonId).classList.add('btn-primary');
+        document.getElementById(buttonId).href = 'javascript:App.kittyToTokenButtonPressed()';
+        if(App.Globals.numIndexHasApprovedKitty[numTxn] === true){
+            App.Globals.numIndexHasApprovedKitty[numTxn] = false;
+            App.Globals.numApprovedKitties -= 1;
+            App.hideTransactionTwoOfTwoButton();
         }
     },
 
