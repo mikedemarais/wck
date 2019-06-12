@@ -279,7 +279,7 @@ App = {
         }
         document.getElementById(elementId).target="_blank"
         document.getElementById(elementId).rel="noopener noreferrer"
-        document.getElementById(elementId).innerText = 'View Transaction on Etherscan';
+        document.getElementById(elementId).innerText = 'Approval In Progress, Final Transaction Below';
         document.getElementById(elementId).classList.remove('btn-primary');
         document.getElementById(elementId).classList.add('btn-default');
     },
