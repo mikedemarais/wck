@@ -491,8 +491,7 @@ App = {
     updateTransactionXOfYText: function(){
         const totalNumTransactions = String(Number(App.Globals.numberOfVisibleKittyToTokenInputBoxes) + 1);
         for(var i = 1; i <= App.Constants.maximumNumberOfVisibleKittyToTokenInputBoxes; i++){
-            const elementId = 'txnXOfY' + String(i);
-            document.getElementById(elementId).innerText = 'Send Transaction ' + i + ' of ' + totalNumTransactions;
+            App.checkInputtedKittyIdForApproval(i);
         }
     },
 
@@ -531,6 +530,8 @@ App = {
 
         } else if (App.Globals.approvedKitties[kittyId] === true){
             App.greyOutButtonContainingKittyId(kittyId, numTxn);
+        } else {
+            App.greenOutButtonLackingKittyId(numTxn);
         }
     },
 
