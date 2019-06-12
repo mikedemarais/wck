@@ -21,6 +21,7 @@ App = {
         numApproveTxnSent: 0,
         approvedKitties:{},
         numApprovedKitties: 0,
+        haveSentApprovalForKitty:{},
         specifyingDestinationAddresses: false,
         specifyingKittyIDs: false,
         lockscreenIsLocked: false,
@@ -222,6 +223,7 @@ App = {
             web3.eth.getAccounts(function(error, accounts) {
                 if (error) { console.log(error); }
                 var account = accounts[0];
+                App.Globals.haveSentApprovalForKitty[kittyId] = true;
                 App.Globals.contracts['cryptoCatsCoreContract'].instance.approve(new BigNumber(String(App.Globals.contracts['wrappedKittiesContract'].contractAddress)),
                                                                             new BigNumber(String(kittyId)),
                                                                             {
@@ -528,13 +530,20 @@ App = {
                                                                                                 }
                                                                                             });
 
+        } else if(App.Globals.approvedKitties[kittyId] === true){
+            App.greyOutButtonContainingKittyId(kittyId, numTxn);
+        } else if(App.Globals.haveSentApprovalForKitty[kittyId] !== true) {
+            App.greenOutButtonLackingKittyId(numTxn);
         }
     },
 
     kittyIndexToApprovedCallback: function(kittyId, numTxn, result){
         if(String(result).toLowerCase() === String(App.Globals.contracts['wrappedKittiesContract'].contractAddress).toLowerCase()){
             App.Globals.approvedKitties[kittyId] = true;
+            App.Globals.numApprovedKitties += 1;
             App.greyOutButtonContainingKittyId(kittyId, numTxn);
+        } else if(App.Globals.haveSentApprovalForKitty[kittyId] !== true) {
+            App.greenOutButtonLackingKittyId(numTxn);
         }
     },
 
@@ -547,11 +556,19 @@ App = {
             document.getElementById(buttonId).classList.remove('btn-primary');
             document.getElementById(buttonId).classList.add('btn-default');
             document.getElementById(buttonId).href = 'javascript:App.doNothing()';
-            App.Globals.numApprovedKitties += 1;
         };
         if(App.Globals.numApprovedKitties === App.Globals.numberOfVisibleKittyToTokenInputBoxes){
             App.showTransactionTwoOfTwoButton();
         }
+    },
+
+    greenOutButtonLackingKittyId: function(numTxn){
+        const buttonId = 'txnXOfY' + String(numTxn);
+        const totalNumTransactions = String(Number(App.Globals.numberOfVisibleKittyToTokenInputBoxes) + 1);
+        document.getElementById(buttonId).innerText = 'Send Transaction ' + numTxn + ' of ' + totalNumTransactions;
+        document.getElementById(buttonId).classList.remove('btn-default');
+        document.getElementById(buttonId).classList.add('btn-primary');
+        document.getElementById(buttonId).href = 'javascript:App.approveKittyButtonPressed(' + numTxn + ')';
     },
 
     showTransactionTwoOfTwoButton: function(){
