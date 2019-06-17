@@ -123,7 +123,7 @@ App = {
 
     checkWhetherWeb3HasBeenInitialized: function() {
         App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
-        if(window.web3.eth.accounts[0] !== undefined){
+        if(window.web3 !== undefined && window.web3.eth.accounts[0] !== undefined){
             App.initWeb3();
         }
     },
@@ -296,13 +296,23 @@ App = {
     },
 
     showHomePageDivs: function(){
-        App.showAllDivsInClass('coreApp');
+        if(window.web3 === undefined
+            || window.web3.eth === undefined
+            || window.web3.eth.accounts === undefined
+            || window.web3.eth.accounts[0] === undefined){
+                App.showAllDivsInClass('connectToWeb3Button');
+        } else{
+            App.showAllDivsInClass('coreApp');
+        }
         App.showAllDivsInClass('infoForApp');
         App.showAllDivsInClass('builtOnEthereum');
     },
 
     hideHomePageDivs: function(){
         App.hideAllDivsInClass('coreApp');
+        App.hideAllDivsInClass('connectToWeb3Button');
+        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
         App.hideAllDivsInClass('infoForApp');
         App.hideAllDivsInClass('builtOnEthereum');
     },
@@ -375,33 +385,58 @@ App = {
         App.showAllDivsInClass('kittyToTokenSection');
     },
 
-    proceedToTokenToKittySection: function(){
+    proceedToTokenForSpecificKittySection: function(){
         App.hideHomePageDivs();
+
         App.Globals.specifyingDestinationAddresses = false;
-        App.Globals.specifyingKittyIDs = false;
+        App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
+        document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = 'Optional: Specify Individual Destination Addresses Per Kitty';
+
+        App.Globals.specifyingKittyIDs = true;
+        App.showAllDivsInClass('tokenToKittySpecificKittyIDRow');
+        document.getElementById('tokentoKittyAddSpecificIdsButton').innerText = "Optional: Express No Preference For Which Kitties Will Be Withdrawn";
+
         window.history.pushState({}, "", "");
         document.getElementById('tokenToKittyInputBox').value = '1';
         App.clearInputsOfTokenToKittyInputSections();
-        App.hideAllDivsInClass('tokenToKittySpecificKittyIDRow');
-        App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
         App.hideAllDivsInClass('invalidAddressErrorMessage');
         App.hideAllDivsInClass('missingInputErrorNumTokens');
         App.showAllDivsInClass('tokenToKittySection');
+        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(1);
+    },
+
+    tokenToKittyAddSpecificIdsButtonPressed: function(){
+        App.Globals.specifyingKittyIDs = !App.Globals.specifyingKittyIDs;
+        if(App.Globals.specifyingKittyIDs){
+            App.showAllDivsInClass('tokenToKittySpecificKittyIDRow');
+            document.getElementById('tokentoKittyAddSpecificIdsButton').innerText = "Optional: Express No Preference For Which Kitties Will Be Withdrawn";
+        } else {
+            App.hideAllDivsInClass('tokenToKittySpecificKittyIDRow');
+            document.getElementById('tokentoKittyAddSpecificIdsButton').innerText = "Optional: Specify The ID of Each Kitty That Will Be Withdrawn";
+        }
+        var inputValue = document.getElementById('tokenToKittyInputBox').value;
+        if(inputValue === '' || inputValue === undefined) { inputValue = 1; }
+        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(inputValue);
+        if(App.Globals.specifyingDestinationAddresses){
+            App.tokenToKittyShowSpecificAddressInputsUpToValue(inputValue);
+        }
     },
 
     tokentoKittyAddSpecificAddressesButtonPressed: function(){
         App.Globals.specifyingDestinationAddresses = !App.Globals.specifyingDestinationAddresses;
         if(App.Globals.specifyingDestinationAddresses){
             App.showAllDivsInClass('tokenToKittySpecificAddressRow');
-            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = "Specify My Address For All Kitties Being Withdrawn";
+            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = "Optional: Specify My Address For All Kitties Being Withdrawn";
         } else {
             App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
-            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = 'Optional: Specify Individual Destination Addresses Per Kitty';
+            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = "Optional: Specify Individual Destination Addresses Per Kitty";
         }
         var inputValue = document.getElementById('tokenToKittyInputBox').value;
         if(inputValue === '' || inputValue === undefined) { inputValue = 1; }
         App.tokenToKittyShowSpecificAddressInputsUpToValue(inputValue);
-        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(inputValue);
+        if(App.Globals.specifyingKittyIDs){
+            App.tokenToKittyShowSpecificKittyIDInputsUpToValue(inputValue);
+        }
     },
 
     tokenToKittyNumTokensInputValueEntered: function(value){
@@ -430,21 +465,6 @@ App = {
                 }
             }
         }
-    },
-
-    proceedToTokenForSpecificKittySection: function(){
-        App.hideHomePageDivs();
-        App.Globals.specifyingDestinationAddresses = false;
-        App.Globals.specifyingKittyIDs = true;
-        window.history.pushState({}, "", "");
-        document.getElementById('tokenToKittyInputBox').value = '1';
-        App.clearInputsOfTokenToKittyInputSections();
-        App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
-        App.hideAllDivsInClass('invalidAddressErrorMessage');
-        App.hideAllDivsInClass('missingInputErrorNumTokens');
-        App.showAllDivsInClass('tokenToKittySection');
-        App.showAllDivsInClass('tokenToKittySpecificKittyIDRow');
-        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(1);
     },
 
     clearInputsOfTokenToKittyInputSections: function(){

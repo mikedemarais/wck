@@ -64,27 +64,10 @@
           <div class="col tokenToKittyButton">
             <center>
               <div class="col">
-                <a href="javascript:App.proceedToTokenToKittySection();" class="btn btn-block btn-lg btn-primary">Give a WCK Token, Get a Kitty</a>
+                <a href="javascript:App.proceedToTokenForSpecificKittySection();" class="btn btn-block btn-lg btn-primary">Give a WCK Token, Get a Kitty</a>
               </div>
             </center>
           </div> <!-- /tokenToKittyButton -->
-        </div> <!-- /demoRow -->
-        <br/>
-        <div class="row demo-row">
-          <div class="col kittyToKittyButton">
-            <center>
-              <div class="col">
-                <a href="javascript:App.proceedToTokenForSpecificKittySection();" class="btn btn-block btn-lg btn-primary">Give a WCK Token, Get a Specific Kitty</a>
-              </div>
-            </center>
-          </div> <!-- /kittyToKittyButton -->
-          <div class="col tokenToTokenButton">
-            <center>
-              <div class="col">
-                <a href="javascript:App.proceedToBuyTokensInBulkSection()" class="btn btn-block btn-lg btn-primary">Buy and Sell WCK Tokens In Bulk</a>
-              </div>
-            </center>
-          </div> <!-- /tokenToTokenButton -->
         </div> <!-- /demoRow -->
       </div> <!-- /coreApp -->
       <div class="kittyToTokenSection" style="display: none;">
@@ -702,6 +685,16 @@
               <div class="col tokentoKittyAddSpecificAddressesSection">
                 <div class="col" >
                   <div class="form-group">
+                    <a href="javascript:App.tokenToKittyAddSpecificIdsButtonPressed();" class="btn btn-block btn-lg btn-primary" id="tokentoKittyAddSpecificIdsButton">Optional: Express No Preference For Which Kitties You Receive</a>
+                  </div>
+                </div>
+            </div> <!-- /specificAddressInputBox -->
+          </div> <!-- /demoRow -->
+          <br/>
+          <div class="row">
+              <div class="col tokentoKittyAddSpecificAddressesSection">
+                <div class="col" >
+                  <div class="form-group">
                     <a href="javascript:App.tokentoKittyAddSpecificAddressesButtonPressed();" class="btn btn-block btn-lg btn-primary" id="tokentoKittyAddSpecificAddressesButton">Optional: Specify Individual Destination Addresses Per Kitty</a>
                   </div>
                 </div>
@@ -728,9 +721,26 @@
                 </div> <!-- /viewTransactionOnEtherscanButton -->
               </div> <!-- /demoRow -->
           </center>
-      </div> <!-- /tokenToKittySection -->
+      </div> <!-- /buyTokensInBulkSection -->
       <br/>
       <div class="infoForApp">
+          <div class="row demo-row">
+            <div class="col kittyToKittyButton">
+              <center>
+                <div class="col">
+                  <a href="https://opensea.io/assets/cryptokitties" class="btn btn-block btn-lg btn-info">Buy Items Using WCK as a Currency</a>
+                </div>
+              </center>
+            </div> <!-- /kittyToKittyButton -->
+            <div class="col tokenToTokenButton">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.proceedToBuyTokensInBulkSection()" class="btn btn-block btn-lg btn-info">Buy and Sell WCK Tokens In Bulk</a>
+                </div>
+              </center>
+            </div> <!-- /tokenToTokenButton -->
+          </div> <!-- /demoRow -->
+          <br/>
         <div class="row demo-row">
           <div class="col viewVerifiedContract">
             <center>
