@@ -349,7 +349,6 @@ App = {
         App.hideAllDivsInClass('tokenToKittySection');
         App.hideAllDivsInClass('invalidAddressErrorMessage');
         App.hideAllDivsInClass('missingInputErrorNumTokens');
-        App.hideAllDivsInClass('buyTokensInBulkSection');
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
         App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
         for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
@@ -365,7 +364,6 @@ App = {
         App.hideAllDivsInClass('tokenToKittySection');
         App.hideAllDivsInClass('invalidAddressErrorMessage');
         App.hideAllDivsInClass('missingInputErrorNumTokens');
-        App.hideAllDivsInClass('buyTokensInBulkSection');
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
         for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
             const textBoxId = 'kittyToTokenInputBox' + String(i);
@@ -474,12 +472,6 @@ App = {
             const addressInputBoxElementID = 'tokenToKittySpecificAddressInputBox' + String(i);
             document.getElementById(addressInputBoxElementID).value = '';
         }
-    },
-
-    proceedToBuyTokensInBulkSection: function(){
-        App.hideHomePageDivs();
-        window.history.pushState({}, "", "");
-        App.showAllDivsInClass('buyTokensInBulkSection');
     },
 
     updateKittyToTokenInputBoxes: function(){
