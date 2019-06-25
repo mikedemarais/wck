@@ -240,7 +240,7 @@ App = {
         }
     },
 
-    txnTwoOfTwoButtonPressed: function(){
+    duplicateKittyIdsHaveBeenEntered: function(){
         var catsToSend = [];
         for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
             const elementId = 'kittyToTokenInputBox' + i;
@@ -249,6 +249,40 @@ App = {
                 catsToSend.push(new BigNumber(String(kittyId)));
             }
         }
+        var arrayHasDuplicates = false;
+        console.log(catsToSend);
+        for (var i = 0; i < catsToSend.length; i++) {
+            for(var j = 0; j < catsToSend.length; j++){
+                if(i === j) { continue; }
+                if(catsToSend[i].toNumber() === catsToSend[j].toNumber()){
+                    arrayHasDuplicates = true;
+                }
+            }
+        }
+        if(arrayHasDuplicates){
+            App.showAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
+            console.log('Duplicates found!');
+            return true;
+        } else {
+            App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
+            console.log('No duplicates found');
+            return false;
+        }
+    },
+
+    txnTwoOfTwoButtonPressed: function(){
+        if(App.duplicateKittyIdsHaveBeenEntered()){
+            return;
+        }
+        var catsToSend = [];
+        for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
+            const elementId = 'kittyToTokenInputBox' + i;
+            var kittyId = document.getElementById(elementId).value;
+            if(kittyId !== ''){
+                catsToSend.push(new BigNumber(String(kittyId)));
+            }
+        }
+
         if(catsToSend.length === 0) {
             return;
         }
@@ -312,6 +346,7 @@ App = {
         App.hideAllDivsInClass('coreApp');
         App.hideAllDivsInClass('connectToWeb3Button');
         App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
+        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
         App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
         App.hideAllDivsInClass('infoForApp');
         App.hideAllDivsInClass('builtOnEthereum');
@@ -350,6 +385,7 @@ App = {
         App.hideAllDivsInClass('invalidAddressErrorMessage');
         App.hideAllDivsInClass('missingInputErrorNumTokens');
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
+        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
         App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
         for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
             const textBoxId = 'kittyToTokenInputBox' + String(i);
@@ -365,6 +401,7 @@ App = {
         App.hideAllDivsInClass('invalidAddressErrorMessage');
         App.hideAllDivsInClass('missingInputErrorNumTokens');
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
+        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
         for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
             const textBoxId = 'kittyToTokenInputBox' + String(i);
             document.getElementById(textBoxId).value = '';
@@ -380,6 +417,7 @@ App = {
         App.hideHomePageDivs();
         window.history.pushState({}, "", "");
         App.updateKittyToTokenInputBoxes();
+        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
         App.showAllDivsInClass('kittyToTokenSection');
     },
 
@@ -531,6 +569,7 @@ App = {
     },
 
     checkInputtedKittyIdForApproval: function(numTxn){
+        App.duplicateKittyIdsHaveBeenEntered();
         const elementId = 'kittyToTokenInputBox' + numTxn;
         var kittyId = document.getElementById(elementId).value;
         if(kittyId !== '' && App.Globals.approvedKitties[kittyId] !== true){
