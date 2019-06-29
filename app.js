@@ -387,6 +387,7 @@ App = {
         App.hideAllDivsInClass('viewTransactionOnEtherscan');
         App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
         App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+        App.hideAllDivsInClass('viewYourWCKBalanceSection');
         for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
             const textBoxId = 'kittyToTokenInputBox' + String(i);
             document.getElementById(textBoxId).value = '';
@@ -439,6 +440,31 @@ App = {
         App.hideAllDivsInClass('missingInputErrorNumTokens');
         App.showAllDivsInClass('tokenToKittySection');
         App.tokenToKittyShowSpecificKittyIDInputsUpToValue(1);
+    },
+
+    proceedToViewYourWCKBalance: function(){
+        App.hideHomePageDivs();
+        window.history.pushState({}, "", "");
+        App.getWCKBalanceForUser();
+        App.showAllDivsInClass('viewYourWCKBalanceSection');
+    },
+
+    getWCKBalanceForUser: function(){
+        web3.eth.getAccounts(function(error, accounts) {
+            if (error) { console.log(error); }
+            var account = accounts[0];
+            const balance = App.Globals.contracts['wrappedKittiesContract'].instance.balanceOf(account,
+                function(error, result){
+                    if(!error) {
+                        const balanceInWei = result.toNumber();
+                        document.getElementById('wckBalanceText').innerText = String((App.toEth(balanceInWei, 18)).toNumber()) + ' WCK' ;
+                    }
+                    else {
+                        console.log(error.message);
+                    }
+                }
+            );
+        });
     },
 
     tokenToKittyAddSpecificIdsButtonPressed: function(){
@@ -670,6 +696,10 @@ App = {
             divsToHide[i].style.display = "none";
         }
     },
+
+    toEth: function(wei, decimals){
+		return new BigNumber(String(wei)).div(new BigNumber(10 ** decimals));
+	},
 };
 
 window.onload = function() {
