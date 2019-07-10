@@ -12,7 +12,8 @@ App = {
     Constants: {
         nullAddress: '0x0000000000000000000000000000000000000000',
         nullTransaction: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        uint256Max: '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+        //uint256Max: '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+        uint256NearlyMax: '100000000000000000000000000000000000000000000000000000000000000000000000000000',
         maximumNumberOfVisibleKittyToTokenInputBoxes:10,
         wckKittyBuyerDevFees: 1.0375,
         wckUniswapSlippage:1.01,
@@ -556,7 +557,7 @@ App = {
             if (error) { console.log(error); }
             var account = accounts[0];
             App.Globals.contracts['wrappedKittiesContract'].instance.approve(new BigNumber(String(App.Globals.contracts['wckKittyBuyerContract'].contractAddress)),
-                                                                        new BigNumber(String(App.Constants.uint256Max)),
+                                                                        new BigNumber(String(App.Constants.uint256NearlyMax)),
                                                                         {
                                                                             from: account,
                                                                         },
