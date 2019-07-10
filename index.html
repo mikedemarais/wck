@@ -26,7 +26,7 @@
       </div> <!-- /demo-headline -->
       <div class="col connectToWeb3Button">
         <center>
-          <a href="javascript:App.init();" class="btn btn-block btn-lg btn-primary">Connect to Web3 Provider</a>
+          <a href="javascript:App.init();" class="btn btn-block btn-lg btn-primary">Connect to Web3 Provider to Convert Kitties to WCK</a>
         </center>
       </div> <!-- /Connect To Web3 -->
       <div class="col connectToWeb3AccountLockedMessage" style="display: none;">
@@ -57,14 +57,14 @@
           <div class="col kittyToTokenButton">
             <center>
               <div class="col">
-                <a href="javascript:App.proceedToKittyToTokenSection();" class="btn btn-block btn-lg btn-primary">Give a Kitty, Get a WCK Token</a>
+                <a href="javascript:App.proceedToKittyToTokenSection();" class="btn btn-block btn-lg btn-primary">Convert Kitties to WCK Tokens</a>
               </div>
             </center>
           </div> <!-- /kittyToTokenButton -->
           <div class="col tokenToKittyButton">
             <center>
               <div class="col">
-                <a href="javascript:App.proceedToTokenForSpecificKittySection();" class="btn btn-block btn-lg btn-primary">Give a WCK Token, Get a Kitty</a>
+                <a href="javascript:App.proceedToTokenForSpecificKittySection();" class="btn btn-block btn-lg btn-primary">Convert WCK Tokens to Kitties</a>
               </div>
             </center>
           </div> <!-- /tokenToKittyButton -->
@@ -80,12 +80,13 @@
               </div>
             </center>
           </div> <!-- /kittyToTokenButton -->
-          <div class="col">
+          <div class="col proceedToBuyKittyWithWCKButton">
             <center>
               <div class="col">
+                <a href="javascript:App.proceedToBuyKittyWithWCK();" class="btn btn-block btn-lg btn-primary">Buy Kitties with WCK Tokens</a>
               </div>
             </center>
-          </div> <!-- /tokenToKittyButton -->
+        </div> <!-- /proceedToBuyKittyWithWCKButton -->
         </div> <!-- /demoRow -->
       </div> <!-- /coreApp -->
       <div class="kittyToTokenSection" style="display: none;">
@@ -741,6 +742,57 @@
             </div>
         </div> <!-- /row -->
       </div> <!-- /viewYourWCKBalanceSection -->
+      <div class="buyKittyWithWCKSection" style="display: none;">
+          <div class="row loadingWCKKittyBuyingApproval">
+            <div class="col">
+              <center>
+                <h1 class="demo-download-text"><center>Loading, please wait...</center></h1>
+              </center>
+            </div>
+        </div> <!-- /row -->
+          <div class="row wckKittyBuyingNotEnabled" style="display: none;">
+            <div class="col tokenToKittyFunctionButton">
+              <center>
+                <div class="col">
+                  <a href="javascript:App.enableWCKKittyBuyingButtonPressed();" class="btn btn-block btn-lg btn-primary" id="enableWCKKittyBuyingButton">Enable Purchasing of Kitties from CryptoKitties Website with WCK</a>
+                </div>
+              </center>
+            </div> <!-- /tokenToKittyFunctionButton -->
+          </div> <!-- /row -->
+          <div class="row wckKittyBuyingEnabled" style="display: none;">
+            <div class="col">
+              <div class="form-group">
+                <input type="number" min="1" max="10000000" step="1" oninput="validity.valid||(value='');App.wckKittyBuyingKittyIdEntered(value);" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="ID of kitty listed for sale on CryptoKitties website" class="form-control" id="buyKittyWithWCKIDBox" />
+              </div>
+            </div>
+            <div class="col buyKittyWithWCKButton">
+              <center>
+                  <a href="javascript:App.buyKittyWithWCKButtonPressed();" class="btn btn-block btn-lg btn-primary">Buy Kitty from CryptoKitties Website using WCK</a>
+              </center>
+            </div> <!-- /tokenToKittyFunctionButton -->
+          </div> <!-- /row -->
+          <div class="row kittyNotForSaleError" style="display: none;">
+            <div class="col">
+              <center>
+                <h1 class="demo-download-text"><center>That kitty is not currently for sale on the CryptoKitties website.</center></h1>
+              </center>
+            </div>
+        </div> <!-- /row -->
+        <div class="row kittyIsForSaleFetchingPriceMessage" style="display: none;">
+          <div class="col">
+            <center>
+              <h1 class="demo-download-text"><center>Fetching Current Price in WCK...</center></h1>
+            </center>
+          </div>
+      </div> <!-- /row -->
+        <div class="row kittyIsForSaleMessage" style="display: none;">
+          <div class="col">
+            <center>
+              <center><h1 class="demo-download-text" id="kittyIsForSaleWCKPriceText"></h1></center>
+            </center>
+          </div>
+      </div> <!-- /row -->
+      </div> <!-- /buyKittyWithWCKSection -->
       <br/>
       <div class="infoForApp">
           <div class="row demo-row">
@@ -800,7 +852,7 @@
           <div class="row demo-row">
             <div class="col">
               <center>
-                <div><center>You have successfully submitted your bulk transaction!</center></div>
+                <div><center>You have successfully submitted your transaction!</center></div>
                 <div><center>Once the transaction confirms on the blockchain, your balance will update.</center></div>
               </center>
             </div>
