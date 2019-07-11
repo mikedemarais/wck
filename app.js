@@ -495,6 +495,7 @@ App = {
         App.hideAllDivsInClass('wckKittyBuyingEnabled');
         App.showAllDivsInClass('loadingWCKKittyBuyingApproval');
         App.showAllDivsInClass('buyKittyWithWCKSection');
+        App.showAllDivsInClass('wckKittyBuyingContract');
         App.getWCKApprovedForKittyBuyingForUser();
     },
 
