@@ -631,12 +631,21 @@ App = {
     },
 
     fetchCurrentWCKPriceFromUniswap: function(costInWei){
-        const costInWeiPlusFees = costInWei.mul(new BigNumber(String(App.Constants.wckKittyBuyerDevFees)));
-        const costInWeiPlusFeesAndSlippage = costInWeiPlusFees.mul(new BigNumber(String(App.Constants.wckUniswapSlippage)));
+        console.log(costInWei.mul);
+        console.log(costInWei.times);
+        var costInWeiPlusFees;
+        var costInWeiPlusFeesAndSlippage;
+        if(costInWei.mul !== undefined){
+            costInWeiPlusFees = costInWei.mul(new BigNumber(String(App.Constants.wckKittyBuyerDevFees)));
+            costInWeiPlusFeesAndSlippage = costInWeiPlusFees.mul(new BigNumber(String(App.Constants.wckUniswapSlippage)));
+        } else {
+            costInWeiPlusFees = costInWei.times(new BigNumber(String(App.Constants.wckKittyBuyerDevFees)));
+            costInWeiPlusFeesAndSlippage = costInWeiPlusFees.times(new BigNumber(String(App.Constants.wckUniswapSlippage)));
+        }
         web3.eth.getAccounts(function(error, accounts) {
             if (error) { console.log(error); }
             var account = accounts[0];
-            const balance = App.Globals.contracts['uniswapExchangeContract_WCK-ETH'].instance.getTokenToEthOutputPrice(costInWeiPlusFeesAndSlippage,
+            const balance = App.Globals.contracts['uniswapExchangeContract_WCK-ETH'].instance.getTokenToEthOutputPrice(new BigNumber(String(costInWeiPlusFeesAndSlippage)),
                 function(error, result){
                     if(!error) {
                         App.Globals.currentKittyBuyPriceInWCK = result;
