@@ -521,8 +521,8 @@ App = {
         web3.eth.getAccounts(function(error, accounts) {
             if (error) { console.log(error); }
             var account = accounts[0];
-            const balance = App.Globals.contracts['wrappedKittiesContract'].instance.allowance(account,
-                App.Globals.contracts['wckKittyBuyerContract'].contractAddress,
+            const balance = App.Globals.contracts['wrappedKittiesContract'].instance.allowance(new BigNumber(String(account)),
+                new BigNumber(String(App.Globals.contracts['wckKittyBuyerContract'].contractAddress)),
                 function(error, result){
                     if(!error) {
                         const allowance = result.toNumber();
@@ -601,7 +601,7 @@ App = {
             web3.eth.getAccounts(function(error, accounts) {
                 if (error) { console.log(error); }
                 var account = accounts[0];
-                const balance = App.Globals.contracts['cryptoCatsSalesAuctionContract'].instance.getCurrentPrice(kittyId,
+                const balance = App.Globals.contracts['cryptoCatsSalesAuctionContract'].instance.getCurrentPrice(new BigNumber(String(kittyId)),
                     function(error, result){
                         if(!error) {
                             App.parseResultOfGetAuctionForKitty(kittyId, result);
