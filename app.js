@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////////////////
+// Dapper Extension Workaround
+//////////////////////////////////////////////////////////////////////
+
 Object.defineProperty(Object.prototype, 'round', {
     value: function(){return this},
     writeable:true,
@@ -9,6 +13,11 @@ Object.defineProperty(Object.prototype, 'lessThan', {
 });
 
 App = {
+
+    //////////////////////////////////////////////////////////////////////
+    // Globals
+    //////////////////////////////////////////////////////////////////////
+
     Constants: {
         nullAddress: '0x0000000000000000000000000000000000000000',
         nullTransaction: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -29,9 +38,10 @@ App = {
         specifyingDestinationAddresses: false,
         specifyingKittyIDs: false,
         lockscreenIsLocked: false,
-        currentWCKBuyerAllowance: undefined,
+        wckAllowanceForContract:{},
         currentKittyBuyPriceInWCK: undefined,
         WCKApprovalInterval: undefined,
+        currOwnerOfFeaturedCat: undefined,
         contracts:{
             'cryptoCatsCoreContract':{
                 'source': undefined,
@@ -63,8 +73,18 @@ App = {
     	    	'contractABI':[{"name": "TokenPurchase", "inputs": [{"type": "address", "name": "buyer", "indexed": true}, {"type": "uint256", "name": "eth_sold", "indexed": true}, {"type": "uint256", "name": "tokens_bought", "indexed": true}], "anonymous": false, "type": "event"}, {"name": "EthPurchase", "inputs": [{"type": "address", "name": "buyer", "indexed": true}, {"type": "uint256", "name": "tokens_sold", "indexed": true}, {"type": "uint256", "name": "eth_bought", "indexed": true}], "anonymous": false, "type": "event"}, {"name": "AddLiquidity", "inputs": [{"type": "address", "name": "provider", "indexed": true}, {"type": "uint256", "name": "eth_amount", "indexed": true}, {"type": "uint256", "name": "token_amount", "indexed": true}], "anonymous": false, "type": "event"}, {"name": "RemoveLiquidity", "inputs": [{"type": "address", "name": "provider", "indexed": true}, {"type": "uint256", "name": "eth_amount", "indexed": true}, {"type": "uint256", "name": "token_amount", "indexed": true}], "anonymous": false, "type": "event"}, {"name": "Transfer", "inputs": [{"type": "address", "name": "_from", "indexed": true}, {"type": "address", "name": "_to", "indexed": true}, {"type": "uint256", "name": "_value", "indexed": false}], "anonymous": false, "type": "event"}, {"name": "Approval", "inputs": [{"type": "address", "name": "_owner", "indexed": true}, {"type": "address", "name": "_spender", "indexed": true}, {"type": "uint256", "name": "_value", "indexed": false}], "anonymous": false, "type": "event"}, {"name": "setup", "outputs": [], "inputs": [{"type": "address", "name": "token_addr"}], "constant": false, "payable": false, "type": "function", "gas": 175875}, {"name": "addLiquidity", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "min_liquidity"}, {"type": "uint256", "name": "max_tokens"}, {"type": "uint256", "name": "deadline"}], "constant": false, "payable": true, "type": "function", "gas": 82605}, {"name": "removeLiquidity", "outputs": [{"type": "uint256", "name": "out"}, {"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "amount"}, {"type": "uint256", "name": "min_eth"}, {"type": "uint256", "name": "min_tokens"}, {"type": "uint256", "name": "deadline"}], "constant": false, "payable": false, "type": "function", "gas": 116814}, {"name": "__default__", "outputs": [], "inputs": [], "constant": false, "payable": true, "type": "function"}, {"name": "ethToTokenSwapInput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "min_tokens"}, {"type": "uint256", "name": "deadline"}], "constant": false, "payable": true, "type": "function", "gas": 12757}, {"name": "ethToTokenTransferInput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "min_tokens"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "recipient"}], "constant": false, "payable": true, "type": "function", "gas": 12965}, {"name": "ethToTokenSwapOutput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_bought"}, {"type": "uint256", "name": "deadline"}], "constant": false, "payable": true, "type": "function", "gas": 50455}, {"name": "ethToTokenTransferOutput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_bought"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "recipient"}], "constant": false, "payable": true, "type": "function", "gas": 50663}, {"name": "tokenToEthSwapInput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_sold"}, {"type": "uint256", "name": "min_eth"}, {"type": "uint256", "name": "deadline"}], "constant": false, "payable": false, "type": "function", "gas": 47503}, {"name": "tokenToEthTransferInput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_sold"}, {"type": "uint256", "name": "min_eth"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "recipient"}], "constant": false, "payable": false, "type": "function", "gas": 47712}, {"name": "tokenToEthSwapOutput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "eth_bought"}, {"type": "uint256", "name": "max_tokens"}, {"type": "uint256", "name": "deadline"}], "constant": false, "payable": false, "type": "function", "gas": 50175}, {"name": "tokenToEthTransferOutput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "eth_bought"}, {"type": "uint256", "name": "max_tokens"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "recipient"}], "constant": false, "payable": false, "type": "function", "gas": 50384}, {"name": "tokenToTokenSwapInput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_sold"}, {"type": "uint256", "name": "min_tokens_bought"}, {"type": "uint256", "name": "min_eth_bought"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "token_addr"}], "constant": false, "payable": false, "type": "function", "gas": 51007}, {"name": "tokenToTokenTransferInput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_sold"}, {"type": "uint256", "name": "min_tokens_bought"}, {"type": "uint256", "name": "min_eth_bought"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "recipient"}, {"type": "address", "name": "token_addr"}], "constant": false, "payable": false, "type": "function", "gas": 51098}, {"name": "tokenToTokenSwapOutput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_bought"}, {"type": "uint256", "name": "max_tokens_sold"}, {"type": "uint256", "name": "max_eth_sold"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "token_addr"}], "constant": false, "payable": false, "type": "function", "gas": 54928}, {"name": "tokenToTokenTransferOutput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_bought"}, {"type": "uint256", "name": "max_tokens_sold"}, {"type": "uint256", "name": "max_eth_sold"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "recipient"}, {"type": "address", "name": "token_addr"}], "constant": false, "payable": false, "type": "function", "gas": 55019}, {"name": "tokenToExchangeSwapInput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_sold"}, {"type": "uint256", "name": "min_tokens_bought"}, {"type": "uint256", "name": "min_eth_bought"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "exchange_addr"}], "constant": false, "payable": false, "type": "function", "gas": 49342}, {"name": "tokenToExchangeTransferInput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_sold"}, {"type": "uint256", "name": "min_tokens_bought"}, {"type": "uint256", "name": "min_eth_bought"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "recipient"}, {"type": "address", "name": "exchange_addr"}], "constant": false, "payable": false, "type": "function", "gas": 49532}, {"name": "tokenToExchangeSwapOutput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_bought"}, {"type": "uint256", "name": "max_tokens_sold"}, {"type": "uint256", "name": "max_eth_sold"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "exchange_addr"}], "constant": false, "payable": false, "type": "function", "gas": 53233}, {"name": "tokenToExchangeTransferOutput", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_bought"}, {"type": "uint256", "name": "max_tokens_sold"}, {"type": "uint256", "name": "max_eth_sold"}, {"type": "uint256", "name": "deadline"}, {"type": "address", "name": "recipient"}, {"type": "address", "name": "exchange_addr"}], "constant": false, "payable": false, "type": "function", "gas": 53423}, {"name": "getEthToTokenInputPrice", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "eth_sold"}], "constant": true, "payable": false, "type": "function", "gas": 5542}, {"name": "getEthToTokenOutputPrice", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_bought"}], "constant": true, "payable": false, "type": "function", "gas": 6872}, {"name": "getTokenToEthInputPrice", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "tokens_sold"}], "constant": true, "payable": false, "type": "function", "gas": 5637}, {"name": "getTokenToEthOutputPrice", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "uint256", "name": "eth_bought"}], "constant": true, "payable": false, "type": "function", "gas": 6897}, {"name": "tokenAddress", "outputs": [{"type": "address", "name": "out"}], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 1413}, {"name": "factoryAddress", "outputs": [{"type": "address", "name": "out"}], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 1443}, {"name": "balanceOf", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "address", "name": "_owner"}], "constant": true, "payable": false, "type": "function", "gas": 1645}, {"name": "transfer", "outputs": [{"type": "bool", "name": "out"}], "inputs": [{"type": "address", "name": "_to"}, {"type": "uint256", "name": "_value"}], "constant": false, "payable": false, "type": "function", "gas": 75034}, {"name": "transferFrom", "outputs": [{"type": "bool", "name": "out"}], "inputs": [{"type": "address", "name": "_from"}, {"type": "address", "name": "_to"}, {"type": "uint256", "name": "_value"}], "constant": false, "payable": false, "type": "function", "gas": 110907}, {"name": "approve", "outputs": [{"type": "bool", "name": "out"}], "inputs": [{"type": "address", "name": "_spender"}, {"type": "uint256", "name": "_value"}], "constant": false, "payable": false, "type": "function", "gas": 38769}, {"name": "allowance", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [{"type": "address", "name": "_owner"}, {"type": "address", "name": "_spender"}], "constant": true, "payable": false, "type": "function", "gas": 1925}, {"name": "name", "outputs": [{"type": "bytes32", "name": "out"}], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 1623}, {"name": "symbol", "outputs": [{"type": "bytes32", "name": "out"}], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 1653}, {"name": "decimals", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 1683}, {"name": "totalSupply", "outputs": [{"type": "uint256", "name": "out"}], "inputs": [], "constant": true, "payable": false, "type": "function", "gas": 1713}],
     	    	'contractAddress':'0x4FF7Fa493559c40aBd6D157a0bfC35Df68d8D0aC',
     		},
+            'wckAdsContract':{
+                'source': undefined,
+                'instance': undefined,
+                'contractABI':[{"constant":false,"inputs":[{"name":"account","type":"address"}],"name":"addPauser","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_slotId","type":"uint256"},{"name":"_kittyId","type":"uint256"}],"name":"changeKittyIdBeingAdvertised","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newMaxRentalPeriodInBlocks","type":"uint256"}],"name":"ownerUpdateMaxRentalPeriod","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newMinimumPriceIncrementInBasisPoints","type":"uint256"}],"name":"ownerUpdateMinimumPriceIncrement","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_newMinimumRentalPrice","type":"uint256"}],"name":"ownerUpdateMinimumRentalPrice","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_erc20Address","type":"address"},{"name":"_value","type":"uint256"}],"name":"ownerWithdrawERC20","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"ownerWithdrawEther","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"pause","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"renounceOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"renouncePauser","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_slotId","type":"uint256"},{"name":"_newKittyIdToAdvertise","type":"uint256"},{"name":"_newValuationPrice","type":"uint256"}],"name":"rentAdvertisingSlot","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"unpause","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"slotId","type":"uint256"},{"indexed":false,"name":"kittyIdBeingAdvertised","type":"uint256"},{"indexed":false,"name":"blockThatPriceWillResetAt","type":"uint256"},{"indexed":false,"name":"valuationPrice","type":"uint256"},{"indexed":false,"name":"slotOwner","type":"address"}],"name":"AdvertisingSlotRented","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"slotId","type":"uint256"},{"indexed":false,"name":"newKittyIdBeingAdvertised","type":"uint256"}],"name":"AdvertisingSlotContentsChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"}],"name":"Paused","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"account","type":"address"}],"name":"Unpaused","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"account","type":"address"}],"name":"PauserAdded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"account","type":"address"}],"name":"PauserRemoved","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"previousOwner","type":"address"},{"indexed":false,"name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"advertisingSlots","outputs":[{"name":"kittyIdBeingAdvertised","type":"uint256"},{"name":"blockThatPriceWillResetAt","type":"uint256"},{"name":"valuationPrice","type":"uint256"},{"name":"slotOwner","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_slotId","type":"uint256"}],"name":"getCurrentPriceToRentAdvertisingSlot","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"isOwner","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"isPauser","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"kittyCoreContractAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"kittySalesContractAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"kittySiresContractAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"maxRentalPeriodInBlocks","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"minimumPriceIncrementInBasisPoints","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"minimumRentalPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_address","type":"address"},{"name":"_kittyId","type":"uint256"}],"name":"ownsKitty","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"paused","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"wckContractAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"}],
+                'contractAddress':'0x37E482538c09E315A5578b95619a7CB83D8b261A',
+            },
         },
     },
+
+    //////////////////////////////////////////////////////////////////////
+    // Init
+    //////////////////////////////////////////////////////////////////////
 
     init: async function() {
         //App.proceedToSiteUnderMaintenance();
@@ -83,6 +103,7 @@ App = {
                 if(window.web3.eth.accounts[0] !== undefined){
                     App.hideAllDivsInClass('connectToWeb3Button');
                     App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+                    App.fetchAdvertisingSlotContents(0);
                     App.showAllDivsInClass('coreApp');
                 } else {
                     App.showAllDivsInClass('connectToWeb3AccountLockedMessage');
@@ -103,6 +124,7 @@ App = {
             if(window.web3.eth.accounts[0] !== undefined){
                 App.hideAllDivsInClass('connectToWeb3Button');
                 App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+                App.fetchAdvertisingSlotContents(0);
                 App.showAllDivsInClass('coreApp');
             } else {
                 App.showAllDivsInClass('connectToWeb3AccountLockedMessage');
@@ -165,86 +187,18 @@ App = {
             App.Globals.contracts['wckKittyBuyerContract'].instance = App.Globals.contracts['wckKittyBuyerContract'].source.at(App.Globals.contracts['wckKittyBuyerContract'].contractAddress);
             App.Globals.contracts['uniswapExchangeContract_WCK-ETH'].source = window.web3.eth.contract(App.Globals.contracts['uniswapExchangeContract_WCK-ETH'].contractABI);
             App.Globals.contracts['uniswapExchangeContract_WCK-ETH'].instance = App.Globals.contracts['uniswapExchangeContract_WCK-ETH'].source.at(App.Globals.contracts['uniswapExchangeContract_WCK-ETH'].contractAddress);
+            App.Globals.contracts['wckAdsContract'].source = window.web3.eth.contract(App.Globals.contracts['wckAdsContract'].contractABI);
+            App.Globals.contracts['wckAdsContract'].instance = App.Globals.contracts['wckAdsContract'].source.at(App.Globals.contracts['wckAdsContract'].contractAddress);
+
         }
         if(window.web3.eth.accounts[0] !== undefined){
             //return App.fetchCurrentBlock();
         }
     },
 
-    tokenToKittyButtonPressed: function(){
-        var numTokens = document.getElementById('tokenToKittyInputBox').value;
-        if(numTokens === ''){
-            App.showAllDivsInClass('missingInputErrorNumTokens');
-            return;
-        } else {
-            App.hideAllDivsInClass('missingInputErrorNumTokens');
-            web3.eth.getAccounts(function(error, accounts) {
-                if (error) { console.log(error); }
-                var account = accounts[0];
-                var specificKitties = [];
-                var specificAddresses = [];
-                for(var i = 1; i <= Number(numTokens); i++){
-                    if(App.Globals.specifyingKittyIDs === true){
-                        const inputBoxElementID = 'tokenToKittySpecificKittyIDInputBox' + String(i);
-                        const inputValue = document.getElementById(inputBoxElementID).value;
-                        if(inputValue === '') { return; }
-                        specificKitties.push(new BigNumber(String(inputValue)));
-                    } else {
-                        specificKitties.push(new BigNumber(String(0)));
-                    }
-                    if(App.Globals.specifyingDestinationAddresses === true){
-                        const inputBoxElementID = 'tokenToKittySpecificAddressInputBox' + String(i);
-                        const inputValue = document.getElementById(inputBoxElementID).value;
-                        if(inputValue === '' || !App.validateTextInputAsValidAddress(inputValue)) {
-                            App.showAllDivsInClass('invalidAddressErrorMessage');
-                            return;
-                        }
-                        specificAddresses.push(new BigNumber(String(inputValue)));
-                    } else {
-                        specificAddresses.push(new BigNumber(String(App.Globals.userAccount)));
-                    }
-                }
-                App.Globals.contracts['wrappedKittiesContract'].instance.burnTokensAndWithdrawKitties(specificKitties,
-                                                                                                    specificAddresses,
-                                                                            {
-                                                                                from: account,
-                                                                            },
-                                                                            function(error, result){
-                                                                                if(!error) return App.displayTokenToKittyTransactionConfirmation(result);
-                                                                                else {
-                                                                                    console.log(error.message);
-                                                                                    return App.displayTransactionError(error);
-                                                                                }
-                                                                            })
-            });
-        }
-    },
-
-    displayTokenToKittyTransactionConfirmation: function(result){
-        if(String(result) === String(App.Constants.nullTransaction)){
-            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
-        }else{
-            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
-        }
-        App.hideAllDivsInClass('tokenToKittySection');
-        App.hideAllDivsInClass('invalidAddressErrorMessage');
-        App.hideAllDivsInClass('missingInputErrorNumTokens');
-        App.showAllDivsInClass('viewTransactionOnEtherscan');
-    },
-
-    validateTextInputAsValidAddress: function(value){
-        if(String(value).substring(0,2) !== '0x'){
-            return false;
-        } else if(String(value).length !== 42){
-            return false;
-        } else {
-            return true;
-        }
-    },
-
-    displayTransactionError: function(err){},
-
-    doNothing: function(){},
+    //////////////////////////////////////////////////////////////////////
+    // KittyToToken
+    //////////////////////////////////////////////////////////////////////
 
     approveKittyButtonPressed: function(numTxn){
         App.Globals.numApproveTxnSent = numTxn;
@@ -358,443 +312,6 @@ App = {
         App.hideAllDivsInClass('kittyToTokenSection');
         App.showAllDivsInClass('viewTransactionOnEtherscan');
         App.Globals.approvedKitties = {};
-    },
-
-    showHomePageDivs: function(){
-        if(window.web3 === undefined
-            || window.web3.eth === undefined
-            || window.web3.eth.accounts === undefined
-            || window.web3.eth.accounts[0] === undefined){
-                App.showAllDivsInClass('connectToWeb3Button');
-        } else{
-            App.showAllDivsInClass('coreApp');
-        }
-        App.showAllDivsInClass('infoForApp');
-        App.showAllDivsInClass('builtOnEthereum');
-    },
-
-    hideHomePageDivs: function(){
-        App.hideAllDivsInClass('coreApp');
-        App.hideAllDivsInClass('connectToWeb3Button');
-        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
-        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
-        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
-        App.hideAllDivsInClass('infoForApp');
-        App.hideAllDivsInClass('builtOnEthereum');
-    },
-
-    proceedToNoMainnetOrMetamaskScreen: function(){
-        App.hideHomePageDivs();
-        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
-        App.showAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
-    },
-
-    proceedToSiteUnderMaintenance: function(){
-        App.hideHomePageDivs();
-        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
-        App.showAllDivsInClass('siteUnderMaintenance');
-    },
-
-    retreatFromNoMainnetOrMetamaskScreen: function(){
-        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
-        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
-        App.showHomePageDivs();
-    },
-
-    titleButtonPressed: function(){
-        /*
-        if(window.web3.eth.accounts[0] !== undefined){
-            App.retreatToHomeScreen();
-        }
-        */
-    },
-
-    retreatToHomeScreen: function(){
-        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
-        App.hideAllDivsInClass('kittyToTokenSection');
-        App.hideAllDivsInClass('tokenToKittySection');
-        App.hideAllDivsInClass('invalidAddressErrorMessage');
-        App.hideAllDivsInClass('missingInputErrorNumTokens');
-        App.hideAllDivsInClass('viewTransactionOnEtherscan');
-        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
-        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
-        App.hideAllDivsInClass('viewYourWCKBalanceSection');
-        App.hideAllDivsInClass('buyKittyWithWCKSection');
-        for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
-            const textBoxId = 'kittyToTokenInputBox' + String(i);
-            document.getElementById(textBoxId).value = '';
-        }
-        App.showHomePageDivs();
-    },
-
-    retreatToLockScreen: function(){
-        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
-        App.hideAllDivsInClass('kittyToTokenSection');
-        App.hideAllDivsInClass('tokenToKittySection');
-        App.hideAllDivsInClass('invalidAddressErrorMessage');
-        App.hideAllDivsInClass('missingInputErrorNumTokens');
-        App.hideAllDivsInClass('viewTransactionOnEtherscan');
-        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
-        for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
-            const textBoxId = 'kittyToTokenInputBox' + String(i);
-            document.getElementById(textBoxId).value = '';
-        }
-        App.hideAllDivsInClass('coreApp');
-        App.showAllDivsInClass('connectToWeb3AccountLockedMessage');
-        App.showAllDivsInClass('connectToWeb3Button');
-        App.showAllDivsInClass('infoForApp');
-        App.showAllDivsInClass('builtOnEthereum');
-    },
-
-    proceedToKittyToTokenSection: function(){
-        App.hideHomePageDivs();
-        window.history.pushState({}, "", "");
-        App.updateKittyToTokenInputBoxes();
-        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
-        App.showAllDivsInClass('kittyToTokenSection');
-    },
-
-    proceedToTokenForSpecificKittySection: function(){
-        App.hideHomePageDivs();
-
-        App.Globals.specifyingDestinationAddresses = false;
-        App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
-        document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = 'Optional: Specify Individual Destination Addresses Per Kitty';
-
-        App.Globals.specifyingKittyIDs = true;
-        App.showAllDivsInClass('tokenToKittySpecificKittyIDRow');
-        document.getElementById('tokentoKittyAddSpecificIdsButton').innerText = "Optional: Express No Preference For Which Kitties Will Be Withdrawn";
-
-        window.history.pushState({}, "", "");
-        document.getElementById('tokenToKittyInputBox').value = '1';
-        App.clearInputsOfTokenToKittyInputSections();
-        App.hideAllDivsInClass('invalidAddressErrorMessage');
-        App.hideAllDivsInClass('missingInputErrorNumTokens');
-        App.showAllDivsInClass('tokenToKittySection');
-        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(1);
-    },
-
-    proceedToViewYourWCKBalance: function(){
-        App.hideHomePageDivs();
-        window.history.pushState({}, "", "");
-        App.getWCKBalanceForUser();
-        App.showAllDivsInClass('viewYourWCKBalanceSection');
-    },
-
-    proceedToBuyKittyWithWCK: function(){
-        App.hideHomePageDivs();
-        window.history.pushState({}, "", "");
-        document.getElementById('enableWCKKittyBuyingButton').classList.remove('btn-default');
-        document.getElementById('enableWCKKittyBuyingButton').classList.add('btn-primary');
-        document.getElementById('enableWCKKittyBuyingButton').href = "javascript:App.enableWCKKittyBuyingButtonPressed();"
-        document.getElementById('kittyIsForSaleWCKPriceText').innerText = "";
-        document.getElementById('buyKittyWithWCKIDBox').value = '';
-        App.Globals.currentKittyBuyPriceInWCK = undefined;
-        App.hideAllDivsInClass('kittyNotForSaleError');
-        App.hideAllDivsInClass('wckKittyBuyingNotEnabled');
-        App.hideAllDivsInClass('wckKittyBuyingEnabled');
-        App.showAllDivsInClass('loadingWCKKittyBuyingApproval');
-        App.showAllDivsInClass('buyKittyWithWCKSection');
-        App.showAllDivsInClass('wckKittyBuyingContract');
-        App.getWCKApprovedForKittyBuyingForUser();
-    },
-
-    getWCKBalanceForUser: function(){
-        web3.eth.getAccounts(function(error, accounts) {
-            if (error) { console.log(error); }
-            var account = accounts[0];
-            const balance = App.Globals.contracts['wrappedKittiesContract'].instance.balanceOf(account,
-                function(error, result){
-                    if(!error) {
-                        const balanceInWei = result.toNumber();
-                        document.getElementById('wckBalanceText').innerText = String((App.toEth(balanceInWei, 18)).toNumber()) + ' WCK' ;
-                    }
-                    else {
-                        console.log(error.message);
-                    }
-                }
-            );
-        });
-    },
-
-    getWCKApprovedForKittyBuyingForUser: function(){
-        web3.eth.getAccounts(function(error, accounts) {
-            if (error) { console.log(error); }
-            var account = accounts[0];
-            const balance = App.Globals.contracts['wrappedKittiesContract'].instance.allowance(new BigNumber(String(account)),
-                new BigNumber(String(App.Globals.contracts['wckKittyBuyerContract'].contractAddress)),
-                function(error, result){
-                    if(!error) {
-                        const allowance = result.toNumber();
-                        App.Globals.currentWCKBuyerAllowance = allowance;
-                        App.displayWCKKittyBuyingForAllowance(allowance);
-                    }
-                    else {
-                        console.log(error.message);
-                    }
-                }
-            );
-        });
-    },
-
-    displayWCKKittyBuyingForAllowance: function(allowance){
-        if(String(allowance) !== '0'){
-            if(App.Globals.WCKApprovalInterval !== undefined){
-                clearInterval(App.Globals.WCKApprovalInterval);
-                App.Globals.WCKApprovalInterval = undefined;
-            }
-            App.hideAllDivsInClass('loadingWCKKittyBuyingApproval');
-            App.hideAllDivsInClass('wckKittyBuyingNotEnabled');
-            App.showAllDivsInClass('wckKittyBuyingEnabled');
-        } else {
-            App.hideAllDivsInClass('loadingWCKKittyBuyingApproval');
-            App.hideAllDivsInClass('wckKittyBuyingEnabled');
-            App.showAllDivsInClass('wckKittyBuyingNotEnabled');
-        }
-    },
-
-    enableWCKKittyBuyingButtonPressed: function(){
-        web3.eth.getAccounts(function(error, accounts) {
-            if (error) { console.log(error); }
-            var account = accounts[0];
-            App.Globals.contracts['wrappedKittiesContract'].instance.approve(new BigNumber(String(App.Globals.contracts['wckKittyBuyerContract'].contractAddress)),
-                                                                        new BigNumber(String(App.Constants.uint256NearlyMax)),
-                                                                        {
-                                                                            from: account,
-                                                                        },
-                                                                        function(error, result){
-                                                                            if(!error) return App.displayEnableWCKKittyBuyingConfirmation(result);
-                                                                            else {
-                                                                                console.log(error.message);
-                                                                                return App.displayTransactionError(error);
-                                                                            }
-                                                                        })
-        });
-    },
-
-    displayEnableWCKKittyBuyingConfirmation: function(result){
-        if(String(result) === String(App.Constants.nullTransaction)){
-            document.getElementById('enableWCKKittyBuyingButton').href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
-        }else{
-            document.getElementById('enableWCKKittyBuyingButton').href = "https://etherscan.io/tx/" + String(result);
-        }
-        document.getElementById('enableWCKKittyBuyingButton').target="_blank"
-        document.getElementById('enableWCKKittyBuyingButton').rel="noopener noreferrer"
-        document.getElementById('enableWCKKittyBuyingButton').innerText = 'Please Wait, Approval In Progress, Screen Will Change When Transaction Confirms';
-        document.getElementById('enableWCKKittyBuyingButton').classList.remove('btn-primary');
-        document.getElementById('enableWCKKittyBuyingButton').classList.add('btn-default');
-        App.checkForWCKApprovalAfterInterval();
-    },
-
-    checkForWCKApprovalAfterInterval: function(){
-        App.Globals.WCKApprovalInterval = setInterval(function(){
-            App.getWCKApprovedForKittyBuyingForUser();
-        }, 5 * 1000);
-    },
-
-    wckKittyBuyingKittyIdEntered: function(kittyId){
-        if(kittyId === ''){
-            App.hideAllDivsInClass('kittyNotForSaleError');
-            App.hideAllDivsInClass('kittyIsForSaleMessage');
-            App.hideAllDivsInClass('kittyIsForSaleFetchingPriceMessage');
-        } else {
-            web3.eth.getAccounts(function(error, accounts) {
-                if (error) { console.log(error); }
-                var account = accounts[0];
-                const balance = App.Globals.contracts['cryptoCatsSalesAuctionContract'].instance.getCurrentPrice(new BigNumber(String(kittyId)),
-                    function(error, result){
-                        if(!error) {
-                            App.parseResultOfGetAuctionForKitty(kittyId, result);
-                        }
-                        else {
-                            console.log(error.message);
-                        }
-                    }
-                );
-            });
-        }
-    },
-
-    parseResultOfGetAuctionForKitty: function(kittyId, result){
-        if(result !== undefined){
-            if(result.toNumber() === 0){
-                App.hideAllDivsInClass('kittyIsForSaleMessage');
-                App.hideAllDivsInClass('kittyIsForSaleFetchingPriceMessage');
-                App.showAllDivsInClass('kittyNotForSaleError');
-            } else {
-                App.hideAllDivsInClass('kittyIsForSaleMessage');
-                App.hideAllDivsInClass('kittyNotForSaleError');
-                App.showAllDivsInClass('kittyIsForSaleFetchingPriceMessage');
-                App.fetchCurrentWCKPriceFromUniswap(result);
-            }
-        }
-    },
-
-    fetchCurrentWCKPriceFromUniswap: function(costInWei){
-        console.log(costInWei.mul);
-        console.log(costInWei.times);
-        var costInWeiPlusFees;
-        var costInWeiPlusFeesAndSlippage;
-        if(costInWei.mul !== undefined){
-            costInWeiPlusFees = costInWei.mul(new BigNumber(String(App.Constants.wckKittyBuyerDevFees)));
-            costInWeiPlusFeesAndSlippage = costInWeiPlusFees.mul(new BigNumber(String(App.Constants.wckUniswapSlippage)));
-        } else {
-            costInWeiPlusFees = costInWei.times(new BigNumber(String(App.Constants.wckKittyBuyerDevFees)));
-            costInWeiPlusFeesAndSlippage = costInWeiPlusFees.times(new BigNumber(String(App.Constants.wckUniswapSlippage)));
-        }
-        web3.eth.getAccounts(function(error, accounts) {
-            if (error) { console.log(error); }
-            var account = accounts[0];
-            const balance = App.Globals.contracts['uniswapExchangeContract_WCK-ETH'].instance.getTokenToEthOutputPrice(new BigNumber(String(costInWeiPlusFeesAndSlippage)),
-                function(error, result){
-                    if(!error) {
-                        App.Globals.currentKittyBuyPriceInWCK = result;
-                        App.parseResultOfFetchCurrentWCKPriceFromUniswap(result);
-                    }
-                    else {
-                        console.log(error.message);
-                    }
-                }
-            );
-        });
-    },
-
-    parseResultOfFetchCurrentWCKPriceFromUniswap: function(result){
-        App.hideAllDivsInClass('kittyIsForSaleFetchingPriceMessage');
-        if(result.toNumber() === 0){
-            document.getElementById('kittyIsForSaleWCKPriceText').innerText = 'There are not enough reserves in the WCK Uniswap pool to perform this trade.';
-        } else {
-            document.getElementById('kittyIsForSaleWCKPriceText').innerText = 'This kitty will cost no more than ' + String((App.toEth(result, 18)).toNumber()) + ' WCK\n\n(WrappedKitties 3.75% fee is included in this number)';
-            App.fetchCurrentUserWCKBalance();
-        }
-        App.showAllDivsInClass('kittyIsForSaleMessage');
-    },
-
-    fetchCurrentUserWCKBalance: function(costInWei){
-        web3.eth.getAccounts(function(error, accounts) {
-            if (error) { console.log(error); }
-            var account = accounts[0];
-            const balance = App.Globals.contracts['wrappedKittiesContract'].instance.balanceOf(account,
-                function(error, result){
-                    if(!error) {
-                        App.parseFetchCurrentUserWCKBalance(result);
-                    }
-                    else {
-                        console.log(error.message);
-                    }
-                }
-            );
-        });
-    },
-
-    parseFetchCurrentUserWCKBalance: function(result){
-        if(result.lt(App.Globals.currentKittyBuyPriceInWCK)){
-            document.getElementById('kittyIsForSaleWCKPriceText').innerText = document.getElementById('kittyIsForSaleWCKPriceText').innerText + '\n\nYou do not own enough WCK to complete this purchase.';
-        }
-    },
-
-    buyKittyWithWCKButtonPressed: function(){
-        const currCatID = document.getElementById('buyKittyWithWCKIDBox').value;
-        if(currCatID !== '' && App.Globals.currentKittyBuyPriceInWCK !== undefined){
-            web3.eth.getAccounts(function(error, accounts) {
-                if (error) { console.log(error); }
-                var account = accounts[0];
-                App.Globals.contracts['wckKittyBuyerContract'].instance.buyKittyWithWCK(new BigNumber(String(currCatID)),
-                                                                            App.Globals.currentKittyBuyPriceInWCK,
-                                                                            {
-                                                                                from: account,
-                                                                            },
-                                                                            function(error, result){
-                                                                                if(!error) return App.displayBuyKittyWithWCKConfirmation(result);
-                                                                                else {
-                                                                                    console.log(error.message);
-                                                                                    return App.displayTransactionError(error);
-                                                                                }
-                                                                            })
-            });
-        }
-    },
-
-    displayBuyKittyWithWCKConfirmation: function(result){
-        if(String(result) === String(App.Constants.nullTransaction)){
-            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
-        }else{
-            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
-        }
-        App.hideAllDivsInClass('buyKittyWithWCKSection');
-        App.showAllDivsInClass('viewTransactionOnEtherscan');
-        App.Globals.approvedKitties = {};
-    },
-
-    tokenToKittyAddSpecificIdsButtonPressed: function(){
-        App.Globals.specifyingKittyIDs = !App.Globals.specifyingKittyIDs;
-        if(App.Globals.specifyingKittyIDs){
-            App.showAllDivsInClass('tokenToKittySpecificKittyIDRow');
-            document.getElementById('tokentoKittyAddSpecificIdsButton').innerText = "Optional: Express No Preference For Which Kitties Will Be Withdrawn";
-        } else {
-            App.hideAllDivsInClass('tokenToKittySpecificKittyIDRow');
-            document.getElementById('tokentoKittyAddSpecificIdsButton').innerText = "Optional: Specify The ID of Each Kitty That Will Be Withdrawn";
-        }
-        var inputValue = document.getElementById('tokenToKittyInputBox').value;
-        if(inputValue === '' || inputValue === undefined) { inputValue = 1; }
-        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(inputValue);
-        if(App.Globals.specifyingDestinationAddresses){
-            App.tokenToKittyShowSpecificAddressInputsUpToValue(inputValue);
-        }
-    },
-
-    tokentoKittyAddSpecificAddressesButtonPressed: function(){
-        App.Globals.specifyingDestinationAddresses = !App.Globals.specifyingDestinationAddresses;
-        if(App.Globals.specifyingDestinationAddresses){
-            App.showAllDivsInClass('tokenToKittySpecificAddressRow');
-            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = "Optional: Specify My Address For All Kitties Being Withdrawn";
-        } else {
-            App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
-            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = "Optional: Specify Individual Destination Addresses Per Kitty";
-        }
-        var inputValue = document.getElementById('tokenToKittyInputBox').value;
-        if(inputValue === '' || inputValue === undefined) { inputValue = 1; }
-        App.tokenToKittyShowSpecificAddressInputsUpToValue(inputValue);
-        if(App.Globals.specifyingKittyIDs){
-            App.tokenToKittyShowSpecificKittyIDInputsUpToValue(inputValue);
-        }
-    },
-
-    tokenToKittyNumTokensInputValueEntered: function(value){
-        if(value === '' || value === undefined) { value = 1; }
-        App.tokenToKittyShowSpecificAddressInputsUpToValue(value);
-        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(value);
-    },
-
-    tokenToKittyShowSpecificAddressInputsUpToValue: function(value){
-        for(var i = 1; i <= 20; i++){
-            if(i <= value){
-                App.showAllDivsInClass('tokenToKittySpecificAddressInputRow' + String(i));
-            }else{
-                App.hideAllDivsInClass('tokenToKittySpecificAddressInputRow' + String(i));
-            }
-        }
-    },
-
-    tokenToKittyShowSpecificKittyIDInputsUpToValue: function(value){
-        if(App.Globals.specifyingKittyIDs === true){
-            for(var i = 1; i <= 20; i++){
-                if(i <= value){
-                    App.showAllDivsInClass('tokenToKittySpecificKittyIDInputRow' + String(i));
-                }else{
-                    App.hideAllDivsInClass('tokenToKittySpecificKittyIDInputRow' + String(i));
-                }
-            }
-        }
-    },
-
-    clearInputsOfTokenToKittyInputSections: function(){
-        for(var i = 1; i <= 20; i++){
-            const kittyIDInputBoxElementID = 'tokenToKittySpecificKittyIDInputBox' + String(i);
-            document.getElementById(kittyIDInputBoxElementID).value = '';
-            const addressInputBoxElementID = 'tokenToKittySpecificAddressInputBox' + String(i);
-            document.getElementById(addressInputBoxElementID).value = '';
-        }
     },
 
     updateKittyToTokenInputBoxes: function(){
@@ -931,6 +448,763 @@ App = {
         document.getElementById('transactionTwoOfTwoButton').innerText = 'Wait For Previous Transactions To Confirm';
     },
 
+    //////////////////////////////////////////////////////////////////////
+    // TokenToKitty
+    //////////////////////////////////////////////////////////////////////
+
+    tokenToKittyButtonPressed: function(){
+        var numTokens = document.getElementById('tokenToKittyInputBox').value;
+        if(numTokens === ''){
+            App.showAllDivsInClass('missingInputErrorNumTokens');
+            return;
+        } else {
+            App.hideAllDivsInClass('missingInputErrorNumTokens');
+            web3.eth.getAccounts(function(error, accounts) {
+                if (error) { console.log(error); }
+                var account = accounts[0];
+                var specificKitties = [];
+                var specificAddresses = [];
+                for(var i = 1; i <= Number(numTokens); i++){
+                    if(App.Globals.specifyingKittyIDs === true){
+                        const inputBoxElementID = 'tokenToKittySpecificKittyIDInputBox' + String(i);
+                        const inputValue = document.getElementById(inputBoxElementID).value;
+                        if(inputValue === '') { return; }
+                        specificKitties.push(new BigNumber(String(inputValue)));
+                    } else {
+                        specificKitties.push(new BigNumber(String(0)));
+                    }
+                    if(App.Globals.specifyingDestinationAddresses === true){
+                        const inputBoxElementID = 'tokenToKittySpecificAddressInputBox' + String(i);
+                        const inputValue = document.getElementById(inputBoxElementID).value;
+                        if(inputValue === '' || !App.validateTextInputAsValidAddress(inputValue)) {
+                            App.showAllDivsInClass('invalidAddressErrorMessage');
+                            return;
+                        }
+                        specificAddresses.push(new BigNumber(String(inputValue)));
+                    } else {
+                        specificAddresses.push(new BigNumber(String(App.Globals.userAccount)));
+                    }
+                }
+                App.Globals.contracts['wrappedKittiesContract'].instance.burnTokensAndWithdrawKitties(specificKitties,
+                                                                                                    specificAddresses,
+                                                                            {
+                                                                                from: account,
+                                                                            },
+                                                                            function(error, result){
+                                                                                if(!error) return App.displayTokenToKittyTransactionConfirmation(result);
+                                                                                else {
+                                                                                    console.log(error.message);
+                                                                                    return App.displayTransactionError(error);
+                                                                                }
+                                                                            })
+            });
+        }
+    },
+
+    displayTokenToKittyTransactionConfirmation: function(result){
+        if(String(result) === String(App.Constants.nullTransaction)){
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
+        }else{
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
+        }
+        App.hideAllDivsInClass('tokenToKittySection');
+        App.hideAllDivsInClass('invalidAddressErrorMessage');
+        App.hideAllDivsInClass('missingInputErrorNumTokens');
+        App.showAllDivsInClass('viewTransactionOnEtherscan');
+    },
+
+    validateTextInputAsValidAddress: function(value){
+        if(String(value).substring(0,2) !== '0x'){
+            return false;
+        } else if(String(value).length !== 42){
+            return false;
+        } else {
+            return true;
+        }
+    },
+
+    displayTransactionError: function(err){},
+
+    doNothing: function(){},
+
+    tokenToKittyAddSpecificIdsButtonPressed: function(){
+        App.Globals.specifyingKittyIDs = !App.Globals.specifyingKittyIDs;
+        if(App.Globals.specifyingKittyIDs){
+            App.showAllDivsInClass('tokenToKittySpecificKittyIDRow');
+            document.getElementById('tokentoKittyAddSpecificIdsButton').innerText = "Optional: Express No Preference For Which Kitties Will Be Withdrawn";
+        } else {
+            App.hideAllDivsInClass('tokenToKittySpecificKittyIDRow');
+            document.getElementById('tokentoKittyAddSpecificIdsButton').innerText = "Optional: Specify The ID of Each Kitty That Will Be Withdrawn";
+        }
+        var inputValue = document.getElementById('tokenToKittyInputBox').value;
+        if(inputValue === '' || inputValue === undefined) { inputValue = 1; }
+        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(inputValue);
+        if(App.Globals.specifyingDestinationAddresses){
+            App.tokenToKittyShowSpecificAddressInputsUpToValue(inputValue);
+        }
+    },
+
+    tokentoKittyAddSpecificAddressesButtonPressed: function(){
+        App.Globals.specifyingDestinationAddresses = !App.Globals.specifyingDestinationAddresses;
+        if(App.Globals.specifyingDestinationAddresses){
+            App.showAllDivsInClass('tokenToKittySpecificAddressRow');
+            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = "Optional: Specify My Address For All Kitties Being Withdrawn";
+        } else {
+            App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
+            document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = "Optional: Specify Individual Destination Addresses Per Kitty";
+        }
+        var inputValue = document.getElementById('tokenToKittyInputBox').value;
+        if(inputValue === '' || inputValue === undefined) { inputValue = 1; }
+        App.tokenToKittyShowSpecificAddressInputsUpToValue(inputValue);
+        if(App.Globals.specifyingKittyIDs){
+            App.tokenToKittyShowSpecificKittyIDInputsUpToValue(inputValue);
+        }
+    },
+
+    tokenToKittyNumTokensInputValueEntered: function(value){
+        if(value === '' || value === undefined) { value = 1; }
+        App.tokenToKittyShowSpecificAddressInputsUpToValue(value);
+        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(value);
+    },
+
+    tokenToKittyShowSpecificAddressInputsUpToValue: function(value){
+        for(var i = 1; i <= 20; i++){
+            if(i <= value){
+                App.showAllDivsInClass('tokenToKittySpecificAddressInputRow' + String(i));
+            }else{
+                App.hideAllDivsInClass('tokenToKittySpecificAddressInputRow' + String(i));
+            }
+        }
+    },
+
+    tokenToKittyShowSpecificKittyIDInputsUpToValue: function(value){
+        if(App.Globals.specifyingKittyIDs === true){
+            for(var i = 1; i <= 20; i++){
+                if(i <= value){
+                    App.showAllDivsInClass('tokenToKittySpecificKittyIDInputRow' + String(i));
+                }else{
+                    App.hideAllDivsInClass('tokenToKittySpecificKittyIDInputRow' + String(i));
+                }
+            }
+        }
+    },
+
+    clearInputsOfTokenToKittyInputSections: function(){
+        for(var i = 1; i <= 20; i++){
+            const kittyIDInputBoxElementID = 'tokenToKittySpecificKittyIDInputBox' + String(i);
+            document.getElementById(kittyIDInputBoxElementID).value = '';
+            const addressInputBoxElementID = 'tokenToKittySpecificAddressInputBox' + String(i);
+            document.getElementById(addressInputBoxElementID).value = '';
+        }
+    },
+
+    //////////////////////////////////////////////////////////////////////
+    // View WCK Balance
+    //////////////////////////////////////////////////////////////////////
+
+    getWCKBalanceForUser: function(){
+        web3.eth.getAccounts(function(error, accounts) {
+            if (error) { console.log(error); }
+            var account = accounts[0];
+            const balance = App.Globals.contracts['wrappedKittiesContract'].instance.balanceOf(account,
+                function(error, result){
+                    if(!error) {
+                        const balanceInWei = result.toNumber();
+                        document.getElementById('wckBalanceText').innerText = String((App.toEth(balanceInWei, 18)).toNumber()) + ' WCK' ;
+                    }
+                    else {
+                        console.log(error.message);
+                    }
+                }
+            );
+        });
+    },
+
+    //////////////////////////////////////////////////////////////////////
+    // Buy Kitties Using WCK
+    //////////////////////////////////////////////////////////////////////
+
+    getWCKApprovedForContractForUser: function(contractName){
+        web3.eth.getAccounts(function(error, accounts) {
+            if (error) { console.log(error); }
+            var account = accounts[0];
+            const balance = App.Globals.contracts['wrappedKittiesContract'].instance.allowance(new BigNumber(String(account)),
+                new BigNumber(String(App.Globals.contracts[contractName].contractAddress)),
+                function(error, result){
+                    if(!error) {
+                        const allowance = result.toNumber();
+                        App.Globals.wckAllowanceForContract[contractName] = allowance;
+                        App.getWCKApprovedCallbackForContract(contractName, allowance);
+                    }
+                    else {
+                        console.log(error.message);
+                    }
+                }
+            );
+        });
+    },
+
+    getWCKApprovedCallbackForContract: function(contractName, allowance){
+        if(contractName === 'wckKittyBuyerContract'){
+            App.displayWCKKittyBuyingForAllowance(allowance);
+        } else if(contractName === 'wckAdsContract'){
+            App.displayWCKAdsForAllowance(allowance);
+        }
+    },
+
+    displayWCKKittyBuyingForAllowance: function(allowance){
+        if(String(allowance) !== '0'){
+            if(App.Globals.WCKApprovalInterval !== undefined){
+                clearInterval(App.Globals.WCKApprovalInterval);
+                App.Globals.WCKApprovalInterval = undefined;
+            }
+            App.hideAllDivsInClass('loadingWCKKittyBuyingApproval');
+            App.hideAllDivsInClass('wckKittyBuyingNotEnabled');
+            App.showAllDivsInClass('wckKittyBuyingEnabled');
+        } else {
+            App.hideAllDivsInClass('loadingWCKKittyBuyingApproval');
+            App.hideAllDivsInClass('wckKittyBuyingEnabled');
+            App.showAllDivsInClass('wckKittyBuyingNotEnabled');
+        }
+    },
+
+    enableApprovalButtonPressed: function(contractName, buttonId){
+        web3.eth.getAccounts(function(error, accounts) {
+            if (error) { console.log(error); }
+            var account = accounts[0];
+            App.Globals.contracts['wrappedKittiesContract'].instance.approve(new BigNumber(String(App.Globals.contracts[contractName].contractAddress)),
+                                                                        new BigNumber(String(App.Constants.uint256NearlyMax)),
+                                                                        {
+                                                                            from: account,
+                                                                        },
+                                                                        function(error, result){
+                                                                            if(!error) return App.displayEnableApprovalConfirmation(result, contractName, buttonId);
+                                                                            else {
+                                                                                console.log(error.message);
+                                                                                return App.displayTransactionError(error);
+                                                                            }
+                                                                        })
+        });
+    },
+
+    displayEnableApprovalConfirmation: function(result, contractName, buttonId){
+        if(String(result) === String(App.Constants.nullTransaction)){
+            document.getElementById(buttonId).href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
+        }else{
+            document.getElementById(buttonId).href = "https://etherscan.io/tx/" + String(result);
+        }
+        document.getElementById(buttonId).target="_blank"
+        document.getElementById(buttonId).rel="noopener noreferrer"
+        document.getElementById(buttonId).innerText = 'Please Wait, Approval In Progress, Screen Will Change When Transaction Confirms';
+        document.getElementById(buttonId).classList.remove('btn-primary');
+        document.getElementById(buttonId).classList.add('btn-default');
+        App.checkForWCKApprovalAfterInterval(contractName);
+    },
+
+    checkForWCKApprovalAfterInterval: function(contractName){
+        App.Globals.WCKApprovalInterval = setInterval(function(){
+            App.getWCKApprovedForContractForUser(contractName);
+        }, 5 * 1000);
+    },
+
+    wckKittyBuyingKittyIdEntered: function(kittyId){
+        if(kittyId === ''){
+            App.hideAllDivsInClass('kittyNotForSaleError');
+            App.hideAllDivsInClass('kittyIsForSaleMessage');
+            App.hideAllDivsInClass('kittyIsForSaleFetchingPriceMessage');
+        } else {
+            web3.eth.getAccounts(function(error, accounts) {
+                if (error) { console.log(error); }
+                var account = accounts[0];
+                const balance = App.Globals.contracts['cryptoCatsSalesAuctionContract'].instance.getCurrentPrice(new BigNumber(String(kittyId)),
+                    function(error, result){
+                        if(!error) {
+                            App.parseResultOfGetAuctionForKitty(kittyId, result);
+                        }
+                        else {
+                            console.log(error.message);
+                        }
+                    }
+                );
+            });
+        }
+    },
+
+    parseResultOfGetAuctionForKitty: function(kittyId, result){
+        if(result !== undefined){
+            if(result.toNumber() === 0){
+                App.hideAllDivsInClass('kittyIsForSaleMessage');
+                App.hideAllDivsInClass('kittyIsForSaleFetchingPriceMessage');
+                App.showAllDivsInClass('kittyNotForSaleError');
+            } else {
+                App.hideAllDivsInClass('kittyIsForSaleMessage');
+                App.hideAllDivsInClass('kittyNotForSaleError');
+                App.showAllDivsInClass('kittyIsForSaleFetchingPriceMessage');
+                App.fetchCurrentWCKPriceFromUniswap(result);
+            }
+        }
+    },
+
+    fetchCurrentWCKPriceFromUniswap: function(costInWei){
+        var costInWeiPlusFees;
+        var costInWeiPlusFeesAndSlippage;
+        if(costInWei.mul !== undefined){
+            costInWeiPlusFees = costInWei.mul(new BigNumber(String(App.Constants.wckKittyBuyerDevFees)));
+            costInWeiPlusFeesAndSlippage = costInWeiPlusFees.mul(new BigNumber(String(App.Constants.wckUniswapSlippage)));
+        } else {
+            costInWeiPlusFees = costInWei.times(new BigNumber(String(App.Constants.wckKittyBuyerDevFees)));
+            costInWeiPlusFeesAndSlippage = costInWeiPlusFees.times(new BigNumber(String(App.Constants.wckUniswapSlippage)));
+        }
+        web3.eth.getAccounts(function(error, accounts) {
+            if (error) { console.log(error); }
+            var account = accounts[0];
+            const balance = App.Globals.contracts['uniswapExchangeContract_WCK-ETH'].instance.getTokenToEthOutputPrice(new BigNumber(String(costInWeiPlusFeesAndSlippage)),
+                function(error, result){
+                    if(!error) {
+                        App.Globals.currentKittyBuyPriceInWCK = result;
+                        App.parseResultOfFetchCurrentWCKPriceFromUniswap(result);
+                    }
+                    else {
+                        console.log(error.message);
+                    }
+                }
+            );
+        });
+    },
+
+    parseResultOfFetchCurrentWCKPriceFromUniswap: function(result){
+        App.hideAllDivsInClass('kittyIsForSaleFetchingPriceMessage');
+        if(result.toNumber() === 0){
+            document.getElementById('kittyIsForSaleWCKPriceText').innerText = 'There are not enough reserves in the WCK Uniswap pool to perform this trade.';
+        } else {
+            document.getElementById('kittyIsForSaleWCKPriceText').innerText = 'This kitty will cost no more than ' + String((App.toEth(result, 18)).toNumber()) + ' WCK\n\n(WrappedKitties 3.75% fee is included in this number)';
+            App.fetchCurrentUserWCKBalance();
+        }
+        App.showAllDivsInClass('kittyIsForSaleMessage');
+    },
+
+    fetchCurrentUserWCKBalance: function(costInWei){
+        web3.eth.getAccounts(function(error, accounts) {
+            if (error) { console.log(error); }
+            var account = accounts[0];
+            const balance = App.Globals.contracts['wrappedKittiesContract'].instance.balanceOf(account,
+                function(error, result){
+                    if(!error) {
+                        App.parseFetchCurrentUserWCKBalance(result);
+                    }
+                    else {
+                        console.log(error.message);
+                    }
+                }
+            );
+        });
+    },
+
+    parseFetchCurrentUserWCKBalance: function(result){
+        if(result.lt(App.Globals.currentKittyBuyPriceInWCK)){
+            document.getElementById('kittyIsForSaleWCKPriceText').innerText = document.getElementById('kittyIsForSaleWCKPriceText').innerText + '\n\nYou do not own enough WCK to complete this purchase.';
+        }
+    },
+
+    buyKittyWithWCKButtonPressed: function(){
+        const currCatID = document.getElementById('buyKittyWithWCKIDBox').value;
+        if(currCatID !== '' && App.Globals.currentKittyBuyPriceInWCK !== undefined){
+            web3.eth.getAccounts(function(error, accounts) {
+                if (error) { console.log(error); }
+                var account = accounts[0];
+                App.Globals.contracts['wckKittyBuyerContract'].instance.buyKittyWithWCK(new BigNumber(String(currCatID)),
+                                                                            App.Globals.currentKittyBuyPriceInWCK,
+                                                                            {
+                                                                                from: account,
+                                                                            },
+                                                                            function(error, result){
+                                                                                if(!error) return App.displayBuyKittyWithWCKConfirmation(result);
+                                                                                else {
+                                                                                    console.log(error.message);
+                                                                                    return App.displayTransactionError(error);
+                                                                                }
+                                                                            })
+            });
+        }
+    },
+
+    displayBuyKittyWithWCKConfirmation: function(result){
+        if(String(result) === String(App.Constants.nullTransaction)){
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
+        }else{
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
+        }
+        App.hideAllDivsInClass('buyKittyWithWCKSection');
+        App.showAllDivsInClass('viewTransactionOnEtherscan');
+        App.Globals.approvedKitties = {};
+    },
+
+    //////////////////////////////////////////////////////////////////////
+    // Advertise Kitties Using WCK
+    //////////////////////////////////////////////////////////////////////
+
+    displayWCKAdsForAllowance: function(allowance){
+        if(String(allowance) !== '0'){
+            if(App.Globals.WCKApprovalInterval !== undefined){
+                clearInterval(App.Globals.WCKApprovalInterval);
+                App.Globals.WCKApprovalInterval = undefined;
+            }
+            App.hideAllDivsInClass('loadingWckAdsApproval');
+            App.hideAllDivsInClass('wckAdsBuyingNotEnabled');
+            web3.eth.getAccounts(function(error, accounts) {
+                if (error) { console.log(error); }
+                var account = accounts[0];
+                if(String(App.Globals.currOwnerOfFeaturedCat).toLowerCase() === String(account).toLowerCase()){
+                    App.showAllDivsInClass('wckAdsBuyingOwnedByUser');
+                } else {
+                    App.showAllDivsInClass('wckAdsBuyingEnabled');
+                }
+            });
+        } else {
+            App.hideAllDivsInClass('loadingWckAdsApproval');
+            App.hideAllDivsInClass('wckAdsBuyingEnabled');
+            App.showAllDivsInClass('wckAdsBuyingNotEnabled');
+        }
+    },
+
+    wckAdsKittyIdEntered: function(kittyId){
+        if(kittyId === ''){
+            App.hideAllDivsInClass('youDoNotOwnKittyError');
+        } else {
+            web3.eth.getAccounts(function(error, accounts) {
+                if (error) { console.log(error); }
+                var account = accounts[0];
+                const balance = App.Globals.contracts['wckAdsContract'].instance.ownsKitty(new BigNumber(String(account)),
+                    new BigNumber(String(kittyId)),
+                    function(error, result){
+                        if(!error) {
+                            App.parseResultOfGetOwnsKitty(result);
+                        }
+                        else {
+                            console.log(error.message);
+                        }
+                    }
+                );
+            });
+        }
+    },
+
+    parseResultOfGetOwnsKitty: function(result){
+        if(result !== undefined){
+            if(result === false){
+                App.showAllDivsInClass('youDoNotOwnKittyError');
+            } else {
+                App.hideAllDivsInClass('youDoNotOwnKittyError');
+            }
+        }
+    },
+
+    wckAdsPriceEntered: function(price){
+        if(price === ''){
+            App.hideAllDivsInClass('wckAdsFetchingPriceMessage');
+            App.hideAllDivsInClass('wckAdsPriceMessage');
+        } else {
+            web3.eth.getAccounts(function(error, accounts) {
+                if (error) { console.log(error); }
+                var account = accounts[0];
+                const balance = App.Globals.contracts['wckAdsContract'].instance.getCurrentPriceToRentAdvertisingSlot(new BigNumber(String(0)),
+                    function(error, result){
+                        if(!error) {
+                            App.parseResultOfGetMinWckAdsPrice(result, price);
+                        }
+                        else {
+                            console.log(error.message);
+                        }
+                    }
+                );
+            });
+        }
+    },
+
+    parseResultOfGetMinWckAdsPrice: function(result, price){
+        if(result !== undefined){
+            if(result.gt(App.toWei(price, 18))){
+                const currMinPriceInWCK = App.toEth(result, 18);
+                document.getElementById('currMinWckAdsPriceText').innerText = 'You must pay at least ' + String(currMinPriceInWCK) + ' WCK to replace the currently featured CryptoKitty';
+                App.showAllDivsInClass('wckAdsPriceMessage');
+            } else {
+                App.hideAllDivsInClass('wckAdsPriceMessage');
+            }
+        }
+    },
+
+    fetchAdvertisingSlotContents: function(slotId){
+        web3.eth.getAccounts(function(error, accounts) {
+            if (error) { console.log(error); }
+            var account = accounts[0];
+            const balance = App.Globals.contracts['wckAdsContract'].instance.advertisingSlots(new BigNumber(String(slotId)),
+                function(error, result){
+                    if(!error) {
+                        App.parseResultOfFetchAdvertisingSlotContents(result, slotId);
+                    }
+                    else {
+                        console.log(error.message);
+                    }
+                }
+            );
+        });
+    },
+
+    parseResultOfFetchAdvertisingSlotContents: function(result, slotId){
+        if(result !== undefined){
+            [kittyIdBeingAdvertised, blockThatPriceWillResetAt, valuationPrice, slotOwner] = result;
+            App.Globals.currOwnerOfFeaturedCat = slotOwner;
+            if(kittyIdBeingAdvertised.toNumber() !== 0){
+                document.getElementById('kittyAdLink' + String(slotId)).href = 'https://www.cryptokitties.co/kitty/' + kittyIdBeingAdvertised.toNumber();
+                document.getElementById('kittyAdImage' + String(slotId)).src = 'https://img.cryptokitties.co/0x06012c8cf97bead5deae237070f9587f8e7a266d/' + kittyIdBeingAdvertised.toNumber() + '.png';
+            } else {
+                console.log('Kitty id is 0');
+            }
+        }
+    },
+
+    rentKittyAdButtonPressed: function(){
+        const currCatID = document.getElementById('wckAdsKittyIDBox').value;
+        const price = document.getElementById('wckAdsPriceBox').value;
+        if(currCatID !== '' && price !== ''){
+            web3.eth.getAccounts(function(error, accounts) {
+                if (error) { console.log(error); }
+                var account = accounts[0];
+                App.Globals.contracts['wckAdsContract'].instance.rentAdvertisingSlot(new BigNumber(String(0)),
+                                                                            new BigNumber(String(currCatID)),
+                                                                            new BigNumber(String(App.toWei(price, 18))),
+                                                                            {
+                                                                                from: account,
+                                                                            },
+                                                                            function(error, result){
+                                                                                if(!error) return App.displayWckAdsConfirmation(result);
+                                                                                else {
+                                                                                    console.log(error.message);
+                                                                                    return App.displayTransactionError(error);
+                                                                                }
+                                                                            })
+            });
+        }
+    },
+
+    displayWckAdsConfirmation: function(result){
+        if(String(result) === String(App.Constants.nullTransaction)){
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
+        }else{
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
+        }
+        App.hideAllDivsInClass('advertiseKittiesSection');
+        App.showAllDivsInClass('viewTransactionOnEtherscan');
+    },
+
+    changeRentedKittyIdButtonPressed: function(){
+        const currCatID = document.getElementById('wckAdsCurrentOwnerKittyIDBox').value;
+        if(currCatID !== ''){
+            web3.eth.getAccounts(function(error, accounts) {
+                if (error) { console.log(error); }
+                var account = accounts[0];
+                App.Globals.contracts['wckAdsContract'].instance.changeKittyIdBeingAdvertised(new BigNumber(String(0)),
+                                                                            new BigNumber(String(currCatID)),
+                                                                            {
+                                                                                from: account,
+                                                                            },
+                                                                            function(error, result){
+                                                                                if(!error) return App.displayWckAdsConfirmation(result);
+                                                                                else {
+                                                                                    console.log(error.message);
+                                                                                    return App.displayTransactionError(error);
+                                                                                }
+                                                                            })
+            });
+        }
+    },
+
+    displayWckAdsConfirmation: function(result){
+        if(String(result) === String(App.Constants.nullTransaction)){
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/address/" + String(App.Globals.userAccount);
+        }else{
+            document.getElementById('viewTransactionOnEtherscanButton').href = "https://etherscan.io/tx/" + String(result);
+        }
+        App.hideAllDivsInClass('advertiseKittiesSection');
+        App.showAllDivsInClass('viewTransactionOnEtherscan');
+    },
+
+    //////////////////////////////////////////////////////////////////////
+    // Navigation
+    //////////////////////////////////////////////////////////////////////
+
+    showHomePageDivs: function(){
+        App.fetchAdvertisingSlotContents(0);
+        if(window.web3 === undefined
+            || window.web3.eth === undefined
+            || window.web3.eth.accounts === undefined
+            || window.web3.eth.accounts[0] === undefined){
+                App.showAllDivsInClass('connectToWeb3Button');
+        } else{
+            App.showAllDivsInClass('coreApp');
+        }
+        App.showAllDivsInClass('infoForApp');
+        App.showAllDivsInClass('builtOnEthereum');
+    },
+
+    hideHomePageDivs: function(){
+        App.hideAllDivsInClass('coreApp');
+        App.hideAllDivsInClass('connectToWeb3Button');
+        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
+        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+        App.hideAllDivsInClass('infoForApp');
+        App.hideAllDivsInClass('builtOnEthereum');
+    },
+
+    proceedToNoMainnetOrMetamaskScreen: function(){
+        App.fetchAdvertisingSlotContents(0);
+        App.hideHomePageDivs();
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+        App.showAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
+    },
+
+    retreatFromNoMainnetOrMetamaskScreen: function(){
+        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+        App.showHomePageDivs();
+    },
+
+    proceedToSiteUnderMaintenance: function(){
+        App.hideHomePageDivs();
+        App.fetchAdvertisingSlotContents();
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+        App.showAllDivsInClass('siteUnderMaintenance');
+    },
+
+    titleButtonPressed: function(){
+        /*if(window.web3.eth.accounts[0] !== undefined){
+            App.retreatToHomeScreen();
+        }*/
+    },
+
+    retreatToHomeScreen: function(){
+        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
+        App.hideAllDivsInClass('kittyToTokenSection');
+        App.hideAllDivsInClass('tokenToKittySection');
+        App.hideAllDivsInClass('invalidAddressErrorMessage');
+        App.hideAllDivsInClass('missingInputErrorNumTokens');
+        App.hideAllDivsInClass('viewTransactionOnEtherscan');
+        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
+        App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+        App.hideAllDivsInClass('viewYourWCKBalanceSection');
+        App.hideAllDivsInClass('buyKittyWithWCKSection');
+        App.hideAllDivsInClass('advertiseKittiesSection');
+        for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
+            const textBoxId = 'kittyToTokenInputBox' + String(i);
+            document.getElementById(textBoxId).value = '';
+        }
+        App.showHomePageDivs();
+    },
+
+    retreatToLockScreen: function(){
+        App.hideAllDivsInClass('noMainnetOrMetamaskDetectedDiv');
+        App.hideAllDivsInClass('kittyToTokenSection');
+        App.hideAllDivsInClass('tokenToKittySection');
+        App.hideAllDivsInClass('invalidAddressErrorMessage');
+        App.hideAllDivsInClass('missingInputErrorNumTokens');
+        App.hideAllDivsInClass('viewTransactionOnEtherscan');
+        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
+        App.hideAllDivsInClass('viewYourWCKBalanceSection');
+        App.hideAllDivsInClass('buyKittyWithWCKSection');
+        App.hideAllDivsInClass('advertiseKittiesSection');
+        for(var i = 1; i <= App.Globals.numberOfVisibleKittyToTokenInputBoxes; i++){
+            const textBoxId = 'kittyToTokenInputBox' + String(i);
+            document.getElementById(textBoxId).value = '';
+        }
+        App.hideAllDivsInClass('coreApp');
+        App.showAllDivsInClass('connectToWeb3AccountLockedMessage');
+        App.showAllDivsInClass('connectToWeb3Button');
+        App.showAllDivsInClass('infoForApp');
+        App.showAllDivsInClass('builtOnEthereum');
+    },
+
+    proceedToKittyToTokenSection: function(){
+        App.hideHomePageDivs();
+        App.fetchAdvertisingSlotContents(0);
+        window.history.pushState({}, "", "");
+        App.updateKittyToTokenInputBoxes();
+        App.hideAllDivsInClass('kittyToTokenErrorDuplicateKittyIDEntered');
+        App.showAllDivsInClass('kittyToTokenSection');
+    },
+
+    proceedToTokenForSpecificKittySection: function(){
+        App.hideHomePageDivs();
+        App.fetchAdvertisingSlotContents(0);
+
+        App.Globals.specifyingDestinationAddresses = false;
+        App.hideAllDivsInClass('tokenToKittySpecificAddressRow');
+        document.getElementById('tokentoKittyAddSpecificAddressesButton').innerText = 'Optional: Specify Individual Destination Addresses Per Kitty';
+
+        App.Globals.specifyingKittyIDs = true;
+        App.showAllDivsInClass('tokenToKittySpecificKittyIDRow');
+        document.getElementById('tokentoKittyAddSpecificIdsButton').innerText = "Optional: Express No Preference For Which Kitties Will Be Withdrawn";
+
+        window.history.pushState({}, "", "");
+        document.getElementById('tokenToKittyInputBox').value = '1';
+        App.clearInputsOfTokenToKittyInputSections();
+        App.hideAllDivsInClass('invalidAddressErrorMessage');
+        App.hideAllDivsInClass('missingInputErrorNumTokens');
+        App.showAllDivsInClass('tokenToKittySection');
+        App.tokenToKittyShowSpecificKittyIDInputsUpToValue(1);
+    },
+
+    proceedToViewYourWCKBalance: function(){
+        App.hideHomePageDivs();
+        App.fetchAdvertisingSlotContents(0);
+        window.history.pushState({}, "", "");
+        App.getWCKBalanceForUser();
+        App.showAllDivsInClass('viewYourWCKBalanceSection');
+    },
+
+    proceedToBuyKittyWithWCK: function(){
+        App.hideHomePageDivs();
+        App.fetchAdvertisingSlotContents(0);
+        window.history.pushState({}, "", "");
+        document.getElementById('enableWCKKittyBuyingButton').classList.remove('btn-default');
+        document.getElementById('enableWCKKittyBuyingButton').classList.add('btn-primary');
+        document.getElementById('enableWCKKittyBuyingButton').href = "javascript:App.enableApprovalButtonPressed('wckKittyBuyerContract','enableWCKKittyBuyingButton');"
+        document.getElementById('kittyIsForSaleWCKPriceText').innerText = "";
+        document.getElementById('buyKittyWithWCKIDBox').value = '';
+        App.Globals.currentKittyBuyPriceInWCK = undefined;
+        App.hideAllDivsInClass('kittyNotForSaleError');
+        App.hideAllDivsInClass('wckKittyBuyingNotEnabled');
+        App.hideAllDivsInClass('wckKittyBuyingEnabled');
+        App.showAllDivsInClass('loadingWCKKittyBuyingApproval');
+        App.showAllDivsInClass('buyKittyWithWCKSection');
+        App.showAllDivsInClass('wckKittyBuyingContract');
+        App.getWCKApprovedForContractForUser('wckKittyBuyerContract');
+    },
+
+    proceedToAdvertiseKittiesSection: function(){
+        App.hideHomePageDivs();
+        App.fetchAdvertisingSlotContents(0);
+        window.history.pushState({}, "", "");
+        document.getElementById('enableWCKAdsButton').classList.remove('btn-default');
+        document.getElementById('enableWCKAdsButton').classList.add('btn-primary');
+        document.getElementById('enableWCKAdsButton').href = "javascript:App.enableApprovalButtonPressed('wckAdsContract','enableWCKAdsButton');"
+        document.getElementById('kittyIsForSaleWCKPriceText').innerText = "";
+        document.getElementById('wckAdsKittyIDBox').value = '';
+        document.getElementById('wckAdsPriceBox').value = '';
+        App.hideAllDivsInClass('wckAdsBuyingEnabled');
+        App.hideAllDivsInClass('wckAdsBuyingNotEnabled');
+        App.hideAllDivsInClass('wckAdsBuyingOwnedByUser');
+        App.hideAllDivsInClass('youDoNotOwnKittyError');
+        App.hideAllDivsInClass('wckAdsPriceMessage');
+        App.showAllDivsInClass('loadingWckAdsApproval');
+        App.showAllDivsInClass('advertiseKittiesSection');
+        App.getWCKApprovedForContractForUser('wckAdsContract');
+    },
+
+    //////////////////////////////////////////////////////////////////////
+    // Helper Functions
+    //////////////////////////////////////////////////////////////////////
+
     showSingleDiv: function(id) {
         console.log('Showing div with id: ' + id);
         var e = document.getElementById(id);
@@ -958,6 +1232,10 @@ App = {
 
     toEth: function(wei, decimals){
 		return new BigNumber(String(wei)).div(new BigNumber(10 ** decimals));
+	},
+
+    toWei: function(eth, decimals) {
+		return new BigNumber(new BigNumber(String(eth)).times(new BigNumber(10 ** decimals)).toFixed(0, BigNumber.ROUND_UP));
 	},
 };
 

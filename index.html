@@ -10,9 +10,9 @@
     <!-- Loading Flat UI -->
     <link href="flat-ui.css" rel="stylesheet">
     <link href="demo.css" rel="stylesheet">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
     <script language="javascript" type="text/javascript" src="./bignumber.js/bignumber.js"></script>
     <script language="javascript" type="text/javascript" src="app.js"></script>
   </head>
@@ -23,6 +23,8 @@
           Wrapped Kitties
           <div><small>ERC20 tokens, each backed 1:1 by an ERC721 CryptoKitty</small>
         </h1>
+        <!--<a id="kittyAdLink0" href="https://www.cryptokitties.co/kitty/1"><img id="kittyAdImage0" src="https://img.cryptokitties.co/0x06012c8cf97bead5deae237070f9587f8e7a266d/2343.png" alt="Kitty Advertisement" height="200" width="200"></a>-->
+        <a id="kittyAdLink0" href="" target="_blank" rel="noopener noreferrer"><img id="kittyAdImage0" src="images/presentEmoji.png" alt="Kitty Advertisement" height="200" width="200"></a>
       </div> <!-- /demo-headline -->
       <div class="col connectToWeb3Button">
         <center>
@@ -87,6 +89,24 @@
               </div>
             </center>
         </div> <!-- /proceedToBuyKittyWithWCKButton -->
+        </div> <!-- /demoRow -->
+      </div> <!-- /coreApp -->
+      <br/>
+      <div class="coreApp" style="display: none;">
+        <div class="row demo-row">
+          <div class="col advertiseKittiesButton">
+            <center>
+              <div class="col">
+                <a href="javascript:App.proceedToAdvertiseKittiesSection();" class="btn btn-block btn-lg btn-primary">Advertise Your Kitty Using WCK</a>
+              </div>
+            </center>
+          </div> <!-- /advertiseKittiesButton -->
+          <div class="col tokenToKittyButton">
+            <center>
+              <div class="col">
+              </div>
+            </center>
+          </div> <!-- /tokenToKittyButton -->
         </div> <!-- /demoRow -->
       </div> <!-- /coreApp -->
       <div class="kittyToTokenSection" style="display: none;">
@@ -751,11 +771,11 @@
             </div>
         </div> <!-- /row -->
           <div class="row wckKittyBuyingNotEnabled" style="display: none;">
-            <div class="col tokenToKittyFunctionButton">
+            <div class="col enableKittyBuying">
               <center>
-                  <a href="javascript:App.enableWCKKittyBuyingButtonPressed();" class="btn btn-block btn-lg btn-primary" id="enableWCKKittyBuyingButton">Enable Purchasing of Kitties from CryptoKitties Website with WCK</a>
+                  <a href="javascript:App.enableApprovalButtonPressed('wckKittyBuyerContract','enableWCKKittyBuyingButton');" class="btn btn-block btn-lg btn-primary" id="enableWCKKittyBuyingButton">Enable Purchasing of Kitties from CryptoKitties Website with WCK</a>
               </center>
-            </div> <!-- /tokenToKittyFunctionButton -->
+            </div> <!-- /enableKittyBuying -->
           </div> <!-- /row -->
           <div class="row wckKittyBuyingEnabled" style="display: none;">
             <div class="col">
@@ -794,11 +814,107 @@
       <div class="row wckKittyBuyingContract">
           <div class="col viewVerifiedContractForWCKKittyBuying">
             <center>
-                <a href="https://etherscan.io/address/0xC63136c59Afff603F207523Ea394B6ba37b0ebca#contracts" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-info">View Verified Contract on Etherscan</a>
+                <a href="https://etherscan.io/address/0xC63136c59Afff603F207523Ea394B6ba37b0ebca#contracts" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-info">View WrappedKitties Auction Buyer Contract on Etherscan</a>
             </center>
           </div> <!-- /viewVerifiedContract -->
       </div> <!-- /row -->
       </div> <!-- /buyKittyWithWCKSection -->
+      <div class="advertiseKittiesSection" style="display: none;">
+        <div class="row loadingWckAdsApproval">
+            <div class="col">
+              <center>
+                <h1 class="demo-download-text"><center>Loading, please wait...</center></h1>
+              </center>
+            </div>
+        </div> <!-- /row -->
+          <div class="row wckAdsBuyingNotEnabled" style="display: none;">
+            <div class="col enableWCKAds">
+              <center>
+                  <a href="javascript:App.enableApprovalButtonPressed('wckAdsContract','enableWCKAdsButton');" class="btn btn-block btn-lg btn-primary" id="enableWCKAdsButton">Enable the Ability to Advertise Your Kitty at the Top of the WrappedKitties Website</a>
+              </center>
+            </div> <!-- /enableWCKAds -->
+          </div> <!-- /row -->
+          <div class="row wckAdsBuyingEnabled" style="display: none;">
+              <div class="row wckAdsInstructions">
+                <div class="col">
+                  <center>
+                    <h1 class="demo-download-text"><center>You will get to advertise one of your CryptoKitties until:
+                    <br/><br/>(1) Somebody pays at least 5% more than the amount that you paid
+                    <br/><br/>  or
+                    <br/><br/>(2) Seven days have passed
+                    <br/><br/>Price resets to 1 WCK after seven days of inactivity</center></h1>
+                  </center>
+                </div>
+              </div> <!-- /row -->
+              <div class="col">
+                <div class="form-group">
+                  <input type="number" min="1" max="10000000" step="1" oninput="validity.valid||(value='');App.wckAdsKittyIdEntered(value);" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="ID of kitty to advertise (you may change this as often as you like while you control the ad)" class="form-control" id="wckAdsKittyIDBox" />
+                </div>
+              </div>
+            <div class="col">
+              <div class="form-group">
+                <input type="number" min="1" max="10000000" step="0.000000000000000001" oninput="validity.valid||(value='');App.wckAdsPriceEntered(value);" value="" placeholder="Price to pay in WCK (if someone pays at least 5% more than this amount, they will replace your advertisement)" class="form-control" id="wckAdsPriceBox" />
+              </div>
+            </div>
+            <div class="row youDoNotOwnKittyError" style="display: none;">
+              <div class="col">
+                <center>
+                  <h1 class="demo-download-text"><center>Due to the terms of the Nifty License, you can only advertise kitties that you own.</center></h1>
+                </center>
+              </div>
+          </div> <!-- /row -->
+          <div class="row wckAdsPriceMessage" style="display: none;">
+            <div class="col">
+              <center>
+                <center><h1 class="demo-download-text" id="currMinWckAdsPriceText"></h1></center>
+              </center>
+            </div>
+        </div> <!-- /row -->
+            <div class="col rentAdWithWCKButtonSection">
+              <center>
+                  <a href="javascript:App.rentKittyAdButtonPressed();" class="btn btn-block btn-lg btn-primary">Rent Advertising Space at the Top of the WrappedKitties Website using WCK</a>
+              </center>
+            </div> <!-- /tokenToKittyFunctionButton -->
+          </div> <!-- /row -->
+          <div class="row wckAdsBuyingOwnedByUser" style="display: none;">
+              <div class="row wckAdsInstructions">
+                <div class="col">
+                  <center>
+                    <h1 class="demo-download-text"><center>Since you are the current renter of the advertisement, you get to advertise one of your CryptoKitties until:
+                    <br/><br/>(1) Somebody pays at least 5% more than the amount that you paid
+                    <br/><br/>  or
+                    <br/><br/>(2) Seven days have passed
+                    <br/><br/>Price resets to 1 WCK after seven days of inactivity</center></h1>
+                  </center>
+                </div>
+              </div> <!-- /row -->
+              <div class="col">
+                <div class="form-group">
+                  <input type="number" min="1" max="10000000" step="1" oninput="validity.valid||(value='');App.wckAdsKittyIdEntered(value);" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="ID of kitty to advertise (since you are the current renter of this ad, you may change this as often as you like)" class="form-control" id="wckAdsCurrentOwnerKittyIDBox" />
+                </div>
+              </div>
+            <div class="row youDoNotOwnKittyError" style="display: none;">
+              <div class="col">
+                <center>
+                  <h1 class="demo-download-text"><center>Due to the terms of the Nifty License, you can only advertise kitties that you own.</center></h1>
+                </center>
+              </div>
+          </div> <!-- /row -->
+            <div class="col rentAdWithWCKButtonSection">
+              <center>
+                  <a href="javascript:App.changeRentedKittyIdButtonPressed();" class="btn btn-block btn-lg btn-primary">Change the Kitty Being Advertised (free)</a>
+              </center>
+            </div> <!-- /tokenToKittyFunctionButton -->
+          </div> <!-- /row -->
+      <br/>
+      <div class="row wckAdsContractSection">
+          <div class="col viewVerifiedContractForWCKAds">
+            <center>
+                <a href="https://etherscan.io/address/0x3d88a5c21753Bda842E7B5810c15948D3EFf96Ea#contracts" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-info">View WrappedKitties Advertising Contract on Etherscan</a>
+            </center>
+          </div> <!-- /viewVerifiedContract -->
+      </div> <!-- /row -->
+      </div> <!-- /advertiseKittiesSection -->
       <br/>
       <div class="infoForApp">
           <div class="row demo-row">
@@ -812,7 +928,7 @@
             <div class="col tokenToTokenButton">
               <center>
                 <div class="col">
-                  <a href="http://uniswap.exchange/swap/0x09fE5f0236F0Ea5D930197DCE254d77B04128075" class="btn btn-block btn-lg btn-info">Buy and Sell WCK Tokens In Bulk on Uniswap</a>
+                  <a href="http://uniswap.exchange/swap/0x09fE5f0236F0Ea5D930197DCE254d77B04128075" class="btn btn-block btn-lg btn-info">Trade WCK Tokens In Bulk on Uniswap</a>
                 </div>
               </center>
             </div> <!-- /tokenToTokenButton -->
@@ -822,7 +938,7 @@
           <div class="col viewVerifiedContract">
             <center>
               <div class="col">
-                <a href="https://etherscan.io/address/0x09fE5f0236F0Ea5D930197DCE254d77B04128075#contracts" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-info">View WCK's Verified Contract on Etherscan</a>
+                <a href="https://etherscan.io/address/0x09fE5f0236F0Ea5D930197DCE254d77B04128075#contracts" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-info">View WCK's Contract on Etherscan</a>
               </div>
             </center>
           </div> <!-- /viewVerifiedContract -->
@@ -840,7 +956,7 @@
           <div class="col coinbaseReferral">
             <center>
               <div class="col">
-                <a href="https://www.coinbase.com/join/johnso_be5" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-inverse">Buy Ether with a Credit Card</a>
+                <a href="https://www.coinbase.com/join/johnso_be5" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-inverse">Buy Ether with a Credit Card on Coinbase</a>
               </div>
             </center>
           </div> <!-- /coinbaseReferral -->
@@ -848,7 +964,7 @@
           <div class="col ledgerReferral">
             <center>
               <div class="col">
-                <a href="https://shop.ledger.com/pages/ledger-nano-x?r=57a7ba3f00b7" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-inverse">Store Your Digital Assets Safely</a>
+                <a href="https://shop.ledger.com/pages/ledger-nano-x?r=57a7ba3f00b7" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-inverse">Store Your Digital Assets Safely with Ledger</a>
               </div>
             </center>
           </div> <!-- /ledgerReferral -->
