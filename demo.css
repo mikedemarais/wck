@@ -96,7 +96,7 @@ ol.linenums {
   width: 970px !important;
 }
 .demo-headline {
-  padding: 43px 0 110px;
+  padding: 43px 0 5px;
   text-align: center;
 }
 .demo-logo {
@@ -260,7 +260,7 @@ ol.linenums {
 }
 .demo-download-text {
   font-size: 15px;
-  padding: 20px 0;
+  padding: 0px 0;
   text-align: center;
 }
 .demo-text-box a:hover {
