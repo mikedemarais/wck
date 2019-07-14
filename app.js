@@ -149,6 +149,7 @@ App = {
                 App.Globals.userAccount = window.web3.eth.accounts[0];
                 App.hideAllDivsInClass('connectToWeb3Button');
                 App.hideAllDivsInClass('connectToWeb3AccountLockedMessage');
+                App.fetchAdvertisingSlotContents(0);
                 App.showAllDivsInClass('coreApp');
             } else if(window.web3.eth.accounts[0] === undefined){
                 App.retreatToLockScreen();
