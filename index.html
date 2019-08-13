@@ -101,12 +101,13 @@
               </div>
             </center>
           </div> <!-- /advertiseKittiesButton -->
-          <div class="col tokenToKittyButton">
+          <div class="col kittyBountiesButton">
             <center>
               <div class="col">
+                <a href="javascript:App.proceedToKittyBountiesSection();" class="btn btn-block btn-lg btn-primary">Earn WCK By Fulfilling Kitty Bounties</a>
               </div>
             </center>
-          </div> <!-- /tokenToKittyButton -->
+          </div> <!-- /advertiseKittiesButton -->
         </div> <!-- /demoRow -->
       </div> <!-- /coreApp -->
       <div class="kittyToTokenSection" style="display: none;">
@@ -915,6 +916,2039 @@
           </div> <!-- /viewVerifiedContract -->
       </div> <!-- /row -->
       </div> <!-- /advertiseKittiesSection -->
+      <div class="kittyBountiesSection" style="display: none;">
+          <div class="row loadingWCKKittyBountiesApproval">
+            <div class="col">
+              <center>
+                <h1 class="demo-download-text"><center>Loading, please wait...</center></h1>
+              </center>
+            </div>
+        </div> <!-- /row -->
+          <div class="row wckKittyBoutiesNotEnabled" style="display: none;">
+            <div class="col enableKittyBounties">
+              <center>
+                  <a href="javascript:App.enableApprovalButtonPressed('wckKittyBounties','enableWCKKittyBountiesButton');" class="btn btn-block btn-lg btn-primary" id="enableWCKKittyBountiesButton">Enable the Ability to Create and Fulfill Kitty Bounties Denominated in WCK</a>
+              </center>
+            </div> <!-- /enableKittyBuying -->
+          </div> <!-- /row -->
+          <div class="row wckKittyBountiesEnabled" style="display: none;">
+              <div class="col coreBountiesApp">
+                <div class="viewCurrentBounties">
+                  <div class="wantedSign" style='border: 2px solid black'>
+                    <center><h1 class="demo-section-title" id="wantedTitleText">Loading...</h1></center>
+                    <center><p class="text" id="currentBountyNumCatsText" ></p></center>
+                    <center><p class="text" id="currentBountyGenesText" ></center>
+                    <center><p class="text" id="currentBountyGenerationText" ></p></center>
+                    <center><p class="text" id="currentBountyMinimumCooldownText" ></p></center>
+                    <center><p class="text" id="currentBountyEarliestIdText" ></p></center>
+                    <center><p class="text" id="currentBountyLatestIdText" ></p></center>
+                    <center><p class="text" id="currentBountyLockoutTimeRemainingText" ></p></center>
+                    <center><h1 class="demo-section-title" id="currentBountyRewardText" ></h1></center>
+                  </div>
+                  <br />
+                  <center><p class="text" id="currentBountyIDText"></p></center>
+                  <br />
+                  <div class="row demo-row viewAllBounties">
+                    <div class="col">
+                      <a href="javascript:App.fulfillBountyInitialButtonPressed();" class="btn btn-block btn-lg btn-primary" id="fulfillBountyInitialButton">Claim Bounty</a>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="fulfillBountyInstructions" style="display: none;">
+                    <div class="row">
+                      <div class="col">
+                        <center><p class="text fulfillBountyInstructionsText">Claim bounty in two steps:<br /><br />(1) Submit a transacton to the CryptoKitties Core contract, approving the kitty that you own that satisfies the requirements to be used for the bounty.</p></center>
+                      </div>
+                    </div> <!-- /row -->
+                    <div class="row">
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="number" min="0" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="Kitty Id #" class="form-control" id="fulfillBountyKittyIdInputBox" />
+                        </div>
+                      </div>
+                      <div class="col">
+                        <a href="javascript:App.fulfillBountyTxnOneButtonPressed();" class="btn btn-block btn-lg btn-primary" id="fulfillBountyTxnOneButton">Submit Transaction 1 of 2</a>
+                      </div>
+                    </div> <!-- /row -->
+                    <div class="row">
+                      <div class="col">
+                      <center>
+                        <p class="text fulfillBountyInstructionsText">(2) Submit a transaction to the KittyBounties contract, sending your cat in exchange for the bounty's reward.<br />(Wait for Transaction 1 to confirm on the blockchain before submitting Transaction 2)</p>
+                      </center>
+                      </div>
+                    </div> <!-- /row -->
+                    <div class="row">
+                      <div class="col">
+                      </div>
+                      <div class="col">
+                        <a href="javascript:App.fulfillBountyTxnTwoButtonPressed();" class="btn btn-block btn-lg btn-primary" id="fulfillBountyTxnTwoButton">Submit Transaction 2 of 2</a>
+                      </div>
+                    </div> <!-- /row -->
+                    <br />
+                  </div>
+                  <div class="row demo-row viewAllBounties">
+                    <div class="col">
+                      <a href="javascript:App.retreatToPreviousBounty();" class="btn btn-block btn-lg btn-info">Previous Bounty</a>
+                    </div>
+                    <br/>
+                    <div class="col">
+                      <a href="javascript:App.advanceToNextBounty();" class="btn btn-block btn-lg btn-info">Next Bounty</a>
+                    </div>
+                  </div> <!-- /row -->
+                  <br />
+                  <br />
+                </div> <!-- /viewCurrentBounties -->
+                <div class="createBountyOptions">
+                  <h1 class="demo-section-title"><center>Create a Bounty</center></h1>
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Fur</h3>
+                      <select id="geneSelector0" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">savannah (Dominant Trait)</option>
+                        <option value="1">selkirk (Dominant Trait)</option>
+                        <option value="2">chantilly (Dominant Trait)</option>
+                        <option value="3">birman (Dominant Trait)</option>
+                        <option value="4">koladiviya (Dominant Trait)</option>
+                        <option value="5">bobtail (Dominant Trait)</option>
+                        <option value="6">manul (Dominant Trait)</option>
+                        <option value="7">pixiebob (Dominant Trait)</option>
+                        <option value="8">siberian (Dominant Trait)</option>
+                        <option value="9">cymric (Dominant Trait)</option>
+                        <option value="10">chartreux (Dominant Trait)</option>
+                        <option value="11">himalayan (Dominant Trait)</option>
+                        <option value="12">munchkin (Dominant Trait)</option>
+                        <option value="13">sphynx (Dominant Trait)</option>
+                        <option value="14">ragamuffin (Dominant Trait)</option>
+                        <option value="15">ragdoll (Dominant Trait)</option>
+                        <option value="16">norwegianforest (Dominant Trait)</option>
+                        <option value="17">mekong (Dominant Trait)</option>
+                        <option value="18">highlander (Dominant Trait)</option>
+                        <option value="19">balinese (Dominant Trait)</option>
+                        <option value="20">lynx (Dominant Trait)</option>
+                        <option value="21">mainecoon (Dominant Trait)</option>
+                        <option value="22">laperm (Dominant Trait)</option>
+                        <option value="23">persian (Dominant Trait)</option>
+                        <option value="24">fox (Dominant Trait)</option>
+                        <option value="25">kurilian (Dominant Trait)</option>
+                        <option value="26">toyger (Dominant Trait)</option>
+                        <option value="27">manx (Dominant Trait)</option>
+                        <option value="28">lykoi (Dominant Trait)</option>
+                        <option value="29">burmilla (Dominant Trait)</option>
+                        <option value="30">liger (Dominant Trait)</option>
+                        <option value="31">FU31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector1" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">savannah (Hidden Trait 1)</option>
+                        <option value="1">selkirk (Hidden Trait 1)</option>
+                        <option value="2">chantilly (Hidden Trait 1)</option>
+                        <option value="3">birman (Hidden Trait 1)</option>
+                        <option value="4">koladiviya (Hidden Trait 1)</option>
+                        <option value="5">bobtail (Hidden Trait 1)</option>
+                        <option value="6">manul (Hidden Trait 1)</option>
+                        <option value="7">pixiebob (Hidden Trait 1)</option>
+                        <option value="8">siberian (Hidden Trait 1)</option>
+                        <option value="9">cymric (Hidden Trait 1)</option>
+                        <option value="10">chartreux (Hidden Trait 1)</option>
+                        <option value="11">himalayan (Hidden Trait 1)</option>
+                        <option value="12">munchkin (Hidden Trait 1)</option>
+                        <option value="13">sphynx (Hidden Trait 1)</option>
+                        <option value="14">ragamuffin (Hidden Trait 1)</option>
+                        <option value="15">ragdoll (Hidden Trait 1)</option>
+                        <option value="16">norwegianforest (Hidden Trait 1)</option>
+                        <option value="17">mekong (Hidden Trait 1)</option>
+                        <option value="18">highlander (Hidden Trait 1)</option>
+                        <option value="19">balinese (Hidden Trait 1)</option>
+                        <option value="20">lynx (Hidden Trait 1)</option>
+                        <option value="21">mainecoon (Hidden Trait 1)</option>
+                        <option value="22">laperm (Hidden Trait 1)</option>
+                        <option value="23">persian (Hidden Trait 1)</option>
+                        <option value="24">fox (Hidden Trait 1)</option>
+                        <option value="25">kurilian (Hidden Trait 1)</option>
+                        <option value="26">toyger (Hidden Trait 1)</option>
+                        <option value="27">manx (Hidden Trait 1)</option>
+                        <option value="28">lykoi (Hidden Trait 1)</option>
+                        <option value="29">burmilla (Hidden Trait 1)</option>
+                        <option value="30">liger (Hidden Trait 1)</option>
+                        <option value="31">FU31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector2" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">savannah (Hidden Trait 2)</option>
+                        <option value="1">selkirk (Hidden Trait 2)</option>
+                        <option value="2">chantilly (Hidden Trait 2)</option>
+                        <option value="3">birman (Hidden Trait 2)</option>
+                        <option value="4">koladiviya (Hidden Trait 2)</option>
+                        <option value="5">bobtail (Hidden Trait 2)</option>
+                        <option value="6">manul (Hidden Trait 2)</option>
+                        <option value="7">pixiebob (Hidden Trait 2)</option>
+                        <option value="8">siberian (Hidden Trait 2)</option>
+                        <option value="9">cymric (Hidden Trait 2)</option>
+                        <option value="10">chartreux (Hidden Trait 2)</option>
+                        <option value="11">himalayan (Hidden Trait 2)</option>
+                        <option value="12">munchkin (Hidden Trait 2)</option>
+                        <option value="13">sphynx (Hidden Trait 2)</option>
+                        <option value="14">ragamuffin (Hidden Trait 2)</option>
+                        <option value="15">ragdoll (Hidden Trait 2)</option>
+                        <option value="16">norwegianforest (Hidden Trait 2)</option>
+                        <option value="17">mekong (Hidden Trait 2)</option>
+                        <option value="18">highlander (Hidden Trait 2)</option>
+                        <option value="19">balinese (Hidden Trait 2)</option>
+                        <option value="20">lynx (Hidden Trait 2)</option>
+                        <option value="21">mainecoon (Hidden Trait 2)</option>
+                        <option value="22">laperm (Hidden Trait 2)</option>
+                        <option value="23">persian (Hidden Trait 2)</option>
+                        <option value="24">fox (Hidden Trait 2)</option>
+                        <option value="25">kurilian (Hidden Trait 2)</option>
+                        <option value="26">toyger (Hidden Trait 2)</option>
+                        <option value="27">manx (Hidden Trait 2)</option>
+                        <option value="28">lykoi (Hidden Trait 2)</option>
+                        <option value="29">burmilla (Hidden Trait 2)</option>
+                        <option value="30">liger (Hidden Trait 2)</option>
+                        <option value="31">FU31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector3" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">savannah (Hidden Trait 3)</option>
+                        <option value="1">selkirk (Hidden Trait 3)</option>
+                        <option value="2">chantilly (Hidden Trait 3)</option>
+                        <option value="3">birman (Hidden Trait 3)</option>
+                        <option value="4">koladiviya (Hidden Trait 3)</option>
+                        <option value="5">bobtail (Hidden Trait 3)</option>
+                        <option value="6">manul (Hidden Trait 3)</option>
+                        <option value="7">pixiebob (Hidden Trait 3)</option>
+                        <option value="8">siberian (Hidden Trait 3)</option>
+                        <option value="9">cymric (Hidden Trait 3)</option>
+                        <option value="10">chartreux (Hidden Trait 3)</option>
+                        <option value="11">himalayan (Hidden Trait 3)</option>
+                        <option value="12">munchkin (Hidden Trait 3)</option>
+                        <option value="13">sphynx (Hidden Trait 3)</option>
+                        <option value="14">ragamuffin (Hidden Trait 3)</option>
+                        <option value="15">ragdoll (Hidden Trait 3)</option>
+                        <option value="16">norwegianforest (Hidden Trait 3)</option>
+                        <option value="17">mekong (Hidden Trait 3)</option>
+                        <option value="18">highlander (Hidden Trait 3)</option>
+                        <option value="19">balinese (Hidden Trait 3)</option>
+                        <option value="20">lynx (Hidden Trait 3)</option>
+                        <option value="21">mainecoon (Hidden Trait 3)</option>
+                        <option value="22">laperm (Hidden Trait 3)</option>
+                        <option value="23">persian (Hidden Trait 3)</option>
+                        <option value="24">fox (Hidden Trait 3)</option>
+                        <option value="25">kurilian (Hidden Trait 3)</option>
+                        <option value="26">toyger (Hidden Trait 3)</option>
+                        <option value="27">manx (Hidden Trait 3)</option>
+                        <option value="28">lykoi (Hidden Trait 3)</option>
+                        <option value="29">burmilla (Hidden Trait 3)</option>
+                        <option value="30">liger (Hidden Trait 3)</option>
+                        <option value="31">FU31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Pattern</h3>
+                      <select id="geneSelector4" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">vigilante (Dominant Trait)</option>
+                        <option value="1">tiger (Dominant Trait)</option>
+                        <option value="2">rascal (Dominant Trait)</option>
+                        <option value="3">ganado (Dominant Trait)</option>
+                        <option value="4">leopard (Dominant Trait)</option>
+                        <option value="5">camo (Dominant Trait)</option>
+                        <option value="6">rorschach (Dominant Trait)</option>
+                        <option value="7">spangled (Dominant Trait)</option>
+                        <option value="8">calicool (Dominant Trait)</option>
+                        <option value="9">luckystripe (Dominant Trait)</option>
+                        <option value="10">amur (Dominant Trait)</option>
+                        <option value="11">jaguar (Dominant Trait)</option>
+                        <option value="12">spock (Dominant Trait)</option>
+                        <option value="13">mittens (Dominant Trait)</option>
+                        <option value="14">totesbasic_14 (Dominant Trait)</option>
+                        <option value="15">totesbasic_15 (Dominant Trait)</option>
+                        <option value="16">splat (Dominant Trait)</option>
+                        <option value="17">thunderstruck (Dominant Trait)</option>
+                        <option value="18">dippedcone (Dominant Trait)</option>
+                        <option value="19">highsociety (Dominant Trait)</option>
+                        <option value="20">tigerpunk (Dominant Trait)</option>
+                        <option value="21">henna (Dominant Trait)</option>
+                        <option value="22">arcreactor (Dominant Trait)</option>
+                        <option value="23">totesbasic_23 (Dominant Trait)</option>
+                        <option value="24">scorpius (Dominant Trait)</option>
+                        <option value="25">razzledazzle (Dominant Trait)</option>
+                        <option value="26">hotrod (Dominant Trait)</option>
+                        <option value="27">allyouneed (Dominant Trait)</option>
+                        <option value="28">avatar (Dominant Trait)</option>
+                        <option value="29">gyre (Dominant Trait)</option>
+                        <option value="30">moonrise (Dominant Trait)</option>
+                        <option value="31">PA31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector5" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">vigilante (Hidden Trait 1)</option>
+                        <option value="1">tiger (Hidden Trait 1)</option>
+                        <option value="2">rascal (Hidden Trait 1)</option>
+                        <option value="3">ganado (Hidden Trait 1)</option>
+                        <option value="4">leopard (Hidden Trait 1)</option>
+                        <option value="5">camo (Hidden Trait 1)</option>
+                        <option value="6">rorschach (Hidden Trait 1)</option>
+                        <option value="7">spangled (Hidden Trait 1)</option>
+                        <option value="8">calicool (Hidden Trait 1)</option>
+                        <option value="9">luckystripe (Hidden Trait 1)</option>
+                        <option value="10">amur (Hidden Trait 1)</option>
+                        <option value="11">jaguar (Hidden Trait 1)</option>
+                        <option value="12">spock (Hidden Trait 1)</option>
+                        <option value="13">mittens (Hidden Trait 1)</option>
+                        <option value="14">totesbasic_14 (Hidden Trait 1)</option>
+                        <option value="15">totesbasic_15 (Hidden Trait 1)</option>
+                        <option value="16">splat (Hidden Trait 1)</option>
+                        <option value="17">thunderstruck (Hidden Trait 1)</option>
+                        <option value="18">dippedcone (Hidden Trait 1)</option>
+                        <option value="19">highsociety (Hidden Trait 1)</option>
+                        <option value="20">tigerpunk (Hidden Trait 1)</option>
+                        <option value="21">henna (Hidden Trait 1)</option>
+                        <option value="22">arcreactor (Hidden Trait 1)</option>
+                        <option value="23">totesbasic_23 (Hidden Trait 1)</option>
+                        <option value="24">scorpius (Hidden Trait 1)</option>
+                        <option value="25">razzledazzle (Hidden Trait 1)</option>
+                        <option value="26">hotrod (Hidden Trait 1)</option>
+                        <option value="27">allyouneed (Hidden Trait 1)</option>
+                        <option value="28">avatar (Hidden Trait 1)</option>
+                        <option value="29">gyre (Hidden Trait 1)</option>
+                        <option value="30">moonrise (Hidden Trait 1)</option>
+                        <option value="31">PA31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector6" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">vigilante (Hidden Trait 2)</option>
+                        <option value="1">tiger (Hidden Trait 2)</option>
+                        <option value="2">rascal (Hidden Trait 2)</option>
+                        <option value="3">ganado (Hidden Trait 2)</option>
+                        <option value="4">leopard (Hidden Trait 2)</option>
+                        <option value="5">camo (Hidden Trait 2)</option>
+                        <option value="6">rorschach (Hidden Trait 2)</option>
+                        <option value="7">spangled (Hidden Trait 2)</option>
+                        <option value="8">calicool (Hidden Trait 2)</option>
+                        <option value="9">luckystripe (Hidden Trait 2)</option>
+                        <option value="10">amur (Hidden Trait 2)</option>
+                        <option value="11">jaguar (Hidden Trait 2)</option>
+                        <option value="12">spock (Hidden Trait 2)</option>
+                        <option value="13">mittens (Hidden Trait 2)</option>
+                        <option value="14">totesbasic_14 (Hidden Trait 2)</option>
+                        <option value="15">totesbasic_15 (Hidden Trait 2)</option>
+                        <option value="16">splat (Hidden Trait 2)</option>
+                        <option value="17">thunderstruck (Hidden Trait 2)</option>
+                        <option value="18">dippedcone (Hidden Trait 2)</option>
+                        <option value="19">highsociety (Hidden Trait 2)</option>
+                        <option value="20">tigerpunk (Hidden Trait 2)</option>
+                        <option value="21">henna (Hidden Trait 2)</option>
+                        <option value="22">arcreactor (Hidden Trait 2)</option>
+                        <option value="23">totesbasic_23 (Hidden Trait 2)</option>
+                        <option value="24">scorpius (Hidden Trait 2)</option>
+                        <option value="25">razzledazzle (Hidden Trait 2)</option>
+                        <option value="26">hotrod (Hidden Trait 2)</option>
+                        <option value="27">allyouneed (Hidden Trait 2)</option>
+                        <option value="28">avatar (Hidden Trait 2)</option>
+                        <option value="29">gyre (Hidden Trait 2)</option>
+                        <option value="30">moonrise (Hidden Trait 2)</option>
+                        <option value="31">PA31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector7" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">vigilante (Hidden Trait 3)</option>
+                        <option value="1">tiger (Hidden Trait 3)</option>
+                        <option value="2">rascal (Hidden Trait 3)</option>
+                        <option value="3">ganado (Hidden Trait 3)</option>
+                        <option value="4">leopard (Hidden Trait 3)</option>
+                        <option value="5">camo (Hidden Trait 3)</option>
+                        <option value="6">rorschach (Hidden Trait 3)</option>
+                        <option value="7">spangled (Hidden Trait 3)</option>
+                        <option value="8">calicool (Hidden Trait 3)</option>
+                        <option value="9">luckystripe (Hidden Trait 3)</option>
+                        <option value="10">amur (Hidden Trait 3)</option>
+                        <option value="11">jaguar (Hidden Trait 3)</option>
+                        <option value="12">spock (Hidden Trait 3)</option>
+                        <option value="13">mittens (Hidden Trait 3)</option>
+                        <option value="14">totesbasic_14 (Hidden Trait 3)</option>
+                        <option value="15">totesbasic_15 (Hidden Trait 3)</option>
+                        <option value="16">splat (Hidden Trait 3)</option>
+                        <option value="17">thunderstruck (Hidden Trait 3)</option>
+                        <option value="18">dippedcone (Hidden Trait 3)</option>
+                        <option value="19">highsociety (Hidden Trait 3)</option>
+                        <option value="20">tigerpunk (Hidden Trait 3)</option>
+                        <option value="21">henna (Hidden Trait 3)</option>
+                        <option value="22">arcreactor (Hidden Trait 3)</option>
+                        <option value="23">totesbasic_23 (Hidden Trait 3)</option>
+                        <option value="24">scorpius (Hidden Trait 3)</option>
+                        <option value="25">razzledazzle (Hidden Trait 3)</option>
+                        <option value="26">hotrod (Hidden Trait 3)</option>
+                        <option value="27">allyouneed (Hidden Trait 3)</option>
+                        <option value="28">avatar (Hidden Trait 3)</option>
+                        <option value="29">gyre (Hidden Trait 3)</option>
+                        <option value="30">moonrise (Hidden Trait 3)</option>
+                        <option value="31">PA31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Eye Color</h3>
+                      <select id="geneSelector8" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">thundergrey (Dominant Trait)</option>
+                        <option value="1">gold (Dominant Trait)</option>
+                        <option value="2">topaz (Dominant Trait)</option>
+                        <option value="3">mintgreen (Dominant Trait)</option>
+                        <option value="4">isotope (Dominant Trait)</option>
+                        <option value="5">sizzurp (Dominant Trait)</option>
+                        <option value="6">chestnut (Dominant Trait)</option>
+                        <option value="7">strawberry (Dominant Trait)</option>
+                        <option value="8">sapphire (Dominant Trait)</option>
+                        <option value="9">forgetmenot (Dominant Trait)</option>
+                        <option value="10">dahlia (Dominant Trait)</option>
+                        <option value="11">coralsunrise (Dominant Trait)</option>
+                        <option value="12">olive (Dominant Trait)</option>
+                        <option value="13">doridnudibranch (Dominant Trait)</option>
+                        <option value="14">parakeet (Dominant Trait)</option>
+                        <option value="15">cyan (Dominant Trait)</option>
+                        <option value="16">pumpkin (Dominant Trait)</option>
+                        <option value="17">limegreen (Dominant Trait)</option>
+                        <option value="18">bridesmaid (Dominant Trait)</option>
+                        <option value="19">bubblegum (Dominant Trait)</option>
+                        <option value="20">twilightsparkle (Dominant Trait)</option>
+                        <option value="21">palejade (Dominant Trait)</option>
+                        <option value="22">pinefresh (Dominant Trait)</option>
+                        <option value="23">eclipse (Dominant Trait)</option>
+                        <option value="24">babypuke (Dominant Trait)</option>
+                        <option value="25">downbythebay (Dominant Trait)</option>
+                        <option value="26">autumnmoon (Dominant Trait)</option>
+                        <option value="27">oasis (Dominant Trait)</option>
+                        <option value="28">gemini (Dominant Trait)</option>
+                        <option value="29">dioscuri (Dominant Trait)</option>
+                        <option value="30">kaleidoscope (Dominant Trait)</option>
+                        <option value="31">EC31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector9" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">thundergrey (Hidden Trait 1)</option>
+                        <option value="1">gold (Hidden Trait 1)</option>
+                        <option value="2">topaz (Hidden Trait 1)</option>
+                        <option value="3">mintgreen (Hidden Trait 1)</option>
+                        <option value="4">isotope (Hidden Trait 1)</option>
+                        <option value="5">sizzurp (Hidden Trait 1)</option>
+                        <option value="6">chestnut (Hidden Trait 1)</option>
+                        <option value="7">strawberry (Hidden Trait 1)</option>
+                        <option value="8">sapphire (Hidden Trait 1)</option>
+                        <option value="9">forgetmenot (Hidden Trait 1)</option>
+                        <option value="10">dahlia (Hidden Trait 1)</option>
+                        <option value="11">coralsunrise (Hidden Trait 1)</option>
+                        <option value="12">olive (Hidden Trait 1)</option>
+                        <option value="13">doridnudibranch (Hidden Trait 1)</option>
+                        <option value="14">parakeet (Hidden Trait 1)</option>
+                        <option value="15">cyan (Hidden Trait 1)</option>
+                        <option value="16">pumpkin (Hidden Trait 1)</option>
+                        <option value="17">limegreen (Hidden Trait 1)</option>
+                        <option value="18">bridesmaid (Hidden Trait 1)</option>
+                        <option value="19">bubblegum (Hidden Trait 1)</option>
+                        <option value="20">twilightsparkle (Hidden Trait 1)</option>
+                        <option value="21">palejade (Hidden Trait 1)</option>
+                        <option value="22">pinefresh (Hidden Trait 1)</option>
+                        <option value="23">eclipse (Hidden Trait 1)</option>
+                        <option value="24">babypuke (Hidden Trait 1)</option>
+                        <option value="25">downbythebay (Hidden Trait 1)</option>
+                        <option value="26">autumnmoon (Hidden Trait 1)</option>
+                        <option value="27">oasis (Hidden Trait 1)</option>
+                        <option value="28">gemini (Hidden Trait 1)</option>
+                        <option value="29">dioscuri (Hidden Trait 1)</option>
+                        <option value="30">kaleidoscope (Hidden Trait 1)</option>
+                        <option value="31">EC31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector10" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">thundergrey (Hidden Trait 2)</option>
+                        <option value="1">gold (Hidden Trait 2)</option>
+                        <option value="2">topaz (Hidden Trait 2)</option>
+                        <option value="3">mintgreen (Hidden Trait 2)</option>
+                        <option value="4">isotope (Hidden Trait 2)</option>
+                        <option value="5">sizzurp (Hidden Trait 2)</option>
+                        <option value="6">chestnut (Hidden Trait 2)</option>
+                        <option value="7">strawberry (Hidden Trait 2)</option>
+                        <option value="8">sapphire (Hidden Trait 2)</option>
+                        <option value="9">forgetmenot (Hidden Trait 2)</option>
+                        <option value="10">dahlia (Hidden Trait 2)</option>
+                        <option value="11">coralsunrise (Hidden Trait 2)</option>
+                        <option value="12">olive (Hidden Trait 2)</option>
+                        <option value="13">doridnudibranch (Hidden Trait 2)</option>
+                        <option value="14">parakeet (Hidden Trait 2)</option>
+                        <option value="15">cyan (Hidden Trait 2)</option>
+                        <option value="16">pumpkin (Hidden Trait 2)</option>
+                        <option value="17">limegreen (Hidden Trait 2)</option>
+                        <option value="18">bridesmaid (Hidden Trait 2)</option>
+                        <option value="19">bubblegum (Hidden Trait 2)</option>
+                        <option value="20">twilightsparkle (Hidden Trait 2)</option>
+                        <option value="21">palejade (Hidden Trait 2)</option>
+                        <option value="22">pinefresh (Hidden Trait 2)</option>
+                        <option value="23">eclipse (Hidden Trait 2)</option>
+                        <option value="24">babypuke (Hidden Trait 2)</option>
+                        <option value="25">downbythebay (Hidden Trait 2)</option>
+                        <option value="26">autumnmoon (Hidden Trait 2)</option>
+                        <option value="27">oasis (Hidden Trait 2)</option>
+                        <option value="28">gemini (Hidden Trait 2)</option>
+                        <option value="29">dioscuri (Hidden Trait 2)</option>
+                        <option value="30">kaleidoscope (Hidden Trait 2)</option>
+                        <option value="31">EC31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector11" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">thundergrey (Hidden Trait 3)</option>
+                        <option value="1">gold (Hidden Trait 3)</option>
+                        <option value="2">topaz (Hidden Trait 3)</option>
+                        <option value="3">mintgreen (Hidden Trait 3)</option>
+                        <option value="4">isotope (Hidden Trait 3)</option>
+                        <option value="5">sizzurp (Hidden Trait 3)</option>
+                        <option value="6">chestnut (Hidden Trait 3)</option>
+                        <option value="7">strawberry (Hidden Trait 3)</option>
+                        <option value="8">sapphire (Hidden Trait 3)</option>
+                        <option value="9">forgetmenot (Hidden Trait 3)</option>
+                        <option value="10">dahlia (Hidden Trait 3)</option>
+                        <option value="11">coralsunrise (Hidden Trait 3)</option>
+                        <option value="12">olive (Hidden Trait 3)</option>
+                        <option value="13">doridnudibranch (Hidden Trait 3)</option>
+                        <option value="14">parakeet (Hidden Trait 3)</option>
+                        <option value="15">cyan (Hidden Trait 3)</option>
+                        <option value="16">pumpkin (Hidden Trait 3)</option>
+                        <option value="17">limegreen (Hidden Trait 3)</option>
+                        <option value="18">bridesmaid (Hidden Trait 3)</option>
+                        <option value="19">bubblegum (Hidden Trait 3)</option>
+                        <option value="20">twilightsparkle (Hidden Trait 3)</option>
+                        <option value="21">palejade (Hidden Trait 3)</option>
+                        <option value="22">pinefresh (Hidden Trait 3)</option>
+                        <option value="23">eclipse (Hidden Trait 3)</option>
+                        <option value="24">babypuke (Hidden Trait 3)</option>
+                        <option value="25">downbythebay (Hidden Trait 3)</option>
+                        <option value="26">autumnmoon (Hidden Trait 3)</option>
+                        <option value="27">oasis (Hidden Trait 3)</option>
+                        <option value="28">gemini (Hidden Trait 3)</option>
+                        <option value="29">dioscuri (Hidden Trait 3)</option>
+                        <option value="30">kaleidoscope (Hidden Trait 3)</option>
+                        <option value="31">EC31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Eye Shape</h3>
+                      <select id="geneSelector12" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">swarley (Dominant Trait)</option>
+                        <option value="1">wonky (Dominant Trait)</option>
+                        <option value="2">serpent (Dominant Trait)</option>
+                        <option value="3">googly (Dominant Trait)</option>
+                        <option value="4">otaku (Dominant Trait)</option>
+                        <option value="5">simple (Dominant Trait)</option>
+                        <option value="6">crazy (Dominant Trait)</option>
+                        <option value="7">thicccbrowz (Dominant Trait)</option>
+                        <option value="8">caffeine (Dominant Trait)</option>
+                        <option value="9">wowza (Dominant Trait)</option>
+                        <option value="10">baddate (Dominant Trait)</option>
+                        <option value="11">asif (Dominant Trait)</option>
+                        <option value="12">chronic (Dominant Trait)</option>
+                        <option value="13">slyboots (Dominant Trait)</option>
+                        <option value="14">wiley (Dominant Trait)</option>
+                        <option value="15">stunned (Dominant Trait)</option>
+                        <option value="16">chameleon (Dominant Trait)</option>
+                        <option value="17">alien (Dominant Trait)</option>
+                        <option value="18">fabulous (Dominant Trait)</option>
+                        <option value="19">raisedbrow (Dominant Trait)</option>
+                        <option value="20">tendertears (Dominant Trait)</option>
+                        <option value="21">hacker (Dominant Trait)</option>
+                        <option value="22">sass (Dominant Trait)</option>
+                        <option value="23">sweetmeloncakes (Dominant Trait)</option>
+                        <option value="24">oceanid (Dominant Trait)</option>
+                        <option value="25">wingtips (Dominant Trait)</option>
+                        <option value="26">firedup (Dominant Trait)</option>
+                        <option value="27">buzzed (Dominant Trait)</option>
+                        <option value="28">bornwithit (Dominant Trait)</option>
+                        <option value="29">candyshoppe (Dominant Trait)</option>
+                        <option value="30">drama (Dominant Trait)</option>
+                        <option value="31">ES31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector13" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">swarley (Hidden Trait 1)</option>
+                        <option value="1">wonky (Hidden Trait 1)</option>
+                        <option value="2">serpent (Hidden Trait 1)</option>
+                        <option value="3">googly (Hidden Trait 1)</option>
+                        <option value="4">otaku (Hidden Trait 1)</option>
+                        <option value="5">simple (Hidden Trait 1)</option>
+                        <option value="6">crazy (Hidden Trait 1)</option>
+                        <option value="7">thicccbrowz (Hidden Trait 1)</option>
+                        <option value="8">caffeine (Hidden Trait 1)</option>
+                        <option value="9">wowza (Hidden Trait 1)</option>
+                        <option value="10">baddate (Hidden Trait 1)</option>
+                        <option value="11">asif (Hidden Trait 1)</option>
+                        <option value="12">chronic (Hidden Trait 1)</option>
+                        <option value="13">slyboots (Hidden Trait 1)</option>
+                        <option value="14">wiley (Hidden Trait 1)</option>
+                        <option value="15">stunned (Hidden Trait 1)</option>
+                        <option value="16">chameleon (Hidden Trait 1)</option>
+                        <option value="17">alien (Hidden Trait 1)</option>
+                        <option value="18">fabulous (Hidden Trait 1)</option>
+                        <option value="19">raisedbrow (Hidden Trait 1)</option>
+                        <option value="20">tendertears (Hidden Trait 1)</option>
+                        <option value="21">hacker (Hidden Trait 1)</option>
+                        <option value="22">sass (Hidden Trait 1)</option>
+                        <option value="23">sweetmeloncakes (Hidden Trait 1)</option>
+                        <option value="24">oceanid (Hidden Trait 1)</option>
+                        <option value="25">wingtips (Hidden Trait 1)</option>
+                        <option value="26">firedup (Hidden Trait 1)</option>
+                        <option value="27">buzzed (Hidden Trait 1)</option>
+                        <option value="28">bornwithit (Hidden Trait 1)</option>
+                        <option value="29">candyshoppe (Hidden Trait 1)</option>
+                        <option value="30">drama (Hidden Trait 1)</option>
+                        <option value="31">ES31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector14" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">swarley (Hidden Trait 2)</option>
+                        <option value="1">wonky (Hidden Trait 2)</option>
+                        <option value="2">serpent (Hidden Trait 2)</option>
+                        <option value="3">googly (Hidden Trait 2)</option>
+                        <option value="4">otaku (Hidden Trait 2)</option>
+                        <option value="5">simple (Hidden Trait 2)</option>
+                        <option value="6">crazy (Hidden Trait 2)</option>
+                        <option value="7">thicccbrowz (Hidden Trait 2)</option>
+                        <option value="8">caffeine (Hidden Trait 2)</option>
+                        <option value="9">wowza (Hidden Trait 2)</option>
+                        <option value="10">baddate (Hidden Trait 2)</option>
+                        <option value="11">asif (Hidden Trait 2)</option>
+                        <option value="12">chronic (Hidden Trait 2)</option>
+                        <option value="13">slyboots (Hidden Trait 2)</option>
+                        <option value="14">wiley (Hidden Trait 2)</option>
+                        <option value="15">stunned (Hidden Trait 2)</option>
+                        <option value="16">chameleon (Hidden Trait 2)</option>
+                        <option value="17">alien (Hidden Trait 2)</option>
+                        <option value="18">fabulous (Hidden Trait 2)</option>
+                        <option value="19">raisedbrow (Hidden Trait 2)</option>
+                        <option value="20">tendertears (Hidden Trait 2)</option>
+                        <option value="21">hacker (Hidden Trait 2)</option>
+                        <option value="22">sass (Hidden Trait 2)</option>
+                        <option value="23">sweetmeloncakes (Hidden Trait 2)</option>
+                        <option value="24">oceanid (Hidden Trait 2)</option>
+                        <option value="25">wingtips (Hidden Trait 2)</option>
+                        <option value="26">firedup (Hidden Trait 2)</option>
+                        <option value="27">buzzed (Hidden Trait 2)</option>
+                        <option value="28">bornwithit (Hidden Trait 2)</option>
+                        <option value="29">candyshoppe (Hidden Trait 2)</option>
+                        <option value="30">drama (Hidden Trait 2)</option>
+                        <option value="31">ES31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector15" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">swarley (Hidden Trait 3)</option>
+                        <option value="1">wonky (Hidden Trait 3)</option>
+                        <option value="2">serpent (Hidden Trait 3)</option>
+                        <option value="3">googly (Hidden Trait 3)</option>
+                        <option value="4">otaku (Hidden Trait 3)</option>
+                        <option value="5">simple (Hidden Trait 3)</option>
+                        <option value="6">crazy (Hidden Trait 3)</option>
+                        <option value="7">thicccbrowz (Hidden Trait 3)</option>
+                        <option value="8">caffeine (Hidden Trait 3)</option>
+                        <option value="9">wowza (Hidden Trait 3)</option>
+                        <option value="10">baddate (Hidden Trait 3)</option>
+                        <option value="11">asif (Hidden Trait 3)</option>
+                        <option value="12">chronic (Hidden Trait 3)</option>
+                        <option value="13">slyboots (Hidden Trait 3)</option>
+                        <option value="14">wiley (Hidden Trait 3)</option>
+                        <option value="15">stunned (Hidden Trait 3)</option>
+                        <option value="16">chameleon (Hidden Trait 3)</option>
+                        <option value="17">alien (Hidden Trait 3)</option>
+                        <option value="18">fabulous (Hidden Trait 3)</option>
+                        <option value="19">raisedbrow (Hidden Trait 3)</option>
+                        <option value="20">tendertears (Hidden Trait 3)</option>
+                        <option value="21">hacker (Hidden Trait 3)</option>
+                        <option value="22">sass (Hidden Trait 3)</option>
+                        <option value="23">sweetmeloncakes (Hidden Trait 3)</option>
+                        <option value="24">oceanid (Hidden Trait 3)</option>
+                        <option value="25">wingtips (Hidden Trait 3)</option>
+                        <option value="26">firedup (Hidden Trait 3)</option>
+                        <option value="27">buzzed (Hidden Trait 3)</option>
+                        <option value="28">bornwithit (Hidden Trait 3)</option>
+                        <option value="29">candyshoppe (Hidden Trait 3)</option>
+                        <option value="30">drama (Hidden Trait 3)</option>
+                        <option value="31">ES31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Base Color</h3>
+                      <select id="geneSelector16" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">shadowgrey (Dominant Trait)</option>
+                        <option value="1">salmon (Dominant Trait)</option>
+                        <option value="2">meowgarine (Dominant Trait)</option>
+                        <option value="3">orangesoda (Dominant Trait)</option>
+                        <option value="4">cottoncandy (Dominant Trait)</option>
+                        <option value="5">mauveover (Dominant Trait)</option>
+                        <option value="6">aquamarine (Dominant Trait)</option>
+                        <option value="7">nachocheez (Dominant Trait)</option>
+                        <option value="8">harbourfog (Dominant Trait)</option>
+                        <option value="9">cinderella (Dominant Trait)</option>
+                        <option value="10">greymatter (Dominant Trait)</option>
+                        <option value="11">tundra (Dominant Trait)</option>
+                        <option value="12">brownies (Dominant Trait)</option>
+                        <option value="13">dragonfruit (Dominant Trait)</option>
+                        <option value="14">hintomint (Dominant Trait)</option>
+                        <option value="15">bananacream (Dominant Trait)</option>
+                        <option value="16">cloudwhite (Dominant Trait)</option>
+                        <option value="17">cornflower (Dominant Trait)</option>
+                        <option value="18">oldlace (Dominant Trait)</option>
+                        <option value="19">koala (Dominant Trait)</option>
+                        <option value="20">lavender (Dominant Trait)</option>
+                        <option value="21">glacier (Dominant Trait)</option>
+                        <option value="22">redvelvet (Dominant Trait)</option>
+                        <option value="23">verdigris (Dominant Trait)</option>
+                        <option value="24">icicle (Dominant Trait)</option>
+                        <option value="25">onyx (Dominant Trait)</option>
+                        <option value="26">hyacinth (Dominant Trait)</option>
+                        <option value="27">martian (Dominant Trait)</option>
+                        <option value="28">hotcocoa (Dominant Trait)</option>
+                        <option value="29">shamrock (Dominant Trait)</option>
+                        <option value="30">firstblush (Dominant Trait)</option>
+                        <option value="31">BC31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector17" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">shadowgrey (Hidden Trait 1)</option>
+                        <option value="1">salmon (Hidden Trait 1)</option>
+                        <option value="2">meowgarine (Hidden Trait 1)</option>
+                        <option value="3">orangesoda (Hidden Trait 1)</option>
+                        <option value="4">cottoncandy (Hidden Trait 1)</option>
+                        <option value="5">mauveover (Hidden Trait 1)</option>
+                        <option value="6">aquamarine (Hidden Trait 1)</option>
+                        <option value="7">nachocheez (Hidden Trait 1)</option>
+                        <option value="8">harbourfog (Hidden Trait 1)</option>
+                        <option value="9">cinderella (Hidden Trait 1)</option>
+                        <option value="10">greymatter (Hidden Trait 1)</option>
+                        <option value="11">tundra (Hidden Trait 1)</option>
+                        <option value="12">brownies (Hidden Trait 1)</option>
+                        <option value="13">dragonfruit (Hidden Trait 1)</option>
+                        <option value="14">hintomint (Hidden Trait 1)</option>
+                        <option value="15">bananacream (Hidden Trait 1)</option>
+                        <option value="16">cloudwhite (Hidden Trait 1)</option>
+                        <option value="17">cornflower (Hidden Trait 1)</option>
+                        <option value="18">oldlace (Hidden Trait 1)</option>
+                        <option value="19">koala (Hidden Trait 1)</option>
+                        <option value="20">lavender (Hidden Trait 1)</option>
+                        <option value="21">glacier (Hidden Trait 1)</option>
+                        <option value="22">redvelvet (Hidden Trait 1)</option>
+                        <option value="23">verdigris (Hidden Trait 1)</option>
+                        <option value="24">icicle (Hidden Trait 1)</option>
+                        <option value="25">onyx (Hidden Trait 1)</option>
+                        <option value="26">hyacinth (Hidden Trait 1)</option>
+                        <option value="27">martian (Hidden Trait 1)</option>
+                        <option value="28">hotcocoa (Hidden Trait 1)</option>
+                        <option value="29">shamrock (Hidden Trait 1)</option>
+                        <option value="30">firstblush (Hidden Trait 1)</option>
+                        <option value="31">BC31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector18" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">shadowgrey (Hidden Trait 2)</option>
+                        <option value="1">salmon (Hidden Trait 2)</option>
+                        <option value="2">meowgarine (Hidden Trait 2)</option>
+                        <option value="3">orangesoda (Hidden Trait 2)</option>
+                        <option value="4">cottoncandy (Hidden Trait 2)</option>
+                        <option value="5">mauveover (Hidden Trait 2)</option>
+                        <option value="6">aquamarine (Hidden Trait 2)</option>
+                        <option value="7">nachocheez (Hidden Trait 2)</option>
+                        <option value="8">harbourfog (Hidden Trait 2)</option>
+                        <option value="9">cinderella (Hidden Trait 2)</option>
+                        <option value="10">greymatter (Hidden Trait 2)</option>
+                        <option value="11">tundra (Hidden Trait 2)</option>
+                        <option value="12">brownies (Hidden Trait 2)</option>
+                        <option value="13">dragonfruit (Hidden Trait 2)</option>
+                        <option value="14">hintomint (Hidden Trait 2)</option>
+                        <option value="15">bananacream (Hidden Trait 2)</option>
+                        <option value="16">cloudwhite (Hidden Trait 2)</option>
+                        <option value="17">cornflower (Hidden Trait 2)</option>
+                        <option value="18">oldlace (Hidden Trait 2)</option>
+                        <option value="19">koala (Hidden Trait 2)</option>
+                        <option value="20">lavender (Hidden Trait 2)</option>
+                        <option value="21">glacier (Hidden Trait 2)</option>
+                        <option value="22">redvelvet (Hidden Trait 2)</option>
+                        <option value="23">verdigris (Hidden Trait 2)</option>
+                        <option value="24">icicle (Hidden Trait 2)</option>
+                        <option value="25">onyx (Hidden Trait 2)</option>
+                        <option value="26">hyacinth (Hidden Trait 2)</option>
+                        <option value="27">martian (Hidden Trait 2)</option>
+                        <option value="28">hotcocoa (Hidden Trait 2)</option>
+                        <option value="29">shamrock (Hidden Trait 2)</option>
+                        <option value="30">firstblush (Hidden Trait 2)</option>
+                        <option value="31">BC31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector19" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">shadowgrey (Hidden Trait 3)</option>
+                        <option value="1">salmon (Hidden Trait 3)</option>
+                        <option value="2">meowgarine (Hidden Trait 3)</option>
+                        <option value="3">orangesoda (Hidden Trait 3)</option>
+                        <option value="4">cottoncandy (Hidden Trait 3)</option>
+                        <option value="5">mauveover (Hidden Trait 3)</option>
+                        <option value="6">aquamarine (Hidden Trait 3)</option>
+                        <option value="7">nachocheez (Hidden Trait 3)</option>
+                        <option value="8">harbourfog (Hidden Trait 3)</option>
+                        <option value="9">cinderella (Hidden Trait 3)</option>
+                        <option value="10">greymatter (Hidden Trait 3)</option>
+                        <option value="11">tundra (Hidden Trait 3)</option>
+                        <option value="12">brownies (Hidden Trait 3)</option>
+                        <option value="13">dragonfruit (Hidden Trait 3)</option>
+                        <option value="14">hintomint (Hidden Trait 3)</option>
+                        <option value="15">bananacream (Hidden Trait 3)</option>
+                        <option value="16">cloudwhite (Hidden Trait 3)</option>
+                        <option value="17">cornflower (Hidden Trait 3)</option>
+                        <option value="18">oldlace (Hidden Trait 3)</option>
+                        <option value="19">koala (Hidden Trait 3)</option>
+                        <option value="20">lavender (Hidden Trait 3)</option>
+                        <option value="21">glacier (Hidden Trait 3)</option>
+                        <option value="22">redvelvet (Hidden Trait 3)</option>
+                        <option value="23">verdigris (Hidden Trait 3)</option>
+                        <option value="24">icicle (Hidden Trait 3)</option>
+                        <option value="25">onyx (Hidden Trait 3)</option>
+                        <option value="26">hyacinth (Hidden Trait 3)</option>
+                        <option value="27">martian (Hidden Trait 3)</option>
+                        <option value="28">hotcocoa (Hidden Trait 3)</option>
+                        <option value="29">shamrock (Hidden Trait 3)</option>
+                        <option value="30">firstblush (Hidden Trait 3)</option>
+                        <option value="31">BC31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Highlight Color</h3>
+                      <select id="geneSelector20" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">cyborg (Dominant Trait)</option>
+                        <option value="1">springcrocus (Dominant Trait)</option>
+                        <option value="2">egyptiankohl (Dominant Trait)</option>
+                        <option value="3">poisonberry (Dominant Trait)</option>
+                        <option value="4">lilac (Dominant Trait)</option>
+                        <option value="5">apricot (Dominant Trait)</option>
+                        <option value="6">royalpurple (Dominant Trait)</option>
+                        <option value="7">padparadscha (Dominant Trait)</option>
+                        <option value="8">swampgreen (Dominant Trait)</option>
+                        <option value="9">violet (Dominant Trait)</option>
+                        <option value="10">scarlet (Dominant Trait)</option>
+                        <option value="11">barkbrown (Dominant Trait)</option>
+                        <option value="12">coffee (Dominant Trait)</option>
+                        <option value="13">lemonade (Dominant Trait)</option>
+                        <option value="14">chocolate (Dominant Trait)</option>
+                        <option value="15">butterscotch (Dominant Trait)</option>
+                        <option value="16">ooze (Dominant Trait)</option>
+                        <option value="17">safetyvest (Dominant Trait)</option>
+                        <option value="18">turtleback (Dominant Trait)</option>
+                        <option value="19">rosequartz (Dominant Trait)</option>
+                        <option value="20">wolfgrey (Dominant Trait)</option>
+                        <option value="21">cerulian (Dominant Trait)</option>
+                        <option value="22">skyblue (Dominant Trait)</option>
+                        <option value="23">garnet (Dominant Trait)</option>
+                        <option value="24">peppermint (Dominant Trait)</option>
+                        <option value="25">universe (Dominant Trait)</option>
+                        <option value="26">royalblue (Dominant Trait)</option>
+                        <option value="27">mertail (Dominant Trait)</option>
+                        <option value="28">inflatablepool (Dominant Trait)</option>
+                        <option value="29">pearl (Dominant Trait)</option>
+                        <option value="30">prairierose (Dominant Trait)</option>
+                        <option value="31">HC31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector21" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">cyborg (Hidden Trait 1)</option>
+                        <option value="1">springcrocus (Hidden Trait 1)</option>
+                        <option value="2">egyptiankohl (Hidden Trait 1)</option>
+                        <option value="3">poisonberry (Hidden Trait 1)</option>
+                        <option value="4">lilac (Hidden Trait 1)</option>
+                        <option value="5">apricot (Hidden Trait 1)</option>
+                        <option value="6">royalpurple (Hidden Trait 1)</option>
+                        <option value="7">padparadscha (Hidden Trait 1)</option>
+                        <option value="8">swampgreen (Hidden Trait 1)</option>
+                        <option value="9">violet (Hidden Trait 1)</option>
+                        <option value="10">scarlet (Hidden Trait 1)</option>
+                        <option value="11">barkbrown (Hidden Trait 1)</option>
+                        <option value="12">coffee (Hidden Trait 1)</option>
+                        <option value="13">lemonade (Hidden Trait 1)</option>
+                        <option value="14">chocolate (Hidden Trait 1)</option>
+                        <option value="15">butterscotch (Hidden Trait 1)</option>
+                        <option value="16">ooze (Hidden Trait 1)</option>
+                        <option value="17">safetyvest (Hidden Trait 1)</option>
+                        <option value="18">turtleback (Hidden Trait 1)</option>
+                        <option value="19">rosequartz (Hidden Trait 1)</option>
+                        <option value="20">wolfgrey (Hidden Trait 1)</option>
+                        <option value="21">cerulian (Hidden Trait 1)</option>
+                        <option value="22">skyblue (Hidden Trait 1)</option>
+                        <option value="23">garnet (Hidden Trait 1)</option>
+                        <option value="24">peppermint (Hidden Trait 1)</option>
+                        <option value="25">universe (Hidden Trait 1)</option>
+                        <option value="26">royalblue (Hidden Trait 1)</option>
+                        <option value="27">mertail (Hidden Trait 1)</option>
+                        <option value="28">inflatablepool (Hidden Trait 1)</option>
+                        <option value="29">pearl (Hidden Trait 1)</option>
+                        <option value="30">prairierose (Hidden Trait 1)</option>
+                        <option value="31">HC31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector22" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">cyborg (Hidden Trait 2)</option>
+                        <option value="1">springcrocus (Hidden Trait 2)</option>
+                        <option value="2">egyptiankohl (Hidden Trait 2)</option>
+                        <option value="3">poisonberry (Hidden Trait 2)</option>
+                        <option value="4">lilac (Hidden Trait 2)</option>
+                        <option value="5">apricot (Hidden Trait 2)</option>
+                        <option value="6">royalpurple (Hidden Trait 2)</option>
+                        <option value="7">padparadscha (Hidden Trait 2)</option>
+                        <option value="8">swampgreen (Hidden Trait 2)</option>
+                        <option value="9">violet (Hidden Trait 2)</option>
+                        <option value="10">scarlet (Hidden Trait 2)</option>
+                        <option value="11">barkbrown (Hidden Trait 2)</option>
+                        <option value="12">coffee (Hidden Trait 2)</option>
+                        <option value="13">lemonade (Hidden Trait 2)</option>
+                        <option value="14">chocolate (Hidden Trait 2)</option>
+                        <option value="15">butterscotch (Hidden Trait 2)</option>
+                        <option value="16">ooze (Hidden Trait 2)</option>
+                        <option value="17">safetyvest (Hidden Trait 2)</option>
+                        <option value="18">turtleback (Hidden Trait 2)</option>
+                        <option value="19">rosequartz (Hidden Trait 2)</option>
+                        <option value="20">wolfgrey (Hidden Trait 2)</option>
+                        <option value="21">cerulian (Hidden Trait 2)</option>
+                        <option value="22">skyblue (Hidden Trait 2)</option>
+                        <option value="23">garnet (Hidden Trait 2)</option>
+                        <option value="24">peppermint (Hidden Trait 2)</option>
+                        <option value="25">universe (Hidden Trait 2)</option>
+                        <option value="26">royalblue (Hidden Trait 2)</option>
+                        <option value="27">mertail (Hidden Trait 2)</option>
+                        <option value="28">inflatablepool (Hidden Trait 2)</option>
+                        <option value="29">pearl (Hidden Trait 2)</option>
+                        <option value="30">prairierose (Hidden Trait 2)</option>
+                        <option value="31">HC31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector23" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">cyborg (Hidden Trait 3)</option>
+                        <option value="1">springcrocus (Hidden Trait 3)</option>
+                        <option value="2">egyptiankohl (Hidden Trait 3)</option>
+                        <option value="3">poisonberry (Hidden Trait 3)</option>
+                        <option value="4">lilac (Hidden Trait 3)</option>
+                        <option value="5">apricot (Hidden Trait 3)</option>
+                        <option value="6">royalpurple (Hidden Trait 3)</option>
+                        <option value="7">padparadscha (Hidden Trait 3)</option>
+                        <option value="8">swampgreen (Hidden Trait 3)</option>
+                        <option value="9">violet (Hidden Trait 3)</option>
+                        <option value="10">scarlet (Hidden Trait 3)</option>
+                        <option value="11">barkbrown (Hidden Trait 3)</option>
+                        <option value="12">coffee (Hidden Trait 3)</option>
+                        <option value="13">lemonade (Hidden Trait 3)</option>
+                        <option value="14">chocolate (Hidden Trait 3)</option>
+                        <option value="15">butterscotch (Hidden Trait 3)</option>
+                        <option value="16">ooze (Hidden Trait 3)</option>
+                        <option value="17">safetyvest (Hidden Trait 3)</option>
+                        <option value="18">turtleback (Hidden Trait 3)</option>
+                        <option value="19">rosequartz (Hidden Trait 3)</option>
+                        <option value="20">wolfgrey (Hidden Trait 3)</option>
+                        <option value="21">cerulian (Hidden Trait 3)</option>
+                        <option value="22">skyblue (Hidden Trait 3)</option>
+                        <option value="23">garnet (Hidden Trait 3)</option>
+                        <option value="24">peppermint (Hidden Trait 3)</option>
+                        <option value="25">universe (Hidden Trait 3)</option>
+                        <option value="26">royalblue (Hidden Trait 3)</option>
+                        <option value="27">mertail (Hidden Trait 3)</option>
+                        <option value="28">inflatablepool (Hidden Trait 3)</option>
+                        <option value="29">pearl (Hidden Trait 3)</option>
+                        <option value="30">prairierose (Hidden Trait 3)</option>
+                        <option value="31">HC31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Accent Color</h3>
+                      <select id="geneSelector24" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">belleblue (Dominant Trait)</option>
+                        <option value="1">sandalwood (Dominant Trait)</option>
+                        <option value="2">peach (Dominant Trait)</option>
+                        <option value="3">icy (Dominant Trait)</option>
+                        <option value="4">granitegrey (Dominant Trait)</option>
+                        <option value="5">cashewmilk (Dominant Trait)</option>
+                        <option value="6">kittencream (Dominant Trait)</option>
+                        <option value="7">emeraldgreen (Dominant Trait)</option>
+                        <option value="8">kalahari (Dominant Trait)</option>
+                        <option value="9">shale (Dominant Trait)</option>
+                        <option value="10">purplehaze (Dominant Trait)</option>
+                        <option value="11">hanauma (Dominant Trait)</option>
+                        <option value="12">azaleablush (Dominant Trait)</option>
+                        <option value="13">missmuffett (Dominant Trait)</option>
+                        <option value="14">morningglory (Dominant Trait)</option>
+                        <option value="15">frosting (Dominant Trait)</option>
+                        <option value="16">daffodil (Dominant Trait)</option>
+                        <option value="17">flamingo (Dominant Trait)</option>
+                        <option value="18">buttercup (Dominant Trait)</option>
+                        <option value="19">bloodred (Dominant Trait)</option>
+                        <option value="20">atlantis (Dominant Trait)</option>
+                        <option value="21">summerbonnet (Dominant Trait)</option>
+                        <option value="22">periwinkle (Dominant Trait)</option>
+                        <option value="23">patrickstarfish (Dominant Trait)</option>
+                        <option value="24">seafoam (Dominant Trait)</option>
+                        <option value="25">cobalt (Dominant Trait)</option>
+                        <option value="26">mallowflower (Dominant Trait)</option>
+                        <option value="27">mintmacaron (Dominant Trait)</option>
+                        <option value="28">sully (Dominant Trait)</option>
+                        <option value="29">fallspice (Dominant Trait)</option>
+                        <option value="30">dreamboat (Dominant Trait)</option>
+                        <option value="31">AC31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector25" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">belleblue (Hidden Trait 1)</option>
+                        <option value="1">sandalwood (Hidden Trait 1)</option>
+                        <option value="2">peach (Hidden Trait 1)</option>
+                        <option value="3">icy (Hidden Trait 1)</option>
+                        <option value="4">granitegrey (Hidden Trait 1)</option>
+                        <option value="5">cashewmilk (Hidden Trait 1)</option>
+                        <option value="6">kittencream (Hidden Trait 1)</option>
+                        <option value="7">emeraldgreen (Hidden Trait 1)</option>
+                        <option value="8">kalahari (Hidden Trait 1)</option>
+                        <option value="9">shale (Hidden Trait 1)</option>
+                        <option value="10">purplehaze (Hidden Trait 1)</option>
+                        <option value="11">hanauma (Hidden Trait 1)</option>
+                        <option value="12">azaleablush (Hidden Trait 1)</option>
+                        <option value="13">missmuffett (Hidden Trait 1)</option>
+                        <option value="14">morningglory (Hidden Trait 1)</option>
+                        <option value="15">frosting (Hidden Trait 1)</option>
+                        <option value="16">daffodil (Hidden Trait 1)</option>
+                        <option value="17">flamingo (Hidden Trait 1)</option>
+                        <option value="18">buttercup (Hidden Trait 1)</option>
+                        <option value="19">bloodred (Hidden Trait 1)</option>
+                        <option value="20">atlantis (Hidden Trait 1)</option>
+                        <option value="21">summerbonnet (Hidden Trait 1)</option>
+                        <option value="22">periwinkle (Hidden Trait 1)</option>
+                        <option value="23">patrickstarfish (Hidden Trait 1)</option>
+                        <option value="24">seafoam (Hidden Trait 1)</option>
+                        <option value="25">cobalt (Hidden Trait 1)</option>
+                        <option value="26">mallowflower (Hidden Trait 1)</option>
+                        <option value="27">mintmacaron (Hidden Trait 1)</option>
+                        <option value="28">sully (Hidden Trait 1)</option>
+                        <option value="29">fallspice (Hidden Trait 1)</option>
+                        <option value="30">dreamboat (Hidden Trait 1)</option>
+                        <option value="31">AC31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector26" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">belleblue (Hidden Trait 2)</option>
+                        <option value="1">sandalwood (Hidden Trait 2)</option>
+                        <option value="2">peach (Hidden Trait 2)</option>
+                        <option value="3">icy (Hidden Trait 2)</option>
+                        <option value="4">granitegrey (Hidden Trait 2)</option>
+                        <option value="5">cashewmilk (Hidden Trait 2)</option>
+                        <option value="6">kittencream (Hidden Trait 2)</option>
+                        <option value="7">emeraldgreen (Hidden Trait 2)</option>
+                        <option value="8">kalahari (Hidden Trait 2)</option>
+                        <option value="9">shale (Hidden Trait 2)</option>
+                        <option value="10">purplehaze (Hidden Trait 2)</option>
+                        <option value="11">hanauma (Hidden Trait 2)</option>
+                        <option value="12">azaleablush (Hidden Trait 2)</option>
+                        <option value="13">missmuffett (Hidden Trait 2)</option>
+                        <option value="14">morningglory (Hidden Trait 2)</option>
+                        <option value="15">frosting (Hidden Trait 2)</option>
+                        <option value="16">daffodil (Hidden Trait 2)</option>
+                        <option value="17">flamingo (Hidden Trait 2)</option>
+                        <option value="18">buttercup (Hidden Trait 2)</option>
+                        <option value="19">bloodred (Hidden Trait 2)</option>
+                        <option value="20">atlantis (Hidden Trait 2)</option>
+                        <option value="21">summerbonnet (Hidden Trait 2)</option>
+                        <option value="22">periwinkle (Hidden Trait 2)</option>
+                        <option value="23">patrickstarfish (Hidden Trait 2)</option>
+                        <option value="24">seafoam (Hidden Trait 2)</option>
+                        <option value="25">cobalt (Hidden Trait 2)</option>
+                        <option value="26">mallowflower (Hidden Trait 2)</option>
+                        <option value="27">mintmacaron (Hidden Trait 2)</option>
+                        <option value="28">sully (Hidden Trait 2)</option>
+                        <option value="29">fallspice (Hidden Trait 2)</option>
+                        <option value="30">dreamboat (Hidden Trait 2)</option>
+                        <option value="31">AC31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector27" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">belleblue (Hidden Trait 3)</option>
+                        <option value="1">sandalwood (Hidden Trait 3)</option>
+                        <option value="2">peach (Hidden Trait 3)</option>
+                        <option value="3">icy (Hidden Trait 3)</option>
+                        <option value="4">granitegrey (Hidden Trait 3)</option>
+                        <option value="5">cashewmilk (Hidden Trait 3)</option>
+                        <option value="6">kittencream (Hidden Trait 3)</option>
+                        <option value="7">emeraldgreen (Hidden Trait 3)</option>
+                        <option value="8">kalahari (Hidden Trait 3)</option>
+                        <option value="9">shale (Hidden Trait 3)</option>
+                        <option value="10">purplehaze (Hidden Trait 3)</option>
+                        <option value="11">hanauma (Hidden Trait 3)</option>
+                        <option value="12">azaleablush (Hidden Trait 3)</option>
+                        <option value="13">missmuffett (Hidden Trait 3)</option>
+                        <option value="14">morningglory (Hidden Trait 3)</option>
+                        <option value="15">frosting (Hidden Trait 3)</option>
+                        <option value="16">daffodil (Hidden Trait 3)</option>
+                        <option value="17">flamingo (Hidden Trait 3)</option>
+                        <option value="18">buttercup (Hidden Trait 3)</option>
+                        <option value="19">bloodred (Hidden Trait 3)</option>
+                        <option value="20">atlantis (Hidden Trait 3)</option>
+                        <option value="21">summerbonnet (Hidden Trait 3)</option>
+                        <option value="22">periwinkle (Hidden Trait 3)</option>
+                        <option value="23">patrickstarfish (Hidden Trait 3)</option>
+                        <option value="24">seafoam (Hidden Trait 3)</option>
+                        <option value="25">cobalt (Hidden Trait 3)</option>
+                        <option value="26">mallowflower (Hidden Trait 3)</option>
+                        <option value="27">mintmacaron (Hidden Trait 3)</option>
+                        <option value="28">sully (Hidden Trait 3)</option>
+                        <option value="29">fallspice (Hidden Trait 3)</option>
+                        <option value="30">dreamboat (Hidden Trait 3)</option>
+                        <option value="31">AC31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Wild</h3>
+                      <select id="geneSelector28" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">WE00 (Dominant Trait)</option>
+                        <option value="1">WE01 (Dominant Trait)</option>
+                        <option value="2">WE02 (Dominant Trait)</option>
+                        <option value="3">WE03 (Dominant Trait)</option>
+                        <option value="4">WE04 (Dominant Trait)</option>
+                        <option value="5">WE05 (Dominant Trait)</option>
+                        <option value="6">WE06 (Dominant Trait)</option>
+                        <option value="7">WE07 (Dominant Trait)</option>
+                        <option value="8">WE08 (Dominant Trait)</option>
+                        <option value="9">WE09 (Dominant Trait)</option>
+                        <option value="10">WE10 (Dominant Trait)</option>
+                        <option value="11">WE11 (Dominant Trait)</option>
+                        <option value="12">WE12 (Dominant Trait)</option>
+                        <option value="13">WE13 (Dominant Trait)</option>
+                        <option value="14">WE14 (Dominant Trait)</option>
+                        <option value="15">WE15 (Dominant Trait)</option>
+                        <option value="16">littlefoot (Dominant Trait)</option>
+                        <option value="17">elk (Dominant Trait)</option>
+                        <option value="18">ducky (Dominant Trait)</option>
+                        <option value="19">trioculus (Dominant Trait)</option>
+                        <option value="20">daemonwings (Dominant Trait)</option>
+                        <option value="21">featherbrain (Dominant Trait)</option>
+                        <option value="22">flapflap (Dominant Trait)</option>
+                        <option value="23">daemonhorns (Dominant Trait)</option>
+                        <option value="24">dragontail (Dominant Trait)</option>
+                        <option value="25">aflutter (Dominant Trait)</option>
+                        <option value="26">foghornpawhorn (Dominant Trait)</option>
+                        <option value="27">unicorn (Dominant Trait)</option>
+                        <option value="28">dragonwings (Dominant Trait)</option>
+                        <option value="29">alicorn (Dominant Trait)</option>
+                        <option value="30">wyrm (Dominant Trait)</option>
+                        <option value="31">WE31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector29" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">WE00 (Hidden Trait 1)</option>
+                        <option value="1">WE01 (Hidden Trait 1)</option>
+                        <option value="2">WE02 (Hidden Trait 1)</option>
+                        <option value="3">WE03 (Hidden Trait 1)</option>
+                        <option value="4">WE04 (Hidden Trait 1)</option>
+                        <option value="5">WE05 (Hidden Trait 1)</option>
+                        <option value="6">WE06 (Hidden Trait 1)</option>
+                        <option value="7">WE07 (Hidden Trait 1)</option>
+                        <option value="8">WE08 (Hidden Trait 1)</option>
+                        <option value="9">WE09 (Hidden Trait 1)</option>
+                        <option value="10">WE10 (Hidden Trait 1)</option>
+                        <option value="11">WE11 (Hidden Trait 1)</option>
+                        <option value="12">WE12 (Hidden Trait 1)</option>
+                        <option value="13">WE13 (Hidden Trait 1)</option>
+                        <option value="14">WE14 (Hidden Trait 1)</option>
+                        <option value="15">WE15 (Hidden Trait 1)</option>
+                        <option value="16">littlefoot (Hidden Trait 1)</option>
+                        <option value="17">elk (Hidden Trait 1)</option>
+                        <option value="18">ducky (Hidden Trait 1)</option>
+                        <option value="19">trioculus (Hidden Trait 1)</option>
+                        <option value="20">daemonwings (Hidden Trait 1)</option>
+                        <option value="21">featherbrain (Hidden Trait 1)</option>
+                        <option value="22">flapflap (Hidden Trait 1)</option>
+                        <option value="23">daemonhorns (Hidden Trait 1)</option>
+                        <option value="24">dragontail (Hidden Trait 1)</option>
+                        <option value="25">aflutter (Hidden Trait 1)</option>
+                        <option value="26">foghornpawhorn (Hidden Trait 1)</option>
+                        <option value="27">unicorn (Hidden Trait 1)</option>
+                        <option value="28">dragonwings (Hidden Trait 1)</option>
+                        <option value="29">alicorn (Hidden Trait 1)</option>
+                        <option value="30">wyrm (Hidden Trait 1)</option>
+                        <option value="31">WE31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector30" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">WE00 (Hidden Trait 2)</option>
+                        <option value="1">WE01 (Hidden Trait 2)</option>
+                        <option value="2">WE02 (Hidden Trait 2)</option>
+                        <option value="3">WE03 (Hidden Trait 2)</option>
+                        <option value="4">WE04 (Hidden Trait 2)</option>
+                        <option value="5">WE05 (Hidden Trait 2)</option>
+                        <option value="6">WE06 (Hidden Trait 2)</option>
+                        <option value="7">WE07 (Hidden Trait 2)</option>
+                        <option value="8">WE08 (Hidden Trait 2)</option>
+                        <option value="9">WE09 (Hidden Trait 2)</option>
+                        <option value="10">WE10 (Hidden Trait 2)</option>
+                        <option value="11">WE11 (Hidden Trait 2)</option>
+                        <option value="12">WE12 (Hidden Trait 2)</option>
+                        <option value="13">WE13 (Hidden Trait 2)</option>
+                        <option value="14">WE14 (Hidden Trait 2)</option>
+                        <option value="15">WE15 (Hidden Trait 2)</option>
+                        <option value="16">littlefoot (Hidden Trait 2)</option>
+                        <option value="17">elk (Hidden Trait 2)</option>
+                        <option value="18">ducky (Hidden Trait 2)</option>
+                        <option value="19">trioculus (Hidden Trait 2)</option>
+                        <option value="20">daemonwings (Hidden Trait 2)</option>
+                        <option value="21">featherbrain (Hidden Trait 2)</option>
+                        <option value="22">flapflap (Hidden Trait 2)</option>
+                        <option value="23">daemonhorns (Hidden Trait 2)</option>
+                        <option value="24">dragontail (Hidden Trait 2)</option>
+                        <option value="25">aflutter (Hidden Trait 2)</option>
+                        <option value="26">foghornpawhorn (Hidden Trait 2)</option>
+                        <option value="27">unicorn (Hidden Trait 2)</option>
+                        <option value="28">dragonwings (Hidden Trait 2)</option>
+                        <option value="29">alicorn (Hidden Trait 2)</option>
+                        <option value="30">wyrm (Hidden Trait 2)</option>
+                        <option value="31">WE31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector31" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">WE00 (Hidden Trait 3)</option>
+                        <option value="1">WE01 (Hidden Trait 3)</option>
+                        <option value="2">WE02 (Hidden Trait 3)</option>
+                        <option value="3">WE03 (Hidden Trait 3)</option>
+                        <option value="4">WE04 (Hidden Trait 3)</option>
+                        <option value="5">WE05 (Hidden Trait 3)</option>
+                        <option value="6">WE06 (Hidden Trait 3)</option>
+                        <option value="7">WE07 (Hidden Trait 3)</option>
+                        <option value="8">WE08 (Hidden Trait 3)</option>
+                        <option value="9">WE09 (Hidden Trait 3)</option>
+                        <option value="10">WE10 (Hidden Trait 3)</option>
+                        <option value="11">WE11 (Hidden Trait 3)</option>
+                        <option value="12">WE12 (Hidden Trait 3)</option>
+                        <option value="13">WE13 (Hidden Trait 3)</option>
+                        <option value="14">WE14 (Hidden Trait 3)</option>
+                        <option value="15">WE15 (Hidden Trait 3)</option>
+                        <option value="16">littlefoot (Hidden Trait 3)</option>
+                        <option value="17">elk (Hidden Trait 3)</option>
+                        <option value="18">ducky (Hidden Trait 3)</option>
+                        <option value="19">trioculus (Hidden Trait 3)</option>
+                        <option value="20">daemonwings (Hidden Trait 3)</option>
+                        <option value="21">featherbrain (Hidden Trait 3)</option>
+                        <option value="22">flapflap (Hidden Trait 3)</option>
+                        <option value="23">daemonhorns (Hidden Trait 3)</option>
+                        <option value="24">dragontail (Hidden Trait 3)</option>
+                        <option value="25">aflutter (Hidden Trait 3)</option>
+                        <option value="26">foghornpawhorn (Hidden Trait 3)</option>
+                        <option value="27">unicorn (Hidden Trait 3)</option>
+                        <option value="28">dragonwings (Hidden Trait 3)</option>
+                        <option value="29">alicorn (Hidden Trait 3)</option>
+                        <option value="30">wyrm (Hidden Trait 3)</option>
+                        <option value="31">WE31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Mouth</h3>
+                      <select id="geneSelector32" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">whixtensions (Dominant Trait)</option>
+                        <option value="1">wasntme (Dominant Trait)</option>
+                        <option value="2">wuvme (Dominant Trait)</option>
+                        <option value="3">gerbil (Dominant Trait)</option>
+                        <option value="4">confuzzled (Dominant Trait)</option>
+                        <option value="5">impish (Dominant Trait)</option>
+                        <option value="6">belch (Dominant Trait)</option>
+                        <option value="7">rollercoaster (Dominant Trait)</option>
+                        <option value="8">beard (Dominant Trait)</option>
+                        <option value="9">pouty (Dominant Trait)</option>
+                        <option value="10">saycheese (Dominant Trait)</option>
+                        <option value="11">grim (Dominant Trait)</option>
+                        <option value="12">fangtastic (Dominant Trait)</option>
+                        <option value="13">moue (Dominant Trait)</option>
+                        <option value="14">happygokitty (Dominant Trait)</option>
+                        <option value="15">soserious (Dominant Trait)</option>
+                        <option value="16">cheeky (Dominant Trait)</option>
+                        <option value="17">starstruck (Dominant Trait)</option>
+                        <option value="18">samwise (Dominant Trait)</option>
+                        <option value="19">ruhroh (Dominant Trait)</option>
+                        <option value="20">dali (Dominant Trait)</option>
+                        <option value="21">grimace (Dominant Trait)</option>
+                        <option value="22">majestic (Dominant Trait)</option>
+                        <option value="23">tongue (Dominant Trait)</option>
+                        <option value="24">yokel (Dominant Trait)</option>
+                        <option value="25">topoftheworld (Dominant Trait)</option>
+                        <option value="26">neckbeard (Dominant Trait)</option>
+                        <option value="27">satiated (Dominant Trait)</option>
+                        <option value="28">walrus (Dominant Trait)</option>
+                        <option value="29">struck (Dominant Trait)</option>
+                        <option value="30">delite (Dominant Trait)</option>
+                        <option value="31">MO31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector33" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">whixtensions (Hidden Trait 1)</option>
+                        <option value="1">wasntme (Hidden Trait 1)</option>
+                        <option value="2">wuvme (Hidden Trait 1)</option>
+                        <option value="3">gerbil (Hidden Trait 1)</option>
+                        <option value="4">confuzzled (Hidden Trait 1)</option>
+                        <option value="5">impish (Hidden Trait 1)</option>
+                        <option value="6">belch (Hidden Trait 1)</option>
+                        <option value="7">rollercoaster (Hidden Trait 1)</option>
+                        <option value="8">beard (Hidden Trait 1)</option>
+                        <option value="9">pouty (Hidden Trait 1)</option>
+                        <option value="10">saycheese (Hidden Trait 1)</option>
+                        <option value="11">grim (Hidden Trait 1)</option>
+                        <option value="12">fangtastic (Hidden Trait 1)</option>
+                        <option value="13">moue (Hidden Trait 1)</option>
+                        <option value="14">happygokitty (Hidden Trait 1)</option>
+                        <option value="15">soserious (Hidden Trait 1)</option>
+                        <option value="16">cheeky (Hidden Trait 1)</option>
+                        <option value="17">starstruck (Hidden Trait 1)</option>
+                        <option value="18">samwise (Hidden Trait 1)</option>
+                        <option value="19">ruhroh (Hidden Trait 1)</option>
+                        <option value="20">dali (Hidden Trait 1)</option>
+                        <option value="21">grimace (Hidden Trait 1)</option>
+                        <option value="22">majestic (Hidden Trait 1)</option>
+                        <option value="23">tongue (Hidden Trait 1)</option>
+                        <option value="24">yokel (Hidden Trait 1)</option>
+                        <option value="25">topoftheworld (Hidden Trait 1)</option>
+                        <option value="26">neckbeard (Hidden Trait 1)</option>
+                        <option value="27">satiated (Hidden Trait 1)</option>
+                        <option value="28">walrus (Hidden Trait 1)</option>
+                        <option value="29">struck (Hidden Trait 1)</option>
+                        <option value="30">delite (Hidden Trait 1)</option>
+                        <option value="31">MO31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector34" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">whixtensions (Hidden Trait 2)</option>
+                        <option value="1">wasntme (Hidden Trait 2)</option>
+                        <option value="2">wuvme (Hidden Trait 2)</option>
+                        <option value="3">gerbil (Hidden Trait 2)</option>
+                        <option value="4">confuzzled (Hidden Trait 2)</option>
+                        <option value="5">impish (Hidden Trait 2)</option>
+                        <option value="6">belch (Hidden Trait 2)</option>
+                        <option value="7">rollercoaster (Hidden Trait 2)</option>
+                        <option value="8">beard (Hidden Trait 2)</option>
+                        <option value="9">pouty (Hidden Trait 2)</option>
+                        <option value="10">saycheese (Hidden Trait 2)</option>
+                        <option value="11">grim (Hidden Trait 2)</option>
+                        <option value="12">fangtastic (Hidden Trait 2)</option>
+                        <option value="13">moue (Hidden Trait 2)</option>
+                        <option value="14">happygokitty (Hidden Trait 2)</option>
+                        <option value="15">soserious (Hidden Trait 2)</option>
+                        <option value="16">cheeky (Hidden Trait 2)</option>
+                        <option value="17">starstruck (Hidden Trait 2)</option>
+                        <option value="18">samwise (Hidden Trait 2)</option>
+                        <option value="19">ruhroh (Hidden Trait 2)</option>
+                        <option value="20">dali (Hidden Trait 2)</option>
+                        <option value="21">grimace (Hidden Trait 2)</option>
+                        <option value="22">majestic (Hidden Trait 2)</option>
+                        <option value="23">tongue (Hidden Trait 2)</option>
+                        <option value="24">yokel (Hidden Trait 2)</option>
+                        <option value="25">topoftheworld (Hidden Trait 2)</option>
+                        <option value="26">neckbeard (Hidden Trait 2)</option>
+                        <option value="27">satiated (Hidden Trait 2)</option>
+                        <option value="28">walrus (Hidden Trait 2)</option>
+                        <option value="29">struck (Hidden Trait 2)</option>
+                        <option value="30">delite (Hidden Trait 2)</option>
+                        <option value="31">MO31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector35" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">whixtensions (Hidden Trait 3)</option>
+                        <option value="1">wasntme (Hidden Trait 3)</option>
+                        <option value="2">wuvme (Hidden Trait 3)</option>
+                        <option value="3">gerbil (Hidden Trait 3)</option>
+                        <option value="4">confuzzled (Hidden Trait 3)</option>
+                        <option value="5">impish (Hidden Trait 3)</option>
+                        <option value="6">belch (Hidden Trait 3)</option>
+                        <option value="7">rollercoaster (Hidden Trait 3)</option>
+                        <option value="8">beard (Hidden Trait 3)</option>
+                        <option value="9">pouty (Hidden Trait 3)</option>
+                        <option value="10">saycheese (Hidden Trait 3)</option>
+                        <option value="11">grim (Hidden Trait 3)</option>
+                        <option value="12">fangtastic (Hidden Trait 3)</option>
+                        <option value="13">moue (Hidden Trait 3)</option>
+                        <option value="14">happygokitty (Hidden Trait 3)</option>
+                        <option value="15">soserious (Hidden Trait 3)</option>
+                        <option value="16">cheeky (Hidden Trait 3)</option>
+                        <option value="17">starstruck (Hidden Trait 3)</option>
+                        <option value="18">samwise (Hidden Trait 3)</option>
+                        <option value="19">ruhroh (Hidden Trait 3)</option>
+                        <option value="20">dali (Hidden Trait 3)</option>
+                        <option value="21">grimace (Hidden Trait 3)</option>
+                        <option value="22">majestic (Hidden Trait 3)</option>
+                        <option value="23">tongue (Hidden Trait 3)</option>
+                        <option value="24">yokel (Hidden Trait 3)</option>
+                        <option value="25">topoftheworld (Hidden Trait 3)</option>
+                        <option value="26">neckbeard (Hidden Trait 3)</option>
+                        <option value="27">satiated (Hidden Trait 3)</option>
+                        <option value="28">walrus (Hidden Trait 3)</option>
+                        <option value="29">struck (Hidden Trait 3)</option>
+                        <option value="30">delite (Hidden Trait 3)</option>
+                        <option value="31">MO31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Environment</h3>
+                      <select id="geneSelector36" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">EN00 (Dominant Trait)</option>
+                        <option value="1">EN01 (Dominant Trait)</option>
+                        <option value="2">EN02 (Dominant Trait)</option>
+                        <option value="3">EN03 (Dominant Trait)</option>
+                        <option value="4">EN04 (Dominant Trait)</option>
+                        <option value="5">EN05 (Dominant Trait)</option>
+                        <option value="6">EN06 (Dominant Trait)</option>
+                        <option value="7">EN07 (Dominant Trait)</option>
+                        <option value="8">EN08 (Dominant Trait)</option>
+                        <option value="9">EN09 (Dominant Trait)</option>
+                        <option value="10">EN10 (Dominant Trait)</option>
+                        <option value="11">EN11 (Dominant Trait)</option>
+                        <option value="12">EN12 (Dominant Trait)</option>
+                        <option value="13">EN13 (Dominant Trait)</option>
+                        <option value="14">EN14 (Dominant Trait)</option>
+                        <option value="15">EN15 (Dominant Trait)</option>
+                        <option value="16">salty (Dominant Trait)</option>
+                        <option value="17">dune (Dominant Trait)</option>
+                        <option value="18">juju (Dominant Trait)</option>
+                        <option value="19">tinybox (Dominant Trait)</option>
+                        <option value="20">myparade (Dominant Trait)</option>
+                        <option value="21">finalfrontier (Dominant Trait)</option>
+                        <option value="22">metime (Dominant Trait)</option>
+                        <option value="23">drift (Dominant Trait)</option>
+                        <option value="24">secretgarden (Dominant Trait)</option>
+                        <option value="25">frozen (Dominant Trait)</option>
+                        <option value="26">roadtogold (Dominant Trait)</option>
+                        <option value="27">jacked (Dominant Trait)</option>
+                        <option value="28">floorislava (Dominant Trait)</option>
+                        <option value="29">prism (Dominant Trait)</option>
+                        <option value="30">junglebook (Dominant Trait)</option>
+                        <option value="31">EN31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector37" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">EN00 (Hidden Trait 1)</option>
+                        <option value="1">EN01 (Hidden Trait 1)</option>
+                        <option value="2">EN02 (Hidden Trait 1)</option>
+                        <option value="3">EN03 (Hidden Trait 1)</option>
+                        <option value="4">EN04 (Hidden Trait 1)</option>
+                        <option value="5">EN05 (Hidden Trait 1)</option>
+                        <option value="6">EN06 (Hidden Trait 1)</option>
+                        <option value="7">EN07 (Hidden Trait 1)</option>
+                        <option value="8">EN08 (Hidden Trait 1)</option>
+                        <option value="9">EN09 (Hidden Trait 1)</option>
+                        <option value="10">EN10 (Hidden Trait 1)</option>
+                        <option value="11">EN11 (Hidden Trait 1)</option>
+                        <option value="12">EN12 (Hidden Trait 1)</option>
+                        <option value="13">EN13 (Hidden Trait 1)</option>
+                        <option value="14">EN14 (Hidden Trait 1)</option>
+                        <option value="15">EN15 (Hidden Trait 1)</option>
+                        <option value="16">salty (Hidden Trait 1)</option>
+                        <option value="17">dune (Hidden Trait 1)</option>
+                        <option value="18">juju (Hidden Trait 1)</option>
+                        <option value="19">tinybox (Hidden Trait 1)</option>
+                        <option value="20">myparade (Hidden Trait 1)</option>
+                        <option value="21">finalfrontier (Hidden Trait 1)</option>
+                        <option value="22">metime (Hidden Trait 1)</option>
+                        <option value="23">drift (Hidden Trait 1)</option>
+                        <option value="24">secretgarden (Hidden Trait 1)</option>
+                        <option value="25">frozen (Hidden Trait 1)</option>
+                        <option value="26">roadtogold (Hidden Trait 1)</option>
+                        <option value="27">jacked (Hidden Trait 1)</option>
+                        <option value="28">floorislava (Hidden Trait 1)</option>
+                        <option value="29">prism (Hidden Trait 1)</option>
+                        <option value="30">junglebook (Hidden Trait 1)</option>
+                        <option value="31">EN31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector38" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">EN00 (Hidden Trait 2)</option>
+                        <option value="1">EN01 (Hidden Trait 2)</option>
+                        <option value="2">EN02 (Hidden Trait 2)</option>
+                        <option value="3">EN03 (Hidden Trait 2)</option>
+                        <option value="4">EN04 (Hidden Trait 2)</option>
+                        <option value="5">EN05 (Hidden Trait 2)</option>
+                        <option value="6">EN06 (Hidden Trait 2)</option>
+                        <option value="7">EN07 (Hidden Trait 2)</option>
+                        <option value="8">EN08 (Hidden Trait 2)</option>
+                        <option value="9">EN09 (Hidden Trait 2)</option>
+                        <option value="10">EN10 (Hidden Trait 2)</option>
+                        <option value="11">EN11 (Hidden Trait 2)</option>
+                        <option value="12">EN12 (Hidden Trait 2)</option>
+                        <option value="13">EN13 (Hidden Trait 2)</option>
+                        <option value="14">EN14 (Hidden Trait 2)</option>
+                        <option value="15">EN15 (Hidden Trait 2)</option>
+                        <option value="16">salty (Hidden Trait 2)</option>
+                        <option value="17">dune (Hidden Trait 2)</option>
+                        <option value="18">juju (Hidden Trait 2)</option>
+                        <option value="19">tinybox (Hidden Trait 2)</option>
+                        <option value="20">myparade (Hidden Trait 2)</option>
+                        <option value="21">finalfrontier (Hidden Trait 2)</option>
+                        <option value="22">metime (Hidden Trait 2)</option>
+                        <option value="23">drift (Hidden Trait 2)</option>
+                        <option value="24">secretgarden (Hidden Trait 2)</option>
+                        <option value="25">frozen (Hidden Trait 2)</option>
+                        <option value="26">roadtogold (Hidden Trait 2)</option>
+                        <option value="27">jacked (Hidden Trait 2)</option>
+                        <option value="28">floorislava (Hidden Trait 2)</option>
+                        <option value="29">prism (Hidden Trait 2)</option>
+                        <option value="30">junglebook (Hidden Trait 2)</option>
+                        <option value="31">EN31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector39" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">EN00 (Hidden Trait 3)</option>
+                        <option value="1">EN01 (Hidden Trait 3)</option>
+                        <option value="2">EN02 (Hidden Trait 3)</option>
+                        <option value="3">EN03 (Hidden Trait 3)</option>
+                        <option value="4">EN04 (Hidden Trait 3)</option>
+                        <option value="5">EN05 (Hidden Trait 3)</option>
+                        <option value="6">EN06 (Hidden Trait 3)</option>
+                        <option value="7">EN07 (Hidden Trait 3)</option>
+                        <option value="8">EN08 (Hidden Trait 3)</option>
+                        <option value="9">EN09 (Hidden Trait 3)</option>
+                        <option value="10">EN10 (Hidden Trait 3)</option>
+                        <option value="11">EN11 (Hidden Trait 3)</option>
+                        <option value="12">EN12 (Hidden Trait 3)</option>
+                        <option value="13">EN13 (Hidden Trait 3)</option>
+                        <option value="14">EN14 (Hidden Trait 3)</option>
+                        <option value="15">EN15 (Hidden Trait 3)</option>
+                        <option value="16">salty (Hidden Trait 3)</option>
+                        <option value="17">dune (Hidden Trait 3)</option>
+                        <option value="18">juju (Hidden Trait 3)</option>
+                        <option value="19">tinybox (Hidden Trait 3)</option>
+                        <option value="20">myparade (Hidden Trait 3)</option>
+                        <option value="21">finalfrontier (Hidden Trait 3)</option>
+                        <option value="22">metime (Hidden Trait 3)</option>
+                        <option value="23">drift (Hidden Trait 3)</option>
+                        <option value="24">secretgarden (Hidden Trait 3)</option>
+                        <option value="25">frozen (Hidden Trait 3)</option>
+                        <option value="26">roadtogold (Hidden Trait 3)</option>
+                        <option value="27">jacked (Hidden Trait 3)</option>
+                        <option value="28">floorislava (Hidden Trait 3)</option>
+                        <option value="29">prism (Hidden Trait 3)</option>
+                        <option value="30">junglebook (Hidden Trait 3)</option>
+                        <option value="31">EN31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Secret</h3>
+                      <select id="geneSelector40" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">SE00 (Dominant Trait)</option>
+                        <option value="1">SE01 (Dominant Trait)</option>
+                        <option value="2">SE02 (Dominant Trait)</option>
+                        <option value="3">SE03 (Dominant Trait)</option>
+                        <option value="4">SE04 (Dominant Trait)</option>
+                        <option value="5">SE05 (Dominant Trait)</option>
+                        <option value="6">SE06 (Dominant Trait)</option>
+                        <option value="7">SE07 (Dominant Trait)</option>
+                        <option value="8">SE08 (Dominant Trait)</option>
+                        <option value="9">SE09 (Dominant Trait)</option>
+                        <option value="10">SE10 (Dominant Trait)</option>
+                        <option value="11">SE11 (Dominant Trait)</option>
+                        <option value="12">SE12 (Dominant Trait)</option>
+                        <option value="13">SE13 (Dominant Trait)</option>
+                        <option value="14">SE14 (Dominant Trait)</option>
+                        <option value="15">SE15 (Dominant Trait)</option>
+                        <option value="16">SE16 (Dominant Trait)</option>
+                        <option value="17">SE17 (Dominant Trait)</option>
+                        <option value="18">SE18 (Dominant Trait)</option>
+                        <option value="19">SE19 (Dominant Trait)</option>
+                        <option value="20">SE20 (Dominant Trait)</option>
+                        <option value="21">SE21 (Dominant Trait)</option>
+                        <option value="22">SE22 (Dominant Trait)</option>
+                        <option value="23">SE23 (Dominant Trait)</option>
+                        <option value="24">SE24 (Dominant Trait)</option>
+                        <option value="25">SE25 (Dominant Trait)</option>
+                        <option value="26">SE26 (Dominant Trait)</option>
+                        <option value="27">SE27 (Dominant Trait)</option>
+                        <option value="28">SE28 (Dominant Trait)</option>
+                        <option value="29">SE29 (Dominant Trait)</option>
+                        <option value="30">SE30 (Dominant Trait)</option>
+                        <option value="31">SE31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector41" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">SE00 (Hidden Trait 1)</option>
+                        <option value="1">SE01 (Hidden Trait 1)</option>
+                        <option value="2">SE02 (Hidden Trait 1)</option>
+                        <option value="3">SE03 (Hidden Trait 1)</option>
+                        <option value="4">SE04 (Hidden Trait 1)</option>
+                        <option value="5">SE05 (Hidden Trait 1)</option>
+                        <option value="6">SE06 (Hidden Trait 1)</option>
+                        <option value="7">SE07 (Hidden Trait 1)</option>
+                        <option value="8">SE08 (Hidden Trait 1)</option>
+                        <option value="9">SE09 (Hidden Trait 1)</option>
+                        <option value="10">SE10 (Hidden Trait 1)</option>
+                        <option value="11">SE11 (Hidden Trait 1)</option>
+                        <option value="12">SE12 (Hidden Trait 1)</option>
+                        <option value="13">SE13 (Hidden Trait 1)</option>
+                        <option value="14">SE14 (Hidden Trait 1)</option>
+                        <option value="15">SE15 (Hidden Trait 1)</option>
+                        <option value="16">SE16 (Hidden Trait 1)</option>
+                        <option value="17">SE17 (Hidden Trait 1)</option>
+                        <option value="18">SE18 (Hidden Trait 1)</option>
+                        <option value="19">SE19 (Hidden Trait 1)</option>
+                        <option value="20">SE20 (Hidden Trait 1)</option>
+                        <option value="21">SE21 (Hidden Trait 1)</option>
+                        <option value="22">SE22 (Hidden Trait 1)</option>
+                        <option value="23">SE23 (Hidden Trait 1)</option>
+                        <option value="24">SE24 (Hidden Trait 1)</option>
+                        <option value="25">SE25 (Hidden Trait 1)</option>
+                        <option value="26">SE26 (Hidden Trait 1)</option>
+                        <option value="27">SE27 (Hidden Trait 1)</option>
+                        <option value="28">SE28 (Hidden Trait 1)</option>
+                        <option value="29">SE29 (Hidden Trait 1)</option>
+                        <option value="30">SE30 (Hidden Trait 1)</option>
+                        <option value="31">SE31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector42" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">SE00 (Hidden Trait 2)</option>
+                        <option value="1">SE01 (Hidden Trait 2)</option>
+                        <option value="2">SE02 (Hidden Trait 2)</option>
+                        <option value="3">SE03 (Hidden Trait 2)</option>
+                        <option value="4">SE04 (Hidden Trait 2)</option>
+                        <option value="5">SE05 (Hidden Trait 2)</option>
+                        <option value="6">SE06 (Hidden Trait 2)</option>
+                        <option value="7">SE07 (Hidden Trait 2)</option>
+                        <option value="8">SE08 (Hidden Trait 2)</option>
+                        <option value="9">SE09 (Hidden Trait 2)</option>
+                        <option value="10">SE10 (Hidden Trait 2)</option>
+                        <option value="11">SE11 (Hidden Trait 2)</option>
+                        <option value="12">SE12 (Hidden Trait 2)</option>
+                        <option value="13">SE13 (Hidden Trait 2)</option>
+                        <option value="14">SE14 (Hidden Trait 2)</option>
+                        <option value="15">SE15 (Hidden Trait 2)</option>
+                        <option value="16">SE16 (Hidden Trait 2)</option>
+                        <option value="17">SE17 (Hidden Trait 2)</option>
+                        <option value="18">SE18 (Hidden Trait 2)</option>
+                        <option value="19">SE19 (Hidden Trait 2)</option>
+                        <option value="20">SE20 (Hidden Trait 2)</option>
+                        <option value="21">SE21 (Hidden Trait 2)</option>
+                        <option value="22">SE22 (Hidden Trait 2)</option>
+                        <option value="23">SE23 (Hidden Trait 2)</option>
+                        <option value="24">SE24 (Hidden Trait 2)</option>
+                        <option value="25">SE25 (Hidden Trait 2)</option>
+                        <option value="26">SE26 (Hidden Trait 2)</option>
+                        <option value="27">SE27 (Hidden Trait 2)</option>
+                        <option value="28">SE28 (Hidden Trait 2)</option>
+                        <option value="29">SE29 (Hidden Trait 2)</option>
+                        <option value="30">SE30 (Hidden Trait 2)</option>
+                        <option value="31">SE31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector43" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">SE00 (Hidden Trait 3)</option>
+                        <option value="1">SE01 (Hidden Trait 3)</option>
+                        <option value="2">SE02 (Hidden Trait 3)</option>
+                        <option value="3">SE03 (Hidden Trait 3)</option>
+                        <option value="4">SE04 (Hidden Trait 3)</option>
+                        <option value="5">SE05 (Hidden Trait 3)</option>
+                        <option value="6">SE06 (Hidden Trait 3)</option>
+                        <option value="7">SE07 (Hidden Trait 3)</option>
+                        <option value="8">SE08 (Hidden Trait 3)</option>
+                        <option value="9">SE09 (Hidden Trait 3)</option>
+                        <option value="10">SE10 (Hidden Trait 3)</option>
+                        <option value="11">SE11 (Hidden Trait 3)</option>
+                        <option value="12">SE12 (Hidden Trait 3)</option>
+                        <option value="13">SE13 (Hidden Trait 3)</option>
+                        <option value="14">SE14 (Hidden Trait 3)</option>
+                        <option value="15">SE15 (Hidden Trait 3)</option>
+                        <option value="16">SE16 (Hidden Trait 3)</option>
+                        <option value="17">SE17 (Hidden Trait 3)</option>
+                        <option value="18">SE18 (Hidden Trait 3)</option>
+                        <option value="19">SE19 (Hidden Trait 3)</option>
+                        <option value="20">SE20 (Hidden Trait 3)</option>
+                        <option value="21">SE21 (Hidden Trait 3)</option>
+                        <option value="22">SE22 (Hidden Trait 3)</option>
+                        <option value="23">SE23 (Hidden Trait 3)</option>
+                        <option value="24">SE24 (Hidden Trait 3)</option>
+                        <option value="25">SE25 (Hidden Trait 3)</option>
+                        <option value="26">SE26 (Hidden Trait 3)</option>
+                        <option value="27">SE27 (Hidden Trait 3)</option>
+                        <option value="28">SE28 (Hidden Trait 3)</option>
+                        <option value="29">SE29 (Hidden Trait 3)</option>
+                        <option value="30">SE30 (Hidden Trait 3)</option>
+                        <option value="31">SE31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">Purrstige</h3>
+                      <select id="geneSelector44" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Dominant Trait)</option>
+                        <option value="0">PU00 (Dominant Trait)</option>
+                        <option value="1">PU01 (Dominant Trait)</option>
+                        <option value="2">PU02 (Dominant Trait)</option>
+                        <option value="3">PU03 (Dominant Trait)</option>
+                        <option value="4">PU04 (Dominant Trait)</option>
+                        <option value="5">PU05 (Dominant Trait)</option>
+                        <option value="6">PU06 (Dominant Trait)</option>
+                        <option value="7">PU07 (Dominant Trait)</option>
+                        <option value="8">PU08 (Dominant Trait)</option>
+                        <option value="9">PU09 (Dominant Trait)</option>
+                        <option value="10">PU10 (Dominant Trait)</option>
+                        <option value="11">PU11 (Dominant Trait)</option>
+                        <option value="12">PU12 (Dominant Trait)</option>
+                        <option value="13">PU13 (Dominant Trait)</option>
+                        <option value="14">PU14 (Dominant Trait)</option>
+                        <option value="15">PU15 (Dominant Trait)</option>
+                        <option value="16">PU16 (Dominant Trait)</option>
+                        <option value="17">PU17 (Dominant Trait)</option>
+                        <option value="18">PU18 (Dominant Trait)</option>
+                        <option value="19">PU19 (Dominant Trait)</option>
+                        <option value="20">PU20 (Dominant Trait)</option>
+                        <option value="21">PU21 (Dominant Trait)</option>
+                        <option value="22">PU22 (Dominant Trait)</option>
+                        <option value="23">PU23 (Dominant Trait)</option>
+                        <option value="24">PU24 (Dominant Trait)</option>
+                        <option value="25">PU25 (Dominant Trait)</option>
+                        <option value="26">PU26 (Dominant Trait)</option>
+                        <option value="27">PU27 (Dominant Trait)</option>
+                        <option value="28">PU28 (Dominant Trait)</option>
+                        <option value="29">PU29 (Dominant Trait)</option>
+                        <option value="30">PU30 (Dominant Trait)</option>
+                        <option value="31">PU31 (Dominant Trait)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector45" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 1)</option>
+                        <option value="0">PU00 (Hidden Trait 1)</option>
+                        <option value="1">PU01 (Hidden Trait 1)</option>
+                        <option value="2">PU02 (Hidden Trait 1)</option>
+                        <option value="3">PU03 (Hidden Trait 1)</option>
+                        <option value="4">PU04 (Hidden Trait 1)</option>
+                        <option value="5">PU05 (Hidden Trait 1)</option>
+                        <option value="6">PU06 (Hidden Trait 1)</option>
+                        <option value="7">PU07 (Hidden Trait 1)</option>
+                        <option value="8">PU08 (Hidden Trait 1)</option>
+                        <option value="9">PU09 (Hidden Trait 1)</option>
+                        <option value="10">PU10 (Hidden Trait 1)</option>
+                        <option value="11">PU11 (Hidden Trait 1)</option>
+                        <option value="12">PU12 (Hidden Trait 1)</option>
+                        <option value="13">PU13 (Hidden Trait 1)</option>
+                        <option value="14">PU14 (Hidden Trait 1)</option>
+                        <option value="15">PU15 (Hidden Trait 1)</option>
+                        <option value="16">PU16 (Hidden Trait 1)</option>
+                        <option value="17">PU17 (Hidden Trait 1)</option>
+                        <option value="18">PU18 (Hidden Trait 1)</option>
+                        <option value="19">PU19 (Hidden Trait 1)</option>
+                        <option value="20">PU20 (Hidden Trait 1)</option>
+                        <option value="21">PU21 (Hidden Trait 1)</option>
+                        <option value="22">PU22 (Hidden Trait 1)</option>
+                        <option value="23">PU23 (Hidden Trait 1)</option>
+                        <option value="24">PU24 (Hidden Trait 1)</option>
+                        <option value="25">PU25 (Hidden Trait 1)</option>
+                        <option value="26">PU26 (Hidden Trait 1)</option>
+                        <option value="27">PU27 (Hidden Trait 1)</option>
+                        <option value="28">PU28 (Hidden Trait 1)</option>
+                        <option value="29">PU29 (Hidden Trait 1)</option>
+                        <option value="30">PU30 (Hidden Trait 1)</option>
+                        <option value="31">PU31 (Hidden Trait 1)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector46" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 2)</option>
+                        <option value="0">PU00 (Hidden Trait 2)</option>
+                        <option value="1">PU01 (Hidden Trait 2)</option>
+                        <option value="2">PU02 (Hidden Trait 2)</option>
+                        <option value="3">PU03 (Hidden Trait 2)</option>
+                        <option value="4">PU04 (Hidden Trait 2)</option>
+                        <option value="5">PU05 (Hidden Trait 2)</option>
+                        <option value="6">PU06 (Hidden Trait 2)</option>
+                        <option value="7">PU07 (Hidden Trait 2)</option>
+                        <option value="8">PU08 (Hidden Trait 2)</option>
+                        <option value="9">PU09 (Hidden Trait 2)</option>
+                        <option value="10">PU10 (Hidden Trait 2)</option>
+                        <option value="11">PU11 (Hidden Trait 2)</option>
+                        <option value="12">PU12 (Hidden Trait 2)</option>
+                        <option value="13">PU13 (Hidden Trait 2)</option>
+                        <option value="14">PU14 (Hidden Trait 2)</option>
+                        <option value="15">PU15 (Hidden Trait 2)</option>
+                        <option value="16">PU16 (Hidden Trait 2)</option>
+                        <option value="17">PU17 (Hidden Trait 2)</option>
+                        <option value="18">PU18 (Hidden Trait 2)</option>
+                        <option value="19">PU19 (Hidden Trait 2)</option>
+                        <option value="20">PU20 (Hidden Trait 2)</option>
+                        <option value="21">PU21 (Hidden Trait 2)</option>
+                        <option value="22">PU22 (Hidden Trait 2)</option>
+                        <option value="23">PU23 (Hidden Trait 2)</option>
+                        <option value="24">PU24 (Hidden Trait 2)</option>
+                        <option value="25">PU25 (Hidden Trait 2)</option>
+                        <option value="26">PU26 (Hidden Trait 2)</option>
+                        <option value="27">PU27 (Hidden Trait 2)</option>
+                        <option value="28">PU28 (Hidden Trait 2)</option>
+                        <option value="29">PU29 (Hidden Trait 2)</option>
+                        <option value="30">PU30 (Hidden Trait 2)</option>
+                        <option value="31">PU31 (Hidden Trait 2)</option>
+                      </select>
+                      <br></br>
+                      <select id="geneSelector47" class="form-control select select-default" onchange="if(value === '32'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}" data-toggle="select">
+                        <option value="32" selected>Any (Hidden Trait 3)</option>
+                        <option value="0">PU00 (Hidden Trait 3)</option>
+                        <option value="1">PU01 (Hidden Trait 3)</option>
+                        <option value="2">PU02 (Hidden Trait 3)</option>
+                        <option value="3">PU03 (Hidden Trait 3)</option>
+                        <option value="4">PU04 (Hidden Trait 3)</option>
+                        <option value="5">PU05 (Hidden Trait 3)</option>
+                        <option value="6">PU06 (Hidden Trait 3)</option>
+                        <option value="7">PU07 (Hidden Trait 3)</option>
+                        <option value="8">PU08 (Hidden Trait 3)</option>
+                        <option value="9">PU09 (Hidden Trait 3)</option>
+                        <option value="10">PU10 (Hidden Trait 3)</option>
+                        <option value="11">PU11 (Hidden Trait 3)</option>
+                        <option value="12">PU12 (Hidden Trait 3)</option>
+                        <option value="13">PU13 (Hidden Trait 3)</option>
+                        <option value="14">PU14 (Hidden Trait 3)</option>
+                        <option value="15">PU15 (Hidden Trait 3)</option>
+                        <option value="16">PU16 (Hidden Trait 3)</option>
+                        <option value="17">PU17 (Hidden Trait 3)</option>
+                        <option value="18">PU18 (Hidden Trait 3)</option>
+                        <option value="19">PU19 (Hidden Trait 3)</option>
+                        <option value="20">PU20 (Hidden Trait 3)</option>
+                        <option value="21">PU21 (Hidden Trait 3)</option>
+                        <option value="22">PU22 (Hidden Trait 3)</option>
+                        <option value="23">PU23 (Hidden Trait 3)</option>
+                        <option value="24">PU24 (Hidden Trait 3)</option>
+                        <option value="25">PU25 (Hidden Trait 3)</option>
+                        <option value="26">PU26 (Hidden Trait 3)</option>
+                        <option value="27">PU27 (Hidden Trait 3)</option>
+                        <option value="28">PU28 (Hidden Trait 3)</option>
+                        <option value="29">PU29 (Hidden Trait 3)</option>
+                        <option value="30">PU30 (Hidden Trait 3)</option>
+                        <option value="31">PU31 (Hidden Trait 3)</option>
+                      </select>
+                      </center>
+                    </div>
+                  </div> <!-- /row -->
+                  <h3 class="demo-panel-title"><center>(Optional) Exact Generation</center></h3>
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <input type="number" min="0" max="65534" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="0" class="form-control" id="generationInputBox" />
+                      </div>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center>
+                      <h3 class="demo-panel-title">(Optional) Maximum Cooldown Speed</h3>
+                      <select class="form-control select select-default" id="cooldownInputBox" onchange="if(value === '14'){this.classList.remove('select-primary'); this.classList.add('select-default'); } else {this.classList.remove('select-default'); this.classList.add('select-primary');}"  data-toggle="select">
+                        <option value="14" selected>Any</option>
+                        <option value="0">Fast (1 min)</option>
+                        <option value="1">Swift (2 min)</option>
+                        <option value="2">Swift (5 min)</option>
+                        <option value="3">Snappy (10 min)</option>
+                        <option value="4">Snappy (30 min)</option>
+                        <option value="5">Brisk (1 hour)</option>
+                        <option value="6">Brisk (2 hours)</option>
+                        <option value="7">Plodding (4 hours)</option>
+                        <option value="8">Plodding (8 hours)</option>
+                        <option value="9">Slow (16 hours)</option>
+                        <option value="10">Slow (24 hours)</option>
+                        <option value="11">Sluggish (2 days)</option>
+                        <option value="12">Sluggish (4 days)</option>
+                        <option value="13">Catatonic (7 days)</option>
+                      </select>
+                      </center>
+                    </div>
+                  </div> <!-- /row -->
+                  <h3 class="demo-panel-title"><center>(Optional) Lowest ID Willing To Accept</center></h3>
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <input type="number" min="0" max="65534" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="0" class="form-control" id="earliestIdInputBox" />
+                      </div>
+                    </div>
+                  </div> <!-- /row -->
+                  <h3 class="demo-panel-title"><center>(Optional) Highest ID Willing To Accept</center></h3>
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <input type="number" min="0" max="65534" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="0" class="form-control" id="latestIdInputBox" />
+                      </div>
+                    </div>
+                  </div> <!-- /row -->
+                  <h3 class="demo-panel-title"><center>Number of Cats That You Are Seeking With These Characteristics</center></h3>
+                   <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <input id="numberOfCatsInputBox" type="number" min="1" max="4294967295" placeholder="1" step="1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="1" class="form-control" />
+                      </div>
+                    </div>
+                  </div> <!-- /row -->
+                  <h3 class="demo-panel-title"><center>Amount of WCK to Deposit In Total (2 WCK minimum)</center></h3>
+                   <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <input id="depositAmountInETHInputBox" type="number" min="2" max="100000" placeholder="2" step="0.00000000000000001" class="form-control select-danger" />
+                      </div>
+                    </div>
+                  </div> <!-- /row -->
+                  <h3 class="demo-panel-title"><center>(Optional) Number of Days to Lock Your Deposit (365 day maximum)</center></h3>
+                  <p class="text-muted"><center>Locking your WCK deposit prevents you from cancelling the bounty for a duration of time. This will encourage other users to pursue your bounty, knowing that they have a guaranteed reward. Once the lock time has completed, the bounty will stay valid until you cancel it or until it is fulfilled.</center></p>
+                   <div class="row">
+                    <div class="col">
+                      <div class="form-group">
+                        <input id="numberOfDaysToLockInputBox" type="number" min="0" max="365" step:"1" oninput="validity.valid||(value='');" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="" placeholder="0" class="form-control" />
+                      </div>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <a href="javascript:App.checkIfIShouldProceedToKittyBountiesConfirmationScreen();" class="btn btn-block btn-lg btn-primary">Proceed to Confirmation</a>
+                    </div>
+                  </div> <!-- /row -->
+                </div> <!-- /createBountyOptions -->
+                <div class="confirmBountyOptions" style="display: none;">
+                  <h1 class="demo-section-title"><center>Confirm Bounty</center></h1>
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" id="numCatsConfirmation">Number of Cats:</p></center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" id="geneConfirmation">Exact Genes: </p></center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" id="generationConfirmation"></p></center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" id="cooldownConfirmation"></p></center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" id="earliestIdConfirmation"></p></center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" id="latestIdConfirmation"></p></center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" id="depositAmountInETHConfirmation"></p></center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" id="numberOfDaysToLockConfirmation"></p></center>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <a href="javascript:App.sendCreateBountyTxn();" class="btn btn-block btn-lg btn-primary" id="lockEthAndCreateBountyButton">Lock WCK and Create Bounty</a>
+                    </div>
+                  </div> <!-- /row -->
+                  <div class="row demo-row">
+                    <div class="col">
+                      <a href="javascript:App.retreatFromKittyBountiesConfirmationScreen();" class="btn btn-block btn-lg btn-default">Cancel</a>
+                    </div>
+                  </div> <!-- /row -->
+                </div> <!-- /confirmBountyOptions -->
+                <div class="successfullySentCreateBountyTransactionToBlockchain" style="display: none;">
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" id="geneConfirmation">Successfully sent the transaction to the blockchain, waiting for the blockchain to confirm the transaction.</p></center>
+                      <a href="javascript:App.doNothing();" class="btn btn-block btn-lg btn-default" id="createBountyViewSentTxnButton">View Transaction on Etherscan</a>
+                      <a href="javascript:App.retreatToHomeScreen();" class="btn btn-block btn-lg btn-primary" id="">Return to Home Screen</a>
+                    </div>
+                  </div> <!-- /row -->
+                </div> <!-- /confirmBountyOptions -->
+                <div class="errorWithCreateBountyOptions" style="display: none;">
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" >You must enter a minimum deposit of 2 WCK to create a bounty.</p></center>
+                    </div>
+                  </div> <!-- /row -->
+                </div> <!-- /errorWithCreateBountyOptions -->
+                <div class="errorWithCreateBountyNoNumCatsSpecified" style="display: none;">
+                  <div class="row demo-row">
+                    <div class="col">
+                      <center><p class="text" >You must specify the number of cats that you'd like with these characteristics.</p></center>
+                    </div>
+                  </div> <!-- /row -->
+                </div> <!-- /errorWithCreateBountyNoNumCatsSpecified -->
+              </div> <!-- /CoreBountiesApp -->
+          </div> <!-- /row -->
+      <br/>
+      <div class="row wckKittyBountiesContract">
+          <div class="col viewVerifiedContractForWCKKittyBounties">
+            <center>
+                <a href="https://etherscan.io/address/0x3c8e30fdc8d36673964f328c5fd30147426a5f9b#contracts" target="_blank" rel="noopener noreferrer" class="btn btn-block btn-lg btn-info">View WCK Kitty Bounties Contract on Etherscan</a>
+            </center>
+          </div> <!-- /viewVerifiedContract -->
+      </div> <!-- /row -->
+      </div> <!-- /kittyBountiesSection -->
       <br/>
       <div class="infoForApp">
           <div class="row demo-row">
@@ -998,5 +3032,6 @@
     <!-- Bootstrap 4 requires Popper.js -->
     <script src="https://unpkg.com/popper.js@1.14.1/dist/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="flat-ui.js"></script>
+    <script src="application.js"></script>
   </body>
 </html>
